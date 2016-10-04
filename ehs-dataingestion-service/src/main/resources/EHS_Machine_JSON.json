@@ -1,0 +1,43 @@
+{
+	"messageId": "1453338376223",
+	"body": [
+			{
+			"name": "Heller-Machine",
+			"datapoints": [
+				[1453338376223, 10, 1]
+			],
+			"NO2":30, 
+			"SO2": 32,
+			"PM2_5": 36
+			
+		},
+		{
+		"name": "Soltech-Machine",
+			"datapoints": [
+				[1453338376223, 10, 1]
+			],
+			"NO2":31, 
+			"SO2": 35,
+			"PM2_5": 38			
+		},
+		{
+		"name": "Reflow-Ovan",
+			"datapoints": [
+				[1453338376223, 10, 1]
+			],
+			"NO2":33, 
+			"SO2": 39,
+			"PM2_5": 31	
+		},
+		{
+		"name": "Wave-Soldering-Machine",
+			"datapoints": [
+				[1453338376223, 10, 1]
+			],
+			"NO2":35, 
+			"SO2": 32,
+			"PM2_5": 35
+		}
+		
+	]
+}
