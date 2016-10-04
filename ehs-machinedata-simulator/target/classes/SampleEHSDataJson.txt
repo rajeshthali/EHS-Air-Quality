@@ -1,0 +1,13 @@
+{
+"messageId":"EHSData_1453338376222",
+"body":[{"name":"EHS_Data",
+"datapoints":[[1453338376222,10,3]],
+"attributes":{
+	"smtAreaData":"{"O3":30,"NH3":45,"NO2":33,"PB":22,"CO2":56,"SO2":52,"PM2_5":43,"PM10":76,"machineData":[{"name":"Heller-Machine","NO2":30,"SO2":32,"PM2_5":36},{"name":"Soltech-Machine","NO2":31,"SO2":35,"PM2_5":38},{"name":"Reflow-Ovan","NO2":33,"SO2":39,"PM2_5":31},{"name":"Wave-Soldering-Machine","NO2":35,"SO2":32,"PM2_5":35}]}",
+	"prodGrdData":"{"O3":30,"NH3":45,"NO2":33,"PB":22,"CO2":56,"SO2":52,"PM2_5":43,"PM10":76,"machineData":[{"name":"Heller-Machine","NO2":30,"SO2":32,"PM2_5":36},{"name":"Soltech-Machine","NO2":31,"SO2":35,"PM2_5":38},{"name":"Reflow-Ovan","NO2":33,"SO2":39,"PM2_5":31},{"name":"Wave-Soldering-Machine","NO2":35,"SO2":32,"PM2_5":35}]}",
+	"nearSolderngMchnData":"{"O3":30,"NH3":45,"NO2":33,"PB":22,"CO2":56,"SO2":52,"PM2_5":43,"PM10":76,"machineData":[{"name":"Heller-Machine","NO2":30,"SO2":32,"PM2_5":36},{"name":"Soltech-Machine","NO2":31,"SO2":35,"PM2_5":38},{"name":"Reflow-Ovan","NO2":33,"SO2":39,"PM2_5":31},{"name":"Wave-Soldering-Machine","NO2":35,"SO2":32,"PM2_5":35}]}"
+   }
+  }
+ ]
+}
+	

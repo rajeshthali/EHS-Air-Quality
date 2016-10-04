@@ -1,0 +1,12 @@
+---
+applications:
+  - name: ehs-machinedata-simulator-V2.0
+    buildpack: java_buildpack
+    path: target/ehs-machinedata-simulator-V2.0-4.0.0.jar
+    timeout: 120
+env:
+    machineControllerId: 1
+    predix_dataingestion_service_uri: https://ehs-dataingestion-service-v20.run.aws-usw02-pr.ice.predix.io
+   
+     
+    
