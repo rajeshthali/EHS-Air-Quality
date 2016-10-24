@@ -1,0 +1,35 @@
+{
+  "name": "px-validation",
+  "version": "0.2.0",
+  "main": [
+    "px-validation.html"
+  ],
+  "ignore": [
+    ".*",
+    "npm-debug.log",
+    "Gruntfile.js",
+    "sass",
+    "bower_components",
+    "node_modules",
+    "test",
+    "OSS_Notice.pdf"
+  ],
+  "dependencies": {
+    "polymer": "^1.5.0",
+    "px-theme": "https://github.com/PredixDev/px-theme.git#~0.8.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#~v1.1.0",
+    "px-starter-kit-design": "https://github.com/PredixDev/px-starter-kit-design.git#~0.4.9"
+  },
+  "homepage": "https://github.com/predixDev/px-validation",
+  "_release": "0.2.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.2.0",
+    "commit": "6d289a72b424b12d5fdfe4b43a69e4882ae57bce"
+  },
+  "_source": "https://github.com/predixDev/px-validation.git",
+  "_target": "~0.2.0",
+  "_originalSource": "px-validation"
+}
