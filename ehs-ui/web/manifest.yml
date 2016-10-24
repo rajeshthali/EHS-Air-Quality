@@ -1,0 +1,13 @@
+---
+applications:
+  - name: ehs-floor-ui
+    buildpack: predix_openresty_buildpack
+    path: dist
+    memory: 64M
+    stack: cflinuxfs2
+    services:
+            - ehs_redis_floor
+            - ehs_view_floor
+    env:
+      UAA_SERVER_URL: https://72b6dc65-f16d-40bb-9b75-7e2dcd036dd7.predix-uaa.run.aws-usw02-pr.ice.predix.io
+      REDIS: redis-4

@@ -1,0 +1,42 @@
+
+<link rel="import" href="/bower_components/px-chart/px-chart.html"/>
+ <link rel="stylesheet" href="/bower_components/px-chart/css/px-chart-sketch.css"/>
+
+  <!-- Import custom element. Note: see comment about relative paths to dependencies in the *.html file referenced below -->
+  <link rel="import" href="/bower_components/px-theme/px-theme.html"/>
+  <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html"/>
+  <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
+
+    <div class="col-md-12">
+   <px-chart  series-color-order='["dv-basic-egreen","dv-basic-epink"]' navigator-disabled="true" height="300" width="800"
+   legend='{
+     "enabled": true,
+     "useHTML": true,
+     "layout": "vertical",
+     "verticalAlign": "top",
+     "y": 0,
+     "X":20,
+     "align": "left",
+     "floating": true,
+     "itemMarginTop": 5,
+     "itemMarginBottom": 5,
+     "symbolWidth": 20,
+     "symbolHeight":50
+     }'
+   >
+     <px-chart-controls data-controls show-refresh="true" show-date-range="true"></px-chart-controls> 
+    <px-chart-series-line id="AQI" data="{{data_chart}}" >
+    </px-chart-series-line>
+    <px-chart-series-line id="Forcasted AQI" data="{{data_chart_1}}" >
+    </px-chart-series-line>
+	</px-chart>
+	<!-- series chart obj methode -->
+	<!--  <px-chart>
+	<px-chart-series-line id="my-series"  series-obj-name-key="myName"  series-obj-data-key="myData">
+	</px-chart-series-line>
+	<px-chart-series-line id="my-series-1"  series-obj-name-key="myName_1"  series-obj-data-key="myData_1">
+	</px-chart-series-line>
+</px-chart>  -->
+
+</div>
+

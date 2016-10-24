@@ -1,0 +1,59 @@
+
+<div style="min-height: 668px; min-width: 600px; background-color: #d8d8d8;" class="col-xs-12">
+	<div class="full_view base_map">
+		<div class="map_floor_center base_map_floor" id="floor_0">
+			<b class="floor_text" id="floor_0_text">Floor 1</b>
+		</div>
+		<div class="map_floor_center base_map_floor" id="floor_1">
+			<b class="floor_text" id="floor_1_text">Floor 2</b>
+		</div>
+		<div class="map_floor_center base_map_floor" id="floor_2">
+			<b class="floor_text" id="floor_2_text">Floor 3</b>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-5 pull-right text-right" style="margin-top: 10px;">
+			<ul class="dash_op">
+				<li class="active"><a ng-click="setCompliant('all')" data-toggle="tab">All</a></li>
+				<li><a ng-click="setCompliant('compliant')" data-toggle="tab">compliant</a></li>
+				<li><a ng-click="setCompliant('non')" data-toggle="tab">Non-compliant</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="row">
+		<div style="margin-top: 10px;">
+			<div class="col-xs-1 pull-right up_arw nav_button" ng-click="upFloor()"></div>
+			<div class="clearfix"></div>
+			<div class="col-xs-1 pull-right no_actn nav_button" ng-click="showAllFloorToggle()"></div>
+			<div class="clearfix"></div>
+			<div class="col-xs-1 pull-right down_ar nav_button" ng-click="downFloor()"></div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+	<div class="detail_das">
+		<div class="col-xs-9">
+			<p>
+				<i class="fa fa-cloud" aria-hidden="true"></i>Air quality Monitoring
+			</p>
+			<p>
+				<i class="fa fa-industry" aria-hidden="true"></i>Industrial Hygiene Monitoring
+			</p>
+			<p>
+				<i class="fa fa-tint" aria-hidden="true"></i>Water & discharge Management
+			</p>
+			<p>
+				<i class="fa fa-plug" aria-hidden="true"></i>Energy & carbon Management
+			</p>
+			<p>
+				<i class="fa fa-recycle" aria-hidden="true"></i>Waste Management
+			</p>
+		</div>
+		<div class="col-xs-3 padd0">
+			<p class="status_hed">Status</p>
+			<ul class="status_ul">
+				<li class="sat_li">Satisfactory</li>
+				<li class="war_li">Warning</li>
+			</ul>
+		</div>
+	</div>
+</div>

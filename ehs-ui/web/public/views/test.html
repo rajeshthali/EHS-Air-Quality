@@ -1,0 +1,322 @@
+define([ 'angular', './sample-module' ], function(angular, controllers) {
+	'use strict';
+
+	// Controller definition
+	controllers.controller('airqmainCtrl', [ '$scope', '$http', '$state', '$log', 'PredixAssetService', 'PredixViewService', 'CalculationOneService', 'CalculationService', '$interval', 'AqiService',
+			'$rootScope', 'AuthService',
+			function($scope, $http, $state, $log, PredixAssetService, PredixViewService, CalculationOneService, CalculationService, $interval, AqiService, $rootScope, auth) {
+				var topChartSelector = '#topChart1';
+				var hideGraphs = function() {
+					$('.CampaignPercent').css('visibility', 'hidden');
+					$('.topChart').css('visibility', 'hidden');
+					$('.rTop').css('visibility', 'hidden');
+				};
+				var showGraphs = function() {
+					$('.CampaignPercent').css('visibility', 'visible');
+					$('.topChart').css('visibility', 'visible');
+					$('.rTop').css('visibility', 'visible');
+				};
+				hideGraphs();
+				var seperatedResult = null;
+				var promise = null;
+				var assetName = 'SMT Area';
+				var startFetching = function() {
+					if (!$rootScope.token) {
+						auth.getTocken(function(token) {
+							// console.log(token);
+							loadData();
+						});
+					} else {
+						loadData();
+					}
+				};
+
+				var findMaxValue = function(param, list) {
+					var array = null;
+					for (var i = 0; i < list.length; i++) {
+						if (param === list[i].name) {
+							array = list[i].values;
+							break;
+						}
+					}
+					var largest = 0;
+					for (i = 0; i <= largest; i++) {
+						if (array[i] > largest) {
+							largest = array[i];
+						}
+					}
+					return largest;
+				};
+
+				function loadData() {
+					$scope.mostAqiValue = null;
+					$scope.todayMaxAqiName = null;
+					$scope.todayMostAqiValue = null;
+					hideGraphs();
+					AqiService.last10MinDataPoints(assetName, function(timestamps, values) {
+						seperatedResult = values.seperatedResult;
+						var count = 8;
+						showGraphs();
+						// console.log(values);
+						$scope.mostAqiValue = values.maxAqi.name;
+
+						loadChart(topChartSelector, 0.0, 200.0, values.maxAqi.aqiValue);
+						createChart(values.value.slice(Math.max(values.value.length - count, 1)), timestamps.slice(Math.max(timestamps.length - count, 1)));
+
+						AqiService.lastWeekHighestAqiDataPoint(assetName, function(data) {
+							// console.log(data);
+							$scope.todayMaxAqiName = values.maxAqi.name;
+							$scope.todayMostAqiValue = values.maxAqi.aqiValue;
+
+							switch (data.assetName) {
+							case 'SMT Area':
+								loadChart('#camp11', 0.0, 200.0, data.maxAqi.aqiValue);
+								loadChart('#camp122', 0.0, 200.0, $scope.todayMostAqiValue);
+								$scope.isCamp321Visible = (data.maxAqi.name != $scope.mostAqiValue);
+								if ($scope.isCamp321Visible)
+									loadChart('#camp121', 0.0, 200.0, findMaxValue(values.maxAqi.name, seperatedResult));
+								$scope.camp11 = data.maxAqi.name;
+								break;
+							case 'Production Ground Floor':
+								loadChart('#camp21', 0.0, 200.0, data.maxAqi.aqiValue);
+								loadChart('#camp222', 0.0, 200.0, $scope.todayMostAqiValue);
+								$scope.isCamp321Visible = (data.maxAqi.name != $scope.mostAqiValue);
+								if ($scope.isCamp321Visible)
+									loadChart('#camp221', 0.0, 200.0, findMaxValue(values.maxAqi.name, seperatedResult));
+								$scope.camp21 = data.maxAqi.name;
+								break;
+							case 'Near Soldering Machine':
+								loadChart('#camp31', 0.0, 200.0, data.maxAqi.aqiValue);
+								loadChart('#camp322', 0.0, 200.0, $scope.todayMostAqiValue);
+								$scope.isCamp321Visible = (data.maxAqi.name != $scope.mostAqiValue);
+								if ($scope.isCamp321Visible)
+									loadChart('#camp321', 0.0, 200.0, findMaxValue(values.maxAqi.name, seperatedResult));
+								$scope.camp31 = data.maxAqi.name;
+								break;
+
+							default:
+								break;
+							}
+
+						}, function(error) {
+							console.log(error);
+						});
+						startRefreshData();
+					}, function(e) {
+						console.log(e);
+					});
+				}
+				var stillWorking = false;
+				function startRefreshData() {
+					promise = $interval(function() {
+						if (!stillWorking) {
+							// console.log("working");
+							stillWorking = true;
+							AqiService.last20SecDataPoints(assetName, function(timestamps, values) {
+								$scope.mostAqiValue = values.maxAqi.name;
+								loadChart(topChartSelector, 0.0, 200.0, values.maxAqi.aqiValue);
+								for (var i = 0; i < charts.length; i++) {
+									var chart = charts[i];
+									for (var j = 0; j < values.value.length; j++) {
+										if ((values.value.length - j) == 1) {
+											chart.series[0].addPoint([ timestamps[j], values.value[j] ], true, true);
+										} else {
+										}
+									}
+								}
+								stillWorking = false;
+							}, function(e) {
+								console.log(e);
+								stillWorking = false;
+							});
+						} else {
+							// console.log("not completed previous interval");
+						}
+					}, 5000);
+				}
+
+				$scope.sub_graph = function() {
+					$state.go('detilpara');
+				};
+
+				$scope.sub_para = function() {
+					$state.go('detail_parameter');
+				};
+
+				var charts = [];
+
+				var createChart = function(getMaxAqiValuesArray, dates) {
+					charts = [];
+					$('.CampaignPercent').each(function() {
+						var chart = new Highcharts.Chart({
+							type : 'spline',
+							animation : Highcharts.svg, // don't animate in old
+							// IE
+							marginRight : 10,
+							chart : {
+								renderTo : this,
+								spacingTop : 10,
+								width : 350
+							},
+							title : {
+								text : ''
+							},
+							tooltip : {
+								formatter : function() {
+									return '<b>' + this.series.name + '</b><br/>' + Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' + Highcharts.numberFormat(this.y, 2);
+								}
+							},
+							exporting : {
+								enabled : false
+							},
+
+							plotOptions : {
+								series : {
+									color : '#8BBE3D',
+									lineWidth : 1,
+									marker : {
+										enabled : false,
+									},
+								}
+							},
+							credits : {
+								enabled : false
+							},
+
+							xAxis : {
+								title : {
+									text : 'Time'
+								},
+								categories : dates
+							},
+
+							yAxis : {
+								title : {
+									text : 'Air value'
+								},
+							},
+
+							series : [ {
+								name : 'AQI',
+								data : getMaxAqiValuesArray
+							} ]
+						});
+						charts.push(chart);
+					});
+				};
+
+				$scope.stop = function() {
+					$interval.cancel(promise);
+
+				};
+				$scope.$on('$destroy', function() {
+					$scope.stop();
+				});
+
+				startFetching();
+				$scope.graphFunction = function(param) {
+					switch (param) {
+					case 'x1':
+						assetName = 'SMT Area';
+						topChartSelector = '#topChart1';
+						$scope.stop();
+						startFetching();
+						break;
+					case 'x2':
+						assetName = 'Production Ground Floor';
+						topChartSelector = '#topChart2';
+						$scope.stop();
+						startFetching();
+						break;
+					case 'x3':
+						assetName = 'Near Soldering Machine';
+						topChartSelector = '#topChart3';
+						$scope.stop();
+						startFetching();
+						break;
+
+					default:
+						break;
+					}
+				};
+
+				var percentColors = [ {
+					pct : 0.0,
+					color : {
+
+						r : 0x00,
+						g : 0xff,
+						b : 0
+					}
+				}, {
+					pct : 0.5,
+					color : {
+						r : 0xff,
+						g : 0xff,
+						b : 0
+					}
+				}, {
+					pct : 1.0,
+					color : {
+						r : 0xff,
+						g : 0x00,
+						b : 0
+					}
+				} ];
+
+				var getColorForPercentage = function(pct) {
+					// console.log(pct);
+
+					for (var i = 1; i < percentColors.length - 1; i++) {
+						if (pct < percentColors[i].pct) {
+							break;
+						}
+					}
+					var lower = percentColors[i - 1];
+					var upper = percentColors[i];
+					var range = upper.pct - lower.pct;
+					var rangePct = (pct - lower.pct) / range;
+					var pctLower = 1 - rangePct;
+					var pctUpper = rangePct;
+					var color = {
+						r : Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
+						g : Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
+						b : Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
+					};
+					return 'rgb(' + [ color.r, color.g, color.b ].join(',') + ')';
+					// or output as hex if preferred
+				}
+
+				var loadChart = function(selector, min, max, val) {
+					var per = (val / max);
+					var chart = c3.generate({
+						bindto : selector,
+						data : {
+
+							columns : [ [ 'data', val ] ],
+							type : 'gauge'
+						},
+						gauge : {
+							label : {
+								format : function(value, ratio) {
+									return value;
+								},
+							},
+							min : min,
+							max : max,
+							units : '',
+							width : 15
+						},
+						color : {
+							pattern : [ getColorForPercentage(per) ]
+						},
+						size : {
+							height : 155,
+							width : 150
+						}
+					});
+				};
+
+			} ]);
+
+});

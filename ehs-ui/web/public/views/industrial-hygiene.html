@@ -1,0 +1,98 @@
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<style>
+main{
+background-color: #ffffff;
+}
+
+</style>
+<div class="loaderpg"></div>
+<img src='/images/25.gif' class="lad_img-in"> 
+<div class="col-md-12 floor_list_base">
+	<ul>
+		<li ng-repeat="f in floors" ng-class="{'active':$index===floor,'disabled':hygieneLoading }" ng-click="changeFloor(f.id)">{{f.name}}</li>
+	  </ul>
+</div>
+<div>
+ <img src='/images/25.gif' class="lad_img_hygn" ng-show="loading == true">
+	<div class="col-md-3 hygn_background">
+		<div class="hygn_rect_curve_1">
+			<div class="hygn_icons_1"></div>
+			<h4 class="title_hygn">Industrial Hygiene</h4>
+
+		</div>
+		<div class="hygn_area_tab" ng-repeat="area in hygnareaName">
+			<h6 class="box_text_hygn">{{area.assetName}}</h6>
+		</div>
+	</div>
+	<div class="col-md-3 hygn_background">
+		<div class="hygn_rect_curve_2">
+			<div class="hygn_icons_2"></div>
+			<h4 class="title_hygn">Humidity</h4>
+		</div>
+		<div class="hygn_data_tab" ng-click="gotoDetailsView()" ng-repeat="data in floordata">
+			<p class="top">
+				<span class="data_text">{{data.humidity}}%</span>
+			</p>
+		</div>
+		
+	</div>
+
+
+	<div class="col-md-3 hygn_background">
+		<div class="hygn_rect_curve_3">
+			<div class="hygn_icons_3"></div>
+			<h4 class="title_hygn">Noise</h4>
+		</div>
+		<div class="hygn_data_tab" ng-click="gotoDetailsView()" ng-repeat="data in floordata">
+			<p class="top">
+				<span class="data_text">{{data.noise}}db</span>
+			</p>
+
+		</div>
+		
+
+	</div>
+	<div class="col-md-3 hygn_background">
+		<div class="hygn_rect_curve_4">
+			<div class="hygn_icons_4"></div>
+			<h4 class="title_hygn">Temperature</h4>
+		</div>
+		<div class="hygn_data_tab" ng-click="gotoDetailsView()" ng-repeat="data in floordata">
+			<p class="top">
+				<span class="data_text">{{data.temperature}}<sup>0</sup>C
+				</span>
+			</p>
+		</div>
+		
+	</div>
+</div>
+
+<div class="col-md-12 hygiene_div_waste">
+  <div class="col-md-12 hygiene_div_2">
+				<div class="col-md-12  aqi-details-tab-base">
+				     <div class="col-md-12 title_bar">
+				        <div class= "col-md-6 title_inside">
+				          <h4>Prediction Graph</h4>
+				        </div>
+				        <div class= "col-md-6 pull-right charti_ar">
+							<a class= " charticon active_chart " href= "#"><i class="fa fa-bar-chart" style="font-size:25px;" aria-hidden="true" name="mychart"  id= "column" value="column" ng-click= "chartfunc2(options, tabIndex)"></i></a>
+							<a  class= " charticon1  "  href= "#"> <i class="fa fa-area-chart" style="font-size:25px;" aria-hidden="true" name="mychart"  id= "bar" value="bar" ng-click= "chartfunc1(options ,tabIndex)"></i></a>
+					    </div>
+                      </div>
+                 <div class="tab-content aqi-details-tab-base-waste">
+						<div id="hygiene-detailse" class="tab-pane fade in active aqi-details-tab-base-content">
+							<img alt="" class="loading_image" ng-show="hygieneLoading" src="images/25.gif">
+							<ul class="nav nav-tabs" id="hygiene-tab"> 
+								<li ng-repeat="hygiene in hygieneData" ng-class="{'active':$index==tabIndex}"><a data-toggle="tab" href="#" data-target="#hygiene__{{$index}}" ng-click="selectTab($index)">{{hygiene.assetName}}</a></li>
+							</ul>
+							<div id="hygiene-tab-content" ng-show="!hygieneLoading" class="tab-content aqi-details-tab-base-content-waste">
+						       <div ng-repeat="hygiene in hygieneData" id="hygiene_{{$index}}" ng-class="{'active':$index==tabIndex}" class="tab-pane fade in">
+						         <div id="container_{{$index}}" class="hygiene_details_graph_class hygiene_details_graph_class_machine" style="min-height: 353px;"></div>
+							   </div>
+						   </div>
+					    </div>
+				   </div>
+		       </div>
+		</div>
+</div>
