@@ -10,6 +10,7 @@ define([ './services-module',
          './config',
          './predix-view-service', 
 		 './auth-service',
-		 './newHygn-service'
+		 './newHygn-service',
+		 './sensor-data-service'
 		 ], function() {
 });

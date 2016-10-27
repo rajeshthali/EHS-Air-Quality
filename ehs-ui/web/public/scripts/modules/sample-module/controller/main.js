@@ -8,6 +8,7 @@ define([ './controllers-module',
 		 './aqi-controller-floor',
 		 './water-consumption-controller', 
 		 './energy-management-controller', 
-		 './waste-management-controller' 
+		 './waste-management-controller',
+		 './sensor-data-controller'
 		 ], function() {
 });

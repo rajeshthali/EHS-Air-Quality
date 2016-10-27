@@ -1,209 +1,171 @@
 <div class="col-md-12 floor_list_base">
-	<div class="col-md-6">
-		<h4>Water Consumption</h4>
-	</div>
-	<div class="col-md-6">
-	  <ul>
-		  <li ng-repeat="f in floors" ng-class="{'active':$index===floor,'disabled':(aqiMachineLoading || aqiMachineLoading)}" ng-click="changeFloor(f.id)">{{f.name}}</li>
-	  </ul>
-    </div>
+   <div class="col-md-6">
+      <h4>Water Consumption</h4>
+   </div>
+   <div class="col-md-6">
+      <ul>
+         <li ng-repeat="f in floors" ng-class="{'active':$index===floor,'disabled':(aqiMachineLoading || aqiMachineLoading)}" ng-click="changeFloor(f.id)">{{f.name}}</li>
+      </ul>
+   </div>
 </div>
 <div class="clearfix"></div>
-	
-<div class="col-md-12" style="padding: 10px;">
-<div class="col-md-12">
-		<div class="row">
-			<div class="col-md-6" style="padding-left: 5px; padding-right: 5px;">
-			<div class="col-md-12  aqi-tab-base">
-				<ul class="nav nav-tabs">
-						<li class="active"><a data-toggle="tab" href="" data-target="#aqi-area" ng-click="aqiTabChange('aqi')">Industrial Use</a></li>
-						<li><a data-toggle="tab" href="" data-target="#aqi-comparison" ng-click="aqiTabChange('aqi-comparison')">Domestic Use</a></li>
-				</ul> 
-				
-				<div class="aqi-tab-base-inner-water">
-					<div id="aqi-area" class="tab-pane fade in active aqi-details-tab-base-content">
-							<img alt="" class="loading_image" ng-show="aqiArealLoading" src="images/25.gif">
-						
-						<div id="aqi-area-tab-content" class="tab-content aqi-details-tab-base-content-inner-water" style="display: none;">
-								<div ng-repeat="area in aqiAreaData" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea}" class="tab-pane fade in">
-									
-									 <div  id="area_chart_{{$index}}" class="graph_class"></div>
-									
-							<div class="col-md-12">
-								 <div class="col-md-6">
-											
-												 	<h4 class="pull-left">Current Use:</h4>
-													<h2 class="pull-left" style="margin: 0%;">7</h2>
-													<h4>KLD</h4>
-												
-											  </div>
-									<div class="col-md-6">
-											  
-													<h4 class = "pull-right">KLD</h4>
-													<h2 class = "pull-right" style="margin: 0%;">8</h2>
-													<h4 class = "pull-right">Daily Limit:</h4>
-											
-											</div> 
-							</div>
-								</div>
-						</div>
-					</div>	
-			<div id="aqi-area-d" class="tab-pane fade in active aqi-details-tab-base-content">
-							<img alt="" class="loading_image" ng-show="aqiAreaLoading" src="images/25.gif">
-										
-				<div id="aqi-area-tab-content-d" class="aqi-details-tab-base-content-inner-water" style="display: none;">
-								<div ng-repeat="area in aqiAreaData" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea}" class="tab-pane fade in">
-									
-									 <div  id="area_chart_{{$index}}" class="graph_class" ng-click= "details(floor)"></div>
-									
-								<div class="col-md-12">
-										
-											 <div class="col-md-6">
-											
-												 	<h4 class="pull-left">Current Use:</h4>
-													<h2 class="pull-left" style="margin: 0%;">7</h2>
-													<h4>KLD</h4>
-												
-											  </div>
-									<div class="col-md-6">
-											  
-													<h4 class = "pull-right">KLD</h4>
-													<h2 class = "pull-right" style="margin: 0%;">8</h2>
-													<h4 class = "pull-right">Daily Limit:</h4>
-											
-											</div> 
-										</div>	
-									</div>
-								</div>
-								
-							</div>							
-						</div>
-					</div>
-				</div>
-					<div class="col-md-6" style="padding-left: 5px; padding-right: 5px;">
-				<div class="col-md-12 aqi-tab-base">
-					<img alt="" class="loading_image" ng-show="aqiMachineLoading" src="images/25.gif">
-					<ul class="nav nav-tabs">
-						<li class="active"><a data-toggle="tab" href="" data-target="#p-s-e">Process Stack Emission</a></li>
-					</ul>
-
-					<div class="aqi-tab-base-inner-water">
-						<div id="aqi-machine" class="tab-pane fade in active aqi-tab-base-content">
-							
-							<div id="aqi-machine-tab-content" class="tab-content aqi-details-tab-base-content-inner" style="display: none;">
-								<div ng-repeat="machine in aqiMachineData" id="aqi_machine_{{$index}}" ng-class="{'active':$index==tabIndexMachine}" class="tab-pane fade in">
-
-
-									<div class="row">
-										<div class="col-md-12" ng-init="gotoDetailsView()">
-											<div class="col-md-6 machine_values" >
-												<div class="col-md-12 machine_data" sty ng-class="{'machine_down_green': machine.data.components.SO2 <= maxValue, 'machine_up_orange':machine.data.components.SO2 > maxValue}">													
-													<h4 class="h">SO2</h4>
-													<h3 class="d">{{machine.data.components.SO2}}</h3>
-													<h4 class="s">ppb</h4>
-													<div ng-class="{ 'mahine_up_arrow': machine.data.components.SO2<= maxValue, 'mahine_down_arrow': machine.data.components.SO2 > maxValue}">
-														<i class="fa" ng-class="{'fa-arrow-down': machine.data.components.SO2 <= maxValue, 'fa-arrow-up': machine.data.components.SO2 > maxValue}"></i>
-													</div>
-												</div>
-											</div>
-											<div class="col-md-6 machine_values">
-												<div class="col-md-12 machine_data " ng-class="{'machine_down_green': machine.data.components.NO2 <= maxValue, 'machine_up_orange':machine.data.components.NO2 > maxValue}">
-													<h4 class="h">NO2</h4>
-													<h3 class="d">{{machine.data.components.NO2}}</h3>
-													<h4 class="s">ppb</h4>
-													<div ng-class="{ 'mahine_up_arrow': machine.data.components.NO2<= maxValue, 'mahine_down_arrow': machine.data.components.NO2 > maxValue}">
-														<i class="fa" ng-class="{'fa-arrow-down': machine.data.components.NO2 <= maxValue, 'fa-arrow-up': machine.data.components.NO2 > maxValue}"></i>
-													</div>
-												</div>
-											</div>
-											<div class="col-md-6 machine_values">
-												<div class="col-md-12 machine_data " ng-class="{'machine_down_green': machine.data.components.PM2_5 <= maxValue, 'machine_up_orange':machine.data.components.PM2_5 > maxValue}">
-													<h4 class="h">PM 2.5</h4>
-													<h3 class="d">{{machine.data.components.PM2_5}}</h3>
-													<h4 class="s">ug/m3</h4>
-													<div ng-class="{'mahine_up_arrow': machine.data.components.PM2_5 <= maxValue, 'mahine_down_arrow': machine.data.components.PM2_5> maxValue}">
-														<i class="fa" ng-class="{'fa-arrow-down': machine.data.components.PM2_5 <= maxValue, 'fa-arrow-up': machine.data.components.PM2_5 > maxValue}"></i>
-													</div>
-												</div>
-											</div>
-											<div class="col-md-6 machine_values">
-												<div class="col-md-12 machine_data " ng-class="{'machine_down_green': machine.data.components.PM2_5 <= maxValue, 'machine_up_orange':machine.data.components.PM2_5 > maxValue}">
-													<h4 class="h">PM 2.5</h4>
-													<h3 class="d">{{machine.data.components.PM2_5}}</h3>
-													<h4 class="s">ug/m3</h4>
-													<div ng-class="{'mahine_up_arrow': machine.data.components.PM2_5 <= maxValue, 'mahine_down_arrow': machine.data.components.PM2_5> maxValue}">
-														<i class="fa" ng-class="{'fa-arrow-down': machine.data.components.PM2_5 <= maxValue, 'fa-arrow-up': machine.data.components.PM2_5 > maxValue}"></i>
-													</div>
-												</div>
-											</div>
-											<div class="col-md-6 machine_values">
-												<div class="col-md-12 machine_data " ng-class="{'machine_down_green': machine.data.components.PM2_5 <= maxValue, 'machine_up_orange':machine.data.components.PM2_5 > maxValue}">
-													<h4 class="h">PM 2.5</h4>
-													<h3 class="d">{{machine.data.components.PM2_5}}</h3>
-													<h4 class="s">ug/m3</h4>
-													<div ng-class="{'mahine_up_arrow': machine.data.components.PM2_5 <= maxValue, 'mahine_down_arrow': machine.data.components.PM2_5> maxValue}">
-														<i class="fa" ng-class="{'fa-arrow-down': machine.data.components.PM2_5 <= maxValue, 'fa-arrow-up': machine.data.components.PM2_5 > maxValue}"></i>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		
-	
-</div>
-
-
-
-
-
-
-<div class="row" style="margin-top: 10px;">
-<div class="col-md-12" style="padding-left: 5px; padding-right: 5px;">
-<div class="col-md-12 title_bar" ng-show="!hygieneLoading">
-				        <div class= "col-md-6 title_inside">
-				          <h4>Pollutants</h4>
-				        </div>
-				       <div class= "col-md-6 pull-right charti_ar">
-							<a class= " charticon active_chart " href= "#"><i class="fa fa-bar-chart" 
-style="font-size: 25px;" aria-hidden="true" name="mychart"  id= "column" value="column" ng-click= "chartfunc2(options, tabIndex)"></i></a>
-							<a  class= " charticon1  "  href= "#"> <i class="fa fa-area-chart" 
-style="font-size: 25px;" aria-hidden="true" name="mychart"  id= "bar" value="bar" ng-click= "chartfunc1(options ,tabIndex)"></i></a>
-					    </div>
-                      </div>
-
-<div class="aqi-details-tab-base-inner">
-						<div id="hygiene-detailse" class="tab-pane fade in active aqi-details-tab-base-content">
-							<img alt="" class="loading_image" ng-show="hygieneLoading" src="images/25.gif">
-							<ul class="nav nav-tabs" id="hygiene-tab">
-								<li ng-repeat="hygiene in hygieneData" ng-class="{'active':$index==tabIndex}"><a data-toggle="tab" href="#" data-target="#hygiene__{{$index}}" ng-click="selectTab($index)">{{hygiene.assetName}}</a></li>
-							</ul>
-							<div id="container" style="min-height: 373px; min-width: 980px;" ng-show="!hygieneLoading" class="tab-content aqi-details-tab-base-content-inner" nd-model="showMe">
-							<!--<div id="hygiene-tab-content" style="min-height: 273px;" ng-show="!hygieneLoading" class="tab-content aqi-details-tab-base-content-inner"> -->
-								<div ng-repeat="hygiene in hygieneData" id="hygiene_{{$index}}" ng-class="{'active':$index==tabIndex}" class="tab-pane fade in">
-									 <div id="container_{{$index}}" class="hygiene_details_graph_class hygiene_details_graph_class_machine" style="min-height: 353px;"></div>
-									<!--  <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div> -->
-                                           <!--   <input type="radio" name="mychart" class="mychart" id= "column" value="spline" ng-click= "chartfunc1(options)" checked>Column
-											 <input type="radio" name="mychart" class="mychart" id= "bar" value="column" ng-click= "chartfunc2(options)">Bar 
-										 -->
-											
-									
-									 <!-- <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div> -->
-									 <!-- <div id="hygiene_chart_{{$index}}" class="hygiene_details_graph_class hygiene_details_graph_class_machine" style="min-height: 253px;"></div>
-									<div id="container_{{$index}}"  style="min-height: 400px; margin: 0 auto"></div>  -->
-							    </div>
-						    </div>
-					  </div>
-				  </div>
-			</div>
-</div>
-
-
-</div>
-</div>
+<div class="col-md-12 container-padd">
+  <div class="col-md-12"> 
+      <div class="row">
+         <div class="col-md-6 tab-base-padd">
+            <div class="col-md-12  tab-base">
+               <ul class="nav nav-tabs">
+                  <li class="active"><a data-toggle="tab" href="" data-target="#aqi-area" ng-click="aqiTabChange('aqi')">Industrial Use</a></li>
+                  <li><a data-toggle="tab" href="" data-target="#aqi-comparison" ng-click="aqiTabChange('aqi-comparison')">Domestic Use</a></li>
+               </ul>
+               <div class="tab-base-inner-water">
+                  <div id="aqi-area" class="tab-pane fade in active details-tab-base-content">
+                     <img alt="" class="loading_image" ng-show="aqiArealLoading" src="images/25.gif">
+                     <div id="aqi-area-tab-content" class="tab-content details-tab-base-content-inner-water highcharts-button">
+                        <div ng-repeat="area in aqiAreaData" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea}" class="tab-pane fade in">
+                           <div  id="area_chart_{{$index}}" class="graph_class"></div>
+                           <div class="col-md-12">
+                              <div class="col-md-6">
+                                 <h4 class="pull-left">Current Use:</h4>
+                                 <h2 class="pull-left curr-limit">7</h2>
+                                 <h4>KLD</h4>
+                              </div>
+                              <div class="col-md-6">
+                                 <h4 class = "pull-right">KLD</h4>
+                                 <h2 class = "pull-right curr-limit">8</h2>
+                                 <h4 class = "pull-right">Daily Limit:</h4>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div id="aqi-area-d" class="tab-pane fade in active details-tab-base-content">
+                     <img alt="" class="loading_image" ng-show="aqiAreaLoading" src="images/25.gif">
+                     <div id="aqi-area-tab-content-d" class="details-tab-base-content-inner-water highcharts-button">
+                        <div ng-repeat="area in aqiAreaData" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea}" class="tab-pane fade in">
+                           <div  id="area_chart_{{$index}}" class="graph_class" ng-click= "details(floor)"></div>
+                           <div class="col-md-12">
+                              <div class="col-md-6">
+                                 <h4 class="pull-left">Current Use:</h4>
+                                 <h2 class="pull-left curr-limit">7</h2>
+                                 <h4>KLD</h4>
+                              </div>
+                              <div class="col-md-6">
+                                 <h4 class = "pull-right">KLD</h4>
+                                 <h2 class = "pull-right curr-limit">8</h2>
+                                 <h4 class = "pull-right">Daily Limit:</h4>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col-md-6 tab-base-padd">
+            <div class="col-md-12 tab-base">
+               <img alt="" class="loading_image" ng-show="aqiMachineLoading" src="images/25.gif">
+               <ul class="nav nav-tabs">
+                  <li class="active"><a data-toggle="tab" href="" data-target="#p-s-e">Process Stack Emission</a></li>
+               </ul>
+               <div class="tab-base-inner-water">
+                  <div id="aqi-machine" class="tab-pane fade in active tab-base-content">
+                     <div id="aqi-machine-tab-content" class="tab-content details-tab-base-content-inner highcharts-button">
+                        <div ng-repeat="machine in aqiMachineData" id="aqi_machine_{{$index}}" ng-class="{'active':$index==tabIndexMachine}" class="tab-pane fade in">
+                           <div class="row">
+                              <div class="col-md-12" ng-init="gotoDetailsView()">
+                                 <div class="col-md-6 machine_values" >
+                                    <div class="col-md-12 machine_data" sty ng-class="{'machine_down_green': machine.data.components.SO2 <= maxValue, 'machine_up_orange':machine.data.components.SO2 > maxValue}">
+                                       <h4 class="h">pH Value</h4>
+                                       <h3 class="d">{{machine.data.components.SO2}}</h3>
+                                       <h4 class="s">ppb</h4>
+                                       <div ng-class="{ 'mahine_up_arrow': machine.data.components.SO2<= maxValue, 'mahine_down_arrow': machine.data.components.SO2 > maxValue}">
+                                          <i class="fa" ng-class="{'fa-arrow-down': machine.data.components.SO2 <= maxValue, 'fa-arrow-up': machine.data.components.SO2 > maxValue}"></i>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="col-md-6 machine_values">
+                                    <div class="col-md-12 machine_data " ng-class="{'machine_down_green': machine.data.components.NO2 <= maxValue, 'machine_up_orange':machine.data.components.NO2 > maxValue}">
+                                       <h4 class="h">Suspended Solids</h4>
+                                       <h3 class="d">{{machine.data.components.NO2}}</h3>
+                                       <h4 class="s">ppb</h4>
+                                       <div ng-class="{ 'mahine_up_arrow': machine.data.components.NO2<= maxValue, 'mahine_down_arrow': machine.data.components.NO2 > maxValue}">
+                                          <i class="fa" ng-class="{'fa-arrow-down': machine.data.components.NO2 <= maxValue, 'fa-arrow-up': machine.data.components.NO2 > maxValue}"></i>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="col-md-6 machine_values">
+                                    <div class="col-md-12 machine_data " ng-class="{'machine_down_green': machine.data.components.PM2_5 <= maxValue, 'machine_up_orange':machine.data.components.PM2_5 > maxValue}">
+                                       <h4 class="h">BOD</h4>
+                                       <h3 class="d">{{machine.data.components.PM2_5}}</h3>
+                                       <h4 class="s">ug/m3</h4>
+                                       <div ng-class="{'mahine_up_arrow': machine.data.components.PM2_5 <= maxValue, 'mahine_down_arrow': machine.data.components.PM2_5> maxValue}">
+                                          <i class="fa" ng-class="{'fa-arrow-down': machine.data.components.PM2_5 <= maxValue, 'fa-arrow-up': machine.data.components.PM2_5 > maxValue}"></i>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="col-md-6 machine_values">
+                                    <div class="col-md-12 machine_data " ng-class="{'machine_down_green': machine.data.components.PM2_5 <= maxValue, 'machine_up_orange':machine.data.components.PM2_5 > maxValue}">
+                                       <h4 class="h">COD</h4>
+                                       <h3 class="d">{{machine.data.components.PM2_5}}</h3>
+                                       <h4 class="s">ug/m3</h4>
+                                       <div ng-class="{'mahine_up_arrow': machine.data.components.PM2_5 <= maxValue, 'mahine_down_arrow': machine.data.components.PM2_5> maxValue}">
+                                          <i class="fa" ng-class="{'fa-arrow-down': machine.data.components.PM2_5 <= maxValue, 'fa-arrow-up': machine.data.components.PM2_5 > maxValue}"></i>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="col-md-6 machine_values">
+                                    <div class="col-md-12 machine_data " ng-class="{'machine_down_green': machine.data.components.PM2_5 <= maxValue, 'machine_up_orange':machine.data.components.PM2_5 > maxValue}">
+                                       <h4 class="h">Oil & Grease</h4>
+                                       <h3 class="d">{{machine.data.components.PM2_5}}</h3>
+                                       <h4 class="s">ug/m3</h4>
+                                       <div ng-class="{'mahine_up_arrow': machine.data.components.PM2_5 <= maxValue, 'mahine_down_arrow': machine.data.components.PM2_5> maxValue}">
+                                          <i class="fa" ng-class="{'fa-arrow-down': machine.data.components.PM2_5 <= maxValue, 'fa-arrow-up': machine.data.components.PM2_5 > maxValue}"></i>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="row mid-divide">
+         <div class="col-md-12 tab-base-padd">
+            <div class="col-md-12 title_bar" ng-show="!hygieneLoading">
+               <div class= "col-md-6 title_inside">
+                  <h4>Pollutants</h4>
+               </div>
+               <div class= "col-md-6 pull-right charti_ar">
+                  <a class= " charticon active_chart " href= "#"><i class="fa fa-bar-chart bar-area-icon" aria-hidden="true" name="mychart"  id= "column" value="column" ng-click= "chartfunc2(options, tabIndex)"></i></a>
+                  <a  class= " charticon1  "  href= "#"> <i class="fa fa-area-chart bar-area-icon" aria-hidden="true" name="mychart"  id= "bar" value="bar" ng-click= "chartfunc1(options ,tabIndex)"></i></a>
+               </div>
+            </div>
+            <div class="details-tab-base-inner">
+               <div id="hygiene-detailse" class="tab-pane fade in active details-tab-base-content">
+                  <img alt="" class="loading_image" ng-show="hygieneLoading" src="images/25.gif">
+                  <ul class="nav nav-tabs" id="hygiene-tab">
+                     <li ng-repeat="hygiene in hygieneData" ng-class="{'active':$index==tabIndex}"><a data-toggle="tab" href="#" data-target="#hygiene__{{$index}}" ng-click="selectTab($index)">{{hygiene.assetName}}</a></li>
+                  </ul>
+                  <div id="container water-data-graph" ng-show="!hygieneLoading" class="tab-content details-tab-base-content-inner" ng-model="showMe">
+                    <!-- <div id="hygiene-tab-content" style="min-height: 273px;" ng-show="!hygieneLoading" class="tab-content details-tab-base-content-inner"> -->
+                     <div ng-repeat="hygiene in hygieneData" id="hygiene_{{$index}}" ng-class="{'active':$index==tabIndex}" class="tab-pane fade in">
+                        <div id="container_{{$index}}" class="hygiene_details_graph_class hygiene_details_graph_class_machine data-graph"></div>
+                        <!--  <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div> -->
+                        <!--   <input type="radio" name="mychart" class="mychart" id= "column" value="spline" ng-click= "chartfunc1(options)" checked>Column
+                           <input type="radio" name="mychart" class="mychart" id= "bar" value="column" ng-click= "chartfunc2(options)">Bar 
+                           -->
+                        <!-- <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div> -->
+                        <!-- <div id="hygiene_chart_{{$index}}" class="hygiene_details_graph_class hygiene_details_graph_class_machine" style="min-height: 253px;"></div>
+                           <div id="container_{{$index}}"  style="min-height: 400px; margin: 0 auto"></div>  -->
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+ </div> 

@@ -39,26 +39,26 @@
 </div>
 <div class="col-md-12 hygiene_div_waste">
           <div class="col-md-12 hygiene_div_2">
-				<div class="col-md-12  aqi-details-tab-base">
+				<div class="col-md-12  details-tab-base">
 				     <div class="col-md-12 title_bar">
 				        <div class= "col-md-6 title_inside">
 				          <h4>Prediction Graph</h4>
 				        </div>
 				       <div class= "col-md-6 pull-right charti_ar">
-							<a class= " charticon active_chart " href= "#"><i class="fa fa-bar-chart" style="font-size:25px;" aria-hidden="true" name="mychart"  id= "column" value="column" ng-click= "chartfunc2(options, tabIndex)"></i></a>
-							<a  class= " charticon1  "  href= "#"> <i class="fa fa-area-chart" style="font-size:25px;" aria-hidden="true" name="mychart"  id= "bar" value="bar" ng-click= "chartfunc1(options ,tabIndex)"></i></a>
+							<a class= " charticon active_chart " href= "#"><i class="fa fa-bar-chart bar-area-icon" aria-hidden="true" name="mychart"  id= "column" value="column" ng-click= "chartfunc2(options, tabIndex)"></i></a>
+							<a  class= " charticon1  "  href= "#"> <i class="fa fa-area-chart bar-area-icon" aria-hidden="true" name="mychart"  id= "bar" value="bar" ng-click= "chartfunc1(options ,tabIndex)"></i></a>
 					    </div>
                       </div>
                
-			       <div class="tab-content aqi-details-tab-base-waste">
-						<div id="hygiene-detailse" class="tab-pane fade in active aqi-details-tab-base-content">
+			       <div class="tab-content details-tab-base-waste">
+						<div id="hygiene-detailse" class="tab-pane fade in active details-tab-base-content">
 							<img alt="" class="loading_image" ng-show="hygieneLoading" src="images/25.gif">
 							<ul class="nav nav-tabs" id="hygiene-tab"> 
 								<li ng-repeat="hygiene in hygieneData" ng-class="{'active':$index==tabIndex}"><a data-toggle="tab" href="#" data-target="#hygiene__{{$index}}" ng-click="selectTab($index)">{{hygiene.assetName}}</a></li>
 							</ul>
-							<div id="hygiene-tab-content" ng-show="!hygieneLoading" class="tab-content aqi-details-tab-base-content-waste">
+							<div id="hygiene-tab-content" ng-show="!hygieneLoading" class="tab-content details-tab-base-content-waste">
 						       <div ng-repeat="hygiene in hygieneData" id="hygiene_{{$index}}" ng-class="{'active':$index==tabIndex}" class="tab-pane fade in">
-						         <div id="container_{{$index}}" class="hygiene_details_graph_class hygiene_details_graph_class_machine" style="min-height: 353px;"></div>
+						         <div id="container_{{$index}}" class="hygiene_details_graph_class hygiene_details_graph_class_machine data-graph"></div>
 							   </div>
 						   </div>
 					    </div>

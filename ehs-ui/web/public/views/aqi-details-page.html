@@ -1,9 +1,9 @@
-<div class="col-md-12" style="padding: 10px;">
+<div class="col-md-12 container-padd">
 	<div class="col-md-12">
 		<div class="row">
-			<div class="col-md-12" style="padding-left: 5px; padding-right: 5px;">
+			<div class="col-md-12 tab-base-padd">
 
-				<div class="col-md-12  aqi-details-tab-base">
+				<div class="col-md-12  details-tab-base">
 
 					<div class="col-md-12 floor_list_base">
 						<ul>
@@ -14,13 +14,13 @@
 						<li class="active"><a data-toggle="tab" href="" data-target="#aqi-area" ng-click="aqiTabChange('aqi')">Indoor Air Quality</a></li>
 					</ul>
 
-					<div class="tab-content aqi-details-tab-base-inner">
-						<div id="aqi-area" class="tab-pane fade in active aqi-details-tab-base-content">
+					<div class="tab-content details-tab-base-inner">
+						<div id="aqi-area" class="tab-pane fade in active details-tab-base-content">
 							<img alt="" class="loading_image" ng-show="aqiAreaLoading" src="images/25.gif">
 							<ul class="nav nav-tabs" id="aqi-area-tab">
 								<li ng-repeat="area in aqiAreaData" ng-class="{'active':$index==tabIndexArea}"><a data-toggle="tab" href="#" data-target="#aqi_area_{{$index}}" ng-click="selectTab($index,'area')">{{area.assetName}}</a></li>
 							</ul>
-							<div id="aqi-area-tab-content" class="tab-content aqi-details-tab-base-content-inner" style="display: none;">
+							<div id="aqi-area-tab-content" class="tab-content details-tab-base-content-inner highcharts-button">
 								<div ng-repeat="area in aqiAreaData" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea}" class="tab-pane fade in">
 									<div id="area_chart_{{$index}}" class="aqi_details_graph_class aqi_details_graph_class_machine"></div>
 								</div>
@@ -30,21 +30,21 @@
 				</div>
 			</div>
 		</div>
-		<div class="row" style="margin-top: 10px;">
-			<div class="col-md-12" style="padding-left: 5px; padding-right: 5px;">
-				<div class="col-md-12 aqi-details-tab-base">
+		<div class="row mid-divide">
+			<div class="col-md-12 tab-base-padd">
+				<div class="col-md-12 details-tab-base">
 					<img alt="" class="loading_image" ng-show="aqiMachineLoading" src="images/25.gif">
 					<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="" data-target="#p-s-e">Process Stack Emission</a></li>
 					</ul>
 
-					<div class="tab-content  aqi-details-tab-base-inner">
-						<div id="aqi-machine" class="tab-pane fade in active aqi-details-tab-base-content">
+					<div class="tab-content details-tab-base-inner">
+						<div id="aqi-machine" class="tab-pane fade in active details-tab-base-content">
 							<ul class="nav nav-tabs" id="aqi-machine-tab">
 								<li ng-repeat="machine in aqiMachineData" ng-class="{'active':$index==tabIndexMachine}"><a data-toggle="tab" href="#" data-target="#aqi_machine_{{$index}}"
 									ng-click="selectTab($index,'machine')">{{machine.assetName}}</a></li>
 							</ul>
-							<div id="aqi-machine-tab-content" class="tab-content aqi-details-tab-base-content-inner" style="display: none;">
+							<div id="aqi-machine-tab-content" class="tab-content details-tab-base-content-inner highcharts-button">
 								<div ng-repeat="machine in aqiMachineData" id="aqi_machine_{{$index}}" ng-class="{'active':$index==tabIndexMachine}" class="tab-pane fade in">
 									<div id="machine_chart_{{$index}}" class="aqi_details_graph_class"></div>
 								</div>

@@ -107,6 +107,14 @@ define([ 'jquery',
 			           /*{state: 'blanksubpage', label: 'Blank Sub Page'}*/
 			    ]
 			},
+			{    
+				   icon: 'fa fa-recycle', 
+				   state: 'Sensor-Data', 
+			       label: 'Real Time Sensor', 
+			       subitems: [
+			           /*{state: 'blanksubpage', label: 'Blank Sub Page'}*/
+			    ]
+			},
 			
 			 ]
         };

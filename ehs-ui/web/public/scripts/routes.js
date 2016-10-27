@@ -102,6 +102,10 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 			url : '/Waste-Management',
 			templateUrl : 'views/Waste-Management.html',
 			controller : 'WasteManagementController'
+		}).state('Sensor-Data', {
+			url : '/Sensor-Data',
+			templateUrl : 'views/Sensor-Data.html',
+			controller : 'SensorDataController'
 		})
 
 

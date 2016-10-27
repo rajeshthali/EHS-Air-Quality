@@ -1,0 +1,72 @@
+[{	
+		"address":null,
+		"datatype":"FLOAT",
+		"name":"Temperature:MY-APPENDER-VINAYAK",
+		"category":"REAL",	
+		"value":25.0,
+		"timestamp":1477082385289,
+		"quality":"GOOD (0)"
+	}, 
+	{
+	   "address":null,
+	   "datatype":"FLOAT",
+	   "name":"PB:MY-APPENDER-VINAYAK",
+	   "category":"REAL",
+	   "value":1.0,
+	   "timestamp":1477082385289,
+	   "quality":"GOOD (0)"
+	 }, 
+	 {
+	    "address":null,
+	    "datatype":"FLOAT",
+	    "name":"O3:MY-APPENDER-VINAYAK",
+	    "category":"REAL",
+	    "value":1.0,
+	    "timestamp":1477082385289,
+	    "quality":"GOOD (0)"
+	  }, 
+	  { 
+	   "address":null,
+	   "datatype":"FLOAT",
+	   "name":"CO2:MY-APPENDER-VINAYAK",
+	   "category":"REAL",
+	   "value":1.0,
+	   "timestamp":1477082385289,
+	   "quality":"GOOD (0)"
+	  },
+	  {
+	    "address":null,
+	    "datatype":"FLOAT",
+	    "name":"PM2_5:MY-APPENDER-VINAYAK",
+	    "category":"REAL",
+	    "value":1.0,
+	    "timestamp":1477082385289,
+	    "quality":"GOOD (0)"
+	  },
+	  {
+	     "address":null,
+	     "datatype":"FLOAT",
+	     "name":"NH3:MY-APPENDER-VINAYAK",
+	     "category":"REAL",
+	     "value":1.0,
+	     "timestamp":1477082385289,
+	     "quality":"GOOD (0)"
+	   },
+	   {
+	      "address":null,
+	      "datatype":"FLOAT",
+	      "name":"PM10:MY-APPENDER-VINAYAK",
+	      "category":"REAL",
+	      "value":1.0,
+	      "timestamp":1477082385289,
+	      "quality":"GOOD (0)"
+	    }, 
+	    {
+	      "address":null,
+	      "datatype":"FLOAT",
+	      "name":"SO2:MY-APPENDER-VINAYAK",
+	      "category":"REAL",
+	      "value":1.0,
+	      "timestamp":1477082385289,
+	      "quality":"GOOD (0)"
+}]

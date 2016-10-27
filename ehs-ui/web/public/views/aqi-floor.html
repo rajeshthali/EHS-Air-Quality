@@ -1,31 +1,28 @@
 <div class="col-md-12 floor_list_base">
 		<ul>
-			<li ng-repeat="f in floors"   ng-class="{'active':$index===floor,'disabled':(aqiMachineLoading || aqiMachineLoading)}" ng-click="changeFloor(f.id)">{{f.name}}</li>
+			<li ng-repeat="f in floors" ng-class="{'active':$index===floor,'disabled':(aqiMachineLoading || aqiMachineLoading)}" ng-click="changeFloor(f.id)">{{f.name}}</li>
 		</ul>
 	</div>
 	<div class="clearfix"></div>
-<div class="col-md-12" style="padding: 10px;">
+<div class="col-md-12 container-padd">
 	
 	<div class="col-md-12">
 		<div class="row">
-			<div class="col-md-6" style="padding-left: 5px; padding-right: 5px;">
-
-
-
-				<div class="col-md-12  aqi-tab-base">
+			<div class="col-md-6 tab-base-padd">
+				<div class="col-md-12 tab-base">
 					
 					<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="" data-target="#aqi-area" ng-click="aqiTabChange('aqi')">Indoor Air Quality</a></li>
 						<li><a data-toggle="tab" href="" data-target="#aqi-comparison" ng-click="aqiTabChange('aqi-comparison')">AQI Comparison</a></li>
 					</ul>
 
-					<div class="tab-content aqi-tab-base-inner">
-						<div id="aqi-area" class="tab-pane fade in active aqi-tab-base-content">
+					<div class="tab-content tab-base-inner">
+						<div id="aqi-area" class="tab-pane fade in active tab-base-content">
 							<img alt="" class="loading_image" ng-show="aqiAreaLoading" src="images/25.gif">
 							<ul class="nav nav-tabs" id="aqi-area-tab">
 								<li ng-repeat="area in aqiAreaData" ng-class="{'active':$index==tabIndexArea}"><a data-toggle="tab" href="#" data-target="#aqi_area_{{$index}}" ng-click="selectTab($index,'area')">{{area.assetName}}</a></li>
 							</ul>
-							<div id="aqi-area-tab-content" class="tab-content aqi-tab-base-content-inner" style="display: none;">
+							<div id="aqi-area-tab-content" class="tab-content tab-base-content-inner highcharts-button">
 								<div ng-repeat="area in aqiAreaData" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea}" class="tab-pane fade in">
 
 									<div  id="area_chart_{{$index}}" class="graph_class" ng-click= "details(floor)"></div>
@@ -33,7 +30,7 @@
 									<div class="col-md-12 area_gauge_chart_base">
 										<div class="row">
 											<div class="col-md-6 col-xs-12">
-												<div class="" style="text-align: center;">
+												<div class="stat">
 													<div id="area_gauge_chart_{{$index}}" class="gauge_graph_class"></div>
 													<h6 class="prami_txt">AQI</h6>
 												</div>
@@ -49,34 +46,34 @@
 								</div>
 							</div>
 						</div>
-						<div id="aqi-comparison" class="tab-pane fade aqi-comparison-tab-base-content">
+						<div id="aqi-comparison" class="tab-pane fade tab-base-content">
 							<img alt="" class="loading_image" ng-show="aqiAreaComparisonLoading" src="images/25.gif">
 							<ul class="nav nav-tabs" id="aqi-area-tab">
 								<li ng-repeat="area in aqiAreaComparison" ng-class="{'active':$index==tabIndexArea}"><a data-toggle="tab" href="#" data-target="#aqi_area_comparison_{{$index}}"
 									ng-click="selectTab($index,'comparison')">{{area.assetName}}</a></li>
 							</ul>
-							<div id="aqi-area-comparison-tab-content" class="tab-content aqi-comparison-tab-base-content-inner" style="">
+							<div id="aqi-area-comparison-tab-content" class="tab-content tab-base-content-inner">
 								<div ng-repeat="area in aqiAreaComparison" id="aqi_area_comparison_{{$index}}" ng-class="{'active':$index==tabIndexMachineComparison}" class="tab-pane fade in">
 									<div class="row">
 
 										<div class="col-md-12 col-xs-12">
-											<div class="" style="text-align: center;">
+											<div class="stat">
 												<div id="aqi_area_comparison_chart_{{$index}}" class="gauge_graph_class"></div>
 												<h6 class="prami_txt">AQI</h6>
 												<h6 class="prami_txt">Prominent Pollutant : {{area.data.maxAqi.name}}</h6>
-												<h4 style="text-align: center;">Current AQI</h4>
+												<h4 class="stat">Current AQI</h4>
 											</div>
 										</div>
 									</div>
-									<div class="row" style="height: 180px; position: relative;">
+									<div class="row poshR"s>
 
 										<div class="col-md-12 col-xs-12">
-											<div class="" style="text-align: center;">
+											<div class="stat">
 												<div id="aqi_area_comparison_chart_last_week_{{$index}}" class="gauge_graph_class"></div>
 												<div ng-if="area.data.maxAqiLastWeek.name">
 													<h6 class="prami_txt">AQI</h6>
 													<h6 class="prami_txt">Prominent Pollutant : {{area.data.maxAqiLastWeek.name}}</h6>
-													<h4 style="text-align: center;">Last Week AQI</h4>
+													<h4 class="stat">Last Week AQI</h4>
 												</div>
 											</div>
 										</div>
@@ -90,20 +87,20 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6" style="padding-left: 5px; padding-right: 5px;">
-				<div class="col-md-12 aqi-tab-base">
+			<div class="col-md-6 tab-base-padd">
+				<div class="col-md-12 tab-base">
 					<img alt="" class="loading_image" ng-show="aqiMachineLoading" src="images/25.gif">
 					<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="" data-target="#p-s-e">Process Stack Emission</a></li>
 					</ul>
 
-					<div class="tab-content  aqi-tab-base-inner">
-						<div id="aqi-machine" class="tab-pane fade in active aqi-tab-base-content">
+					<div class="tab-content  tab-base-inner">
+						<div id="aqi-machine" class="tab-pane fade in active tab-base-content">
 							<ul class="nav nav-tabs" id="aqi-machine-tab">
 								<li ng-repeat="machine in aqiMachineData" ng-class="{'active':$index==tabIndexMachine}"><a data-toggle="tab" href="#" data-target="#aqi_machine_{{$index}}"
 									ng-click="selectTab($index,'machine')">{{machine.assetName}}</a></li>
 							</ul>
-							<div id="aqi-machine-tab-content" class="tab-content aqi-tab-base-content-inner" style="display: none;">
+							<div id="aqi-machine-tab-content" class="tab-content tab-base-content-inner highcharts-button">
 								<div ng-repeat="machine in aqiMachineData" id="aqi_machine_{{$index}}" ng-class="{'active':$index==tabIndexMachine}" class="tab-pane fade in">
 
 
@@ -142,13 +139,13 @@
 										</div>
 									</div>
 
-									<div class="row" style="margin-top: 50px;">
-										<div class="col-md-5 col-xs-12" style="height: 242px;">
+									<div class="row mach-margin">
+										<div class="col-md-5 col-xs-12 mach-height">
 											<img alt="" class="center_img" ng-src="{{machine.data.imageUrl}}">
 										</div>
 										<div class="col-md-6 col-xs-12">
 											<h4 class="status_txt">Status</h4>
-											<h1 style="font-size: 30px;" ng-class="{'warn_sta': machine.data.maxAqi.aqiValue>=maxValue , 'stis_sta': machine.data.maxAqi.aqiValue<maxValue}">
+											<h1 class="mach-font" ng-class="{'warn_sta': machine.data.maxAqi.aqiValue>=maxValue , 'stis_sta': machine.data.maxAqi.aqiValue<maxValue}">
 												<span ng-if="machine.data.maxAqi.aqiValue<=maxValue">Satisfactory</span> <span ng-if="machine.data.maxAqi.aqiValue>maxValue">Warning</span>
 											</h1>
 										</div>
