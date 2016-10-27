@@ -1,0 +1,9 @@
+---
+applications:
+  - name: ehs-datasource-floor_amlesh
+    buildpack: java_buildpack
+    path: target/ehs-datasource-floor_amlesh-0.1.jar
+    timeout : 180
+env:
+   SPRING_PROFILES_ACTIVE : cloud  
+   JAVA_DOCS_URL : http://predixdev.github.io/predix-microservice-cf-spring
