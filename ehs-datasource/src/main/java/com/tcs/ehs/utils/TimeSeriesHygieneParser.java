@@ -107,9 +107,11 @@ public class TimeSeriesHygieneParser extends CommonTimeSeriesParser {
 
 	}
 	
-	public Collection<Floor> convertToHygieneData(List<CommonResponseObjectCollections> list) {
+	public Collection<Floor> convertToHygieneData(Collection<CommonResponseObjectCollections> list) {
 		Collection<Floor> floorList = new ArrayList<>();
+		java.util.Map<String, Floor> floorMap = new HashMap<>();
 		if(list != null) {
+			
 			for(CommonResponseObjectCollections responseObjectCollection : list) {
 				Floor floorObj = new Floor();
 				floorObj.setFloorNo(Integer.toString(responseObjectCollection.getFloor()));
@@ -118,8 +120,16 @@ public class TimeSeriesHygieneParser extends CommonTimeSeriesParser {
 				floorAsset.setAssetName(responseObjectCollection.getAssetName());
 				List<CommonResponseObject> commonResponseObjectList = responseObjectCollection.getResponseObjects();
 				List<HygieneResponseObject> hygieneList = new ArrayList<>();
+				java.util.Map<Long, HygieneResponseObject> hygieneMap = new HashMap<>();
+				HygieneResponseObject hygieneResponseObject = null;
 				for(CommonResponseObject commonResponseObject : commonResponseObjectList) {
-					HygieneResponseObject hygieneResponseObject = new HygieneResponseObject();
+					if(hygieneMap.get(commonResponseObject.getTimestamp()) == null) {
+						hygieneResponseObject = new HygieneResponseObject();
+						hygieneResponseObject.setTimestamp(commonResponseObject.getTimestamp());
+						hygieneMap.put(commonResponseObject.getTimestamp(), hygieneResponseObject);
+					}else{
+						hygieneResponseObject = hygieneMap.get(commonResponseObject.getTimestamp());
+					}
 					if("TEMPERATURE".equalsIgnoreCase(commonResponseObject.getProperyName())) {
 						hygieneResponseObject.setTemperature(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
 					}else if("HUMIDITY".equalsIgnoreCase(commonResponseObject.getProperyName())) {
@@ -127,8 +137,9 @@ public class TimeSeriesHygieneParser extends CommonTimeSeriesParser {
 					}else if("NOISE".equalsIgnoreCase(commonResponseObject.getProperyName())) {
 						hygieneResponseObject.setNoise(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
 					}
-					hygieneResponseObject.setTimestamp(commonResponseObject.getTimestamp());
-					hygieneList.add(hygieneResponseObject);
+				}
+				for(HygieneResponseObject obj : hygieneMap.values()) {
+					hygieneList.add(obj);
 				}
 				floorAsset.setData(hygieneList);
 				assetsMap.put(responseObjectCollection.getAssetName(), floorAsset);

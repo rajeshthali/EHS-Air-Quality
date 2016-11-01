@@ -45,13 +45,13 @@ public class HygieneController {
 	public ResponseEntity<Object> hygieneQuery(@RequestHeader("Authorization") String authorization, @RequestParam Long interval) throws JsonProcessingException {
 		Value value = TimeUtils.calculateInterval(interval);
 		DatapointsResponse datapointsResponse = timeseriesRequester.requestForHygiene(Constants.QueryTagsHygiene.Hygiene, authorization, value.getStartTime(), value.getEndTime());
-		List<CommonResponseObjectCollections> responseObjectCollectionsList  = timeSeriesParser.parseTimeSeriesResponse(datapointsResponse);
+		Collection<CommonResponseObjectCollections> responseObjectCollectionsList  = timeSeriesParser.parseTimeSeriesResponse(datapointsResponse);
 		Collection<Floor> floors = timeSeriesParser.convertToHygieneData(responseObjectCollectionsList);
 		
 		//datapointsResponse.getTags();
 		
 		ObjectMapper mapper = new ObjectMapper();
-		String response = mapper.writeValueAsString(datapointsResponse);
+		//String response = mapper.writeValueAsString(datapointsResponse);
 		
 		if (floors.size() > 0)
 			return new ResponseEntity<Object>(floors, HttpStatus.OK);
@@ -64,7 +64,9 @@ public class HygieneController {
 	public ResponseEntity<Object> hygieneQueryFloor(@RequestHeader("Authorization") String authorization, @RequestParam Long interval, @PathVariable String floor) throws JsonProcessingException {
 		Value value = TimeUtils.calculateInterval(interval);
 		DatapointsResponse datapointsResponse = timeseriesRequester.requestForHygiene(Constants.QueryTagsHygiene.Hygiene, floor, authorization, value.getStartTime(), value.getEndTime());
-		Collection<Floor> floors = timeSeriesParser.parseFloor(datapointsResponse);
+		//Collection<Floor> floors = timeSeriesParser.parseFloor(datapointsResponse);
+		Collection<CommonResponseObjectCollections> responseObjectCollectionsList  = timeSeriesParser.parseTimeSeriesResponse(datapointsResponse);
+		Collection<Floor> floors = timeSeriesParser.convertToHygieneData(responseObjectCollectionsList);
 		if (floors.size() > 0)
 			return new ResponseEntity<Object>(floors, HttpStatus.OK);
 		else
@@ -76,7 +78,10 @@ public class HygieneController {
 			throws JsonProcessingException {
 		Value value = TimeUtils.calculateInterval(interval);
 		DatapointsResponse datapointsResponse = timeseriesRequester.requestForHygiene(Constants.QueryTagsHygiene.Hygiene, floor, assetName, authorization, value.getStartTime(), value.getEndTime());
-		Collection<Floor> floors = timeSeriesParser.parseFloor(datapointsResponse);
+		//Collection<Floor> floors = timeSeriesParser.parseFloor(datapointsResponse);
+		Collection<CommonResponseObjectCollections> responseObjectCollectionsList  = timeSeriesParser.parseTimeSeriesResponse(datapointsResponse);
+		Collection<Floor> floors = timeSeriesParser.convertToHygieneData(responseObjectCollectionsList);
+	
 		if (floors.size() > 0)
 			return new ResponseEntity<Object>(floors, HttpStatus.OK);
 		else
@@ -88,7 +93,10 @@ public class HygieneController {
 			@PathVariable String assetName) throws JsonProcessingException {
 		Value value = TimeUtils.calculateInterval(interval);
 		DatapointsResponse datapointsResponse = timeseriesRequester.requestForHygiene(Constants.QueryTagsHygiene.Hygiene, floor, assetName, authorization, value.getStartTime(), value.getEndTime());
-		Collection<Floor> floors = timeSeriesParser.parseFloor(datapointsResponse);
+		//Collection<Floor> floors = timeSeriesParser.parseFloor(datapointsResponse);
+		Collection<CommonResponseObjectCollections> responseObjectCollectionsList  = timeSeriesParser.parseTimeSeriesResponse(datapointsResponse);
+		Collection<Floor> floors = timeSeriesParser.convertToHygieneData(responseObjectCollectionsList);
+	
 		floors = hygieneCalculation.getDashBoardValues(floors);
 		if (floors.size() > 0) {
 			return new ResponseEntity<Object>(floors, HttpStatus.OK);

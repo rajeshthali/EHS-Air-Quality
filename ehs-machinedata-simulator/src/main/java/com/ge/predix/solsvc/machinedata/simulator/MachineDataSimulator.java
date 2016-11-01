@@ -134,7 +134,7 @@ public class MachineDataSimulator {
 
 	}
 	*/
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	private DatapointsIngestion createAllFloorDataIngestionRequest(
 			FloorObjectVO floorObj) throws JsonGenerationException,
 			JsonMappingException, IOException {
@@ -183,9 +183,9 @@ public class MachineDataSimulator {
 
 		return dpIngestion;
 
-	}
+	}*/
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	private DatapointsIngestion createFloorDataIngestionRequest(
 			FloorObjectVO floorObj) throws JsonGenerationException, JsonMappingException, IOException {
 
@@ -255,7 +255,7 @@ public class MachineDataSimulator {
 
 		return dpIngestion;
 
-	}
+	}*/
 
 	/*private void generateFloorData(List<FloorBodyVO> floorBodyList,
 			String floorName) throws JsonProcessingException {

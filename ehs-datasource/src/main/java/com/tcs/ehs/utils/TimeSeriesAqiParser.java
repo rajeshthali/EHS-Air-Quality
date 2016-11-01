@@ -317,7 +317,7 @@ public class TimeSeriesAqiParser extends CommonTimeSeriesParser{
 	}
 	
 	
-	public Collection<Floor> convertToAqiData(List<CommonResponseObjectCollections> list) {
+	public Collection<Floor> convertToAqiData(Collection<CommonResponseObjectCollections> list) {
 		Collection<Floor> floorList = new ArrayList<>();
 		if(list != null) {
 			for(CommonResponseObjectCollections responseObjectCollection : list) {
@@ -328,8 +328,17 @@ public class TimeSeriesAqiParser extends CommonTimeSeriesParser{
 				floorAsset.setAssetName(responseObjectCollection.getAssetName());
 				List<CommonResponseObject> commonResponseObjectList = responseObjectCollection.getResponseObjects();
 				List<ResponseObject> aqiList = new ArrayList<>();
+				java.util.Map<Long, ResponseObject> aqiMap = new HashMap<>();
+				ResponseObject aqiObject = null;
 				for(CommonResponseObject commonResponseObject : commonResponseObjectList) {
-					ResponseObject aqiObject = new ResponseObject();
+					
+					if(aqiMap.get(commonResponseObject.getTimestamp()) == null) {
+						aqiObject = new ResponseObject();
+						aqiObject.setTimestamp(commonResponseObject.getTimestamp());
+						aqiMap.put(commonResponseObject.getTimestamp(), aqiObject);
+					}else{
+						aqiObject = aqiMap.get(commonResponseObject.getTimestamp());
+					}
 					if("PM10".equalsIgnoreCase(commonResponseObject.getProperyName())) {
 						aqiObject.setPM10(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
 					}else if("O3".equalsIgnoreCase(commonResponseObject.getProperyName())) {
@@ -347,9 +356,14 @@ public class TimeSeriesAqiParser extends CommonTimeSeriesParser{
 					}else if("SO2".equalsIgnoreCase(commonResponseObject.getProperyName())) {
 						aqiObject.setSO2(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
 					}
-					aqiObject.setTimestamp(commonResponseObject.getTimestamp());
-					aqiList.add(aqiObject);
+					//aqiObject.setTimestamp(commonResponseObject.getTimestamp());
+					//aqiList.add(aqiObject);
 				}
+				
+				for(ResponseObject obj : aqiMap.values()) {
+					aqiList.add(obj);
+				}
+				
 				floorAsset.setResponseObjectList(aqiList);
 				assetsMap.put(responseObjectCollection.getAssetName(), floorAsset);
 				floorObj.setAssetsMap(assetsMap);

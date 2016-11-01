@@ -23,7 +23,7 @@ public class AqiCalculations {
 	TimeSeriesAqiParser timeSeriesAqiParser;
 
 	public Collection<Floor> calculateAqiFloor(DatapointsResponse datapointsResponse, Long startTime, Long endTime) {
-		List<CommonResponseObjectCollections> responseObjectCollectionsList  = timeSeriesAqiParser.parseTimeSeriesResponse(datapointsResponse);
+		Collection<CommonResponseObjectCollections> responseObjectCollectionsList  = timeSeriesAqiParser.parseTimeSeriesResponse(datapointsResponse);
 		Collection<Floor> floors = timeSeriesAqiParser.convertToAqiData(responseObjectCollectionsList);
 		for (Floor floor : floors) {
 			for (FloorAsset floorAsset : floor.getAssets()) {
