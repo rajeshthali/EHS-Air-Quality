@@ -1,0 +1,259 @@
+<style>
+main{background:url('../images/based_map.png');   
+	 background-size: contain;
+    background-repeat-y: no-repeat;
+    background-position: center;
+    }
+    main:not([style-scope]):not(.style-scope) {
+    background-color: #eee!important;
+} 
+.bgtra{background: transparent;}
+
+    
+</style>
+<div class="loaderpg_dash"></div>
+<img src='/images/25.gif' class="lad_img_dash">
+ <div class="col-md-5 pull-right text-right ">
+ 	<ul class="dash_op">
+	  	<li class="active" ng-click="show_all()"><a href="#tab1" data-toggle="tab">All</a></li>
+		<li ng-click="hide_red()"><a href="#tab1" data-toggle="tab">compliant</a></li>
+		<li ng-click="hide_green()"><a href="#tab1" data-toggle="tab">Non-compliant</a></li>
+	</ul>
+ 	 
+ </div>
+ 	<div class="clearfix"></div>
+ 	<div class="parent">
+  	<div class="col-md-6 floor1" ng-class="{hover1: hoverme}" ng-mouseover="hoverfun('floor1')" ng-mouseleave="hoverout('floor1')">
+  		<div class="f1_tit">F1</div>
+		  <div class="dropdown smt_area" ng-click="gotoaqi('x1')">
+			  <div ng-class="{'air_red': sever , 'air_grn': green}" class="air_red"></div>
+			  <div class="dropdown-content air_grn_bdr">
+			    <p>Air quality index</p>
+			    <span class="green_box_title">SMT Area</span>
+			    <div class="clearfix"></div>
+			    <div class="gaugae"><div id="camp31" class="c3"></div></div>
+			    <div class="status">
+					<h2 class="stis_sta_dash">Satisfactory</h2>
+					<h4 class="status_txt_dash">Status</h4>
+				</div>
+				<h6 class="prami_txt">Prominent pollutant: NO2</h6>
+			  </div>
+		</div>
+		
+		
+		 <div class="dropdown production_grnd" ng-click="gotoaqi('x2')">
+			  <div ng-class="{'air_red': sever , 'air_grn': green}" class="air_grn"></div>
+			  <div class="dropdown-content air_grn_bdr">
+			   <p>Air quality index</p>
+			   <span class="green_box_title">Production ground floor</span>
+			   <div class="clearfix"></div>
+			    <div class="gaugae"><div id="camp32" class="c3"></div></div>
+			    <div class="status">
+					<h2 class="stis_sta_dash">Satisfactory</h2>
+					<h4 class="status_txt_dash">Status</h4>
+				</div>
+				<h6 class="prami_txt">Prominent pollutant: NO2</h6>
+			  </div>
+		</div>
+		
+		 <div class="dropdown near_sol" ng-click="gotoaqi('x3')">
+			  <div ng-class="{'air_red': sever , 'air_grn': green}" class="air_red"></div>
+			  <div class="dropdown-content air_grn_bdr">
+			   <p>Air quality index</p>
+			   <span class="green_box_title">Near Soldering Machine</span>
+			   <div class="clearfix"></div>
+			    <div class="gaugae"><div id="camp33" class="c3"></div></div>
+			    <div class="status">
+					<h2 class="stis_sta_dash">Satisfactory</h2>
+					<h4 class="status_txt_dash">Status</h4>
+				</div>
+				<h6 class="prami_txt">Prominent pollutant: NO2</h6>
+			  </div>
+		</div>
+		  	
+  	
+  	
+  	</div>
+   	<div class="col-md-6 floor2" ng-class="{hover2: hoverme}" ng-mouseover="hoverfun('floor2')" ng-mouseleave="hoverout('floor2')">
+   	<div class="f1_tit">F2</div>
+		<div class="dropdown heller_mach" ng-click="gotoaqi('h1')">
+			  <div ng-class="{'air_red': war , 'air_grn': sat}" class="air_grn" ></div>
+			  <div class="dropdown-content air_grn_bdr">
+			    <h4 class="box_text">Process Stack Emission</h4>
+					<span class="green_box_title">Heller Machine</span>
+					<p  class="clear_b"><span class="pull-left span_text">S02</span><span class="pull-right span1_text">70 ppb</span></p>
+					<p  class="clear_b"><span class="pull-left span_text">N02</span><span class="pull-right span1_text">65 ppb</span></p>
+					<p  class="clear_b"><span class="pull-left span_text">PM 2.5</span><span class="pull-right span1_text">50ppb</span></p>		
+			  </div>
+		</div>
+		
+		 <div class="dropdown solte_mach" ng-click="gotoaqi('h2')">
+			  <div ng-class="{'air_red': war , 'air_grn': sat}" class="air_red"></div>
+			  <div class="dropdown-content air_grn_bdr">
+			    <h4 class="box_text">Process Stack Emission</h4>
+					<span class="green_box_title">Soltech Machine</span>
+					<p  class="clear_b"><span class="pull-left span_text">S02</span><span class="pull-right span1_text">70 ppb</span></p>
+					<p  class="clear_b"><span class="pull-left span_text">N02</span><span class="pull-right span1_text">60 ppb</span></p>
+					<p  class="clear_b"><span class="pull-left span_text">PM 2.5</span><span class="pull-right span1_text">50 ppb</span></p>		
+			  </div>
+		</div>
+		
+		 <div class="dropdown relfl_mach" ng-click="gotoaqi('h3')">
+			  <div ng-class="{'air_red': war , 'air_grn': sat}" class="air_grn"></div>
+			  <div class="dropdown-content air_grn_bdr">
+			   <h4 class="box_text">Process Stack Emission</h4>
+					<span class="green_box_title">Relfow Oven</span>
+					<p  class="clear_b"><span class="pull-left span_text">S02</span><span class="pull-right span1_text">70 ppb</span></p>
+					<p  class="clear_b"><span class="pull-left span_text">N02</span><span class="pull-right span1_text">60 ppb</span></p>
+					<p  class="clear_b"><span class="pull-left span_text">PM 2.5</span><span class="pull-right span1_text">50 ppb</span></p>		
+			  </div>
+		</div>
+   	
+   	
+   	</div>
+  	<div class="col-md-6 floor3" ng-class="{hover3: hoverme}" ng-mouseover="hoverfun('floor3')" ng-mouseleave="hoverout('floor3')">
+  		<div class="f1_tit">F3</div>
+		<div class="dropdown wave_mach" ng-click="gotoaqi('h4')">
+			  <div ng-class="{'air_red': war , 'air_grn': sat}" class="air_grn"></div>
+			  <div class="dropdown-content air_grn_bdr">
+			    <h4 class="box_text">Process Stack Emission</h4>
+					<span class="green_box_title">Wave Soldering Machine</span>
+					<p  class="clear_b"><span class="pull-left span_text">S02</span><span class="pull-right span1_text">70 ppb</span></p>
+					<p  class="clear_b"><span class="pull-left span_text">N02</span><span class="pull-right span1_text">60 ppb</span></p>
+					<p  class="clear_b"><span class="pull-left span_text">PM 2.5</span><span class="pull-right span1_text">50 ppb</span></p>		
+			  </div>
+		</div>
+		
+		 <div class="dropdown smt1_hygn" ng-click="gotohygn('x1')">
+			  <div ng-class="{'hygn_red': hygn_wa , 'hygn_grn': hygn_sat}" class="hygn_grn" ></div>
+			  <div class="dropdown-content hygn_grn_bdr">
+			    <h4 class="box_text">Industrial hygiene</h4>
+					<span class="darkg_box_title">SMT line 1</span>
+					<p  class="clear_b"><span class="pull-left span_text">Temprature</span><span class="pull-right span1_text">32 <sup>0</sup>c</span></p>
+					<p  class="clear_b"><span class="pull-left span_text">Humidity</span><span class="pull-right span1_text">30 %</span></p>
+					<p  class="clear_b"><span class="pull-left span_text">Noise</span><span class="pull-right span1_text">35 db</span></p>		
+			  </div>
+		</div>
+		
+		 <div class="dropdown smt2_hygn" ng-click="gotohygn('x2')">
+			  <div ng-class="{'hygn_red': hygn_wa , 'hygn_grn': hygn_sat}"  class="hygn_red"></div>
+			  <div class="dropdown-content hygn_grn_bdr">
+			    <h4 class="box_text">Industrial hygiene</h4>
+					<span class="darkg_box_title">SMT line 2</span>
+					<p  class="clear_b"><span class="pull-left span_text">Temprature</span><span class="pull-right span1_text">30<sup>0</sup>c</span></p>
+					<p  class="clear_b"><span class="pull-left span_text">Humidity</span><span class="pull-right span1_text">30 %</span></p>
+					<p  class="clear_b"><span class="pull-left span_text">Noise</span><span class="pull-right span1_text">35 db</span></p>		
+			  </div>
+		</div>
+  	
+  	
+  	
+  	</div>  
+  	</div>
+  	<div class="col-md-1 pull-right up_arw" ng-click="increment()"></div>
+  	<div class="clearfix"></div>
+  	<div class="col-md-1 pull-right no_actn" ng-click="hide_othr('f4')"></div>
+  	<div class="clearfix"></div>
+  	<div class="col-md-1 pull-right down_ar" ng-click="decrement()"></div>
+  	<div class="clearfix"></div>
+  	
+  	
+  	
+ 
+ 
+
+ 
+
+ <div class="col-md-4 pull-right detail_das">
+ 	<div class="col-md-9">
+ 	<p><i class="fa fa-cloud" aria-hidden="true"></i>Air quality Monitoring</p>
+ 	<p><i class="fa fa-industry" aria-hidden="true"></i>Industrial Hygiene Monitoring</p>
+	<p><i class="fa fa-tint" aria-hidden="true"></i>Water & discharge Management </p>
+	<p><i class="fa fa-plug" aria-hidden="true"></i>Energy & carbon Management</p>
+	<p><i class="fa fa-recycle" aria-hidden="true"></i>Waste Management</p>
+ 	</div>
+ 	<div class="col-md-3 padd0">
+ 		<p class="status_hed">Status</p>
+ 		<ul class="status_ul">
+ 			<li class="sat_li">Satisfactory</li>
+ 			<li class="war_li">Warning</li>
+ 		</ul>
+ 	</div>
+ </div>
+ 
+<!--  <script>
+  $(document).ready(function(){
+	  console.log("i am in doc rdy");
+	 $(".hover1").hover(function() {
+		 //$(this).parent(this).parent(this).parent(this).addClass('bgtra');
+		    $(".hover1").siblings(".hover2").css('display','none');
+		    $(".hover1").siblings(".hover3").css('display','none');
+		}, function() {
+			//$(this).parent(this).parent(this).parent(this).removeClass('bgtra');
+			  $(".hover1").siblings(".hover2").css('display','block');
+			    $(".hover1").siblings(".hover3").css('display','block');
+		});
+	 $(".hover2").hover(function() {
+		// $(this).parent(this).parent(this).parent(this).addClass('bgtra');
+		    $(".hover2").siblings(".hover1").css('display','none');
+		    $(".hover2").siblings(".hover3").css('display','none');
+		}, function() {
+			//$(this).parent(this).parent(this).parent(this).removeClass('bgtra');
+			  $(".hover2").siblings(".hover1").css('display','block');
+			    $(".hover2").siblings(".hover3").css('display','block');
+		});
+	 
+	 $(".hover3").hover(function() {
+		 //$(this).parent(this).parent(this).parent(this).addClass('bgtra');
+		    $(".hover3").siblings(".hover1").css('display','none');
+		    $(".hover3").siblings(".hover2").css('display','none');
+		}, function() {
+			//$(this).parent(this).parent(this).parent(this).removeClass('bgtra');
+			  $(".hover3").siblings(".hover1").css('display','block');
+			    $(".hover3").siblings(".hover2").css('display','block');
+		});
+	
+	
+	});   
+
+</script>  -->
+<script>
+
+var loadChart = function(selector, min, max, val) {
+	var per = (val / max);
+	var chart = c3.generate({
+		bindto : selector,
+		data : {
+
+			columns : [ [ 'data', val ] ],
+			type : 'gauge'
+		},
+		gauge : {
+			label : {
+				format : function(value, ratio) {
+					return value; //returning here the value and not the ratio
+				},
+			},
+			min : min,
+			max : max,
+			units : '', //this is only the text for the label
+			width : 15
+		},
+		color : {
+			pattern : ['#8BBE3D'], // the three color levels for the percentage values.
+
+		},
+		size : {
+			height : 55,
+			width : 100
+		}
+	});
+};
+loadChart('#camp31', 0.0, 200.0, 140);
+loadChart('#camp32', 0.0, 200.0, 140);
+loadChart('#camp33', 0.0, 200.0, 140);
+</script>
+	
+
+	
+	

@@ -15,6 +15,8 @@ define(['angular'], function (angular) {
          * If you are using Siteminder, this interceptor can be used to capture the session timeout on an AJAX request.
          * You can implement your conditions in this interceptor according to your own requirement.
          */
+    	delete $httpProvider.defaults.headers.common['Access-Control-Allow-Headers'];
+    	//delete $httpProvider.defaults.headers.common['X-Requested-With'];
         $httpProvider.interceptors.push(['$q', function ($q) {
             return {
                 // optional method

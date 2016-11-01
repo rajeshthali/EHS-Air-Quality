@@ -11,12 +11,12 @@ var config = {
 	 * following uaa configuration for your solution You'll need to update
 	 * clientId, serverUrl, and base64ClientCredential.
 	 */
-	uaa : {
-		clientId : 'ehs-client',
-		serverUrl : 'https://72b6dc65-f16d-40bb-9b75-7e2dcd036dd7.predix-uaa.run.aws-usw02-pr.ice.predix.io',
-		defaultClientRoute : '/about',
-		base64ClientCredential : 'ZWhzLWNsaWVudDpjbGllbnQ='
-	},
+		 uaa: {
+			    clientId: 'Test_Rajesh',
+			    serverUrl: 'https://123rajesh.predix-uaa.run.aws-usw02-pr.ice.predix.io',
+			    defaultClientRoute: '/about',
+			    base64ClientCredential: 'VGVzdF9SYWplc2g6MTIzcmFqZXNo'
+			  },
 	/**
 	 * --------- ADD YOUR SECURE ROUTES HERE ------------
 	 * 
@@ -31,15 +31,13 @@ var config = {
 	// instanceId: '7c6b551d-ba2f-4818-92d7-46dc36d63909',
 	// pathRewrite: { '^/api/view-service': '/v1'}
 	// }
-	proxy : {
-		'/api/view-service' : {
-			url : 'https://predix-views.run.aws-usw02-pr.ice.predix.io/api',
-			instanceId : '5ac6f118-af0e-4fbd-8c2b-b05a9300b020',
-			pathRewrite : {
-				'^/api/view-service' : '/v1'
-			}
-		}
-	}
+			  proxy: {
+				    '/api/view-service': {
+				      url: 'https://predix-views.run.aws-usw02-pr.ice.predix.io/api',
+				      instanceId: '74f18206-0df2-4355-a65d-81b3bddcfbf1',
+				      pathRewrite: { '^/api/view-service': '/v1'}
+				    }
+				  }
 };
 
 module.exports = {

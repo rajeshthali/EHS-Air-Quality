@@ -23,7 +23,8 @@ public class AqiCalculations {
 	TimeSeriesAqiParser timeSeriesAqiParser;
 
 	public Collection<Floor> calculateAqiFloor(DatapointsResponse datapointsResponse, Long startTime, Long endTime) {
-		Collection<Floor> floors = timeSeriesAqiParser.parseFloor(datapointsResponse);
+		List<CommonResponseObjectCollections> responseObjectCollectionsList  = timeSeriesAqiParser.parseTimeSeriesResponse(datapointsResponse);
+		Collection<Floor> floors = timeSeriesAqiParser.convertToAqiData(responseObjectCollectionsList);
 		for (Floor floor : floors) {
 			for (FloorAsset floorAsset : floor.getAssets()) {
 				floorAsset.setData(calculateAqi(floorAsset.getResponseObjectList(), startTime, endTime));
@@ -70,7 +71,7 @@ public class AqiCalculations {
 			} else {
 				isNO2Available = false;
 			}
-			if (responseObject.getNO2() != null) {
+			if (responseObject.getSO2() != null) {
 				AQI aqiValue = getAQIValue(getAQIValueObject(responseObject.getSO2(), Constants.Parameter.SO2));
 				SO2.add(aqiValue);
 				values.add(aqiValue);
@@ -78,7 +79,7 @@ public class AqiCalculations {
 				isSO2Available = false;
 			}
 
-			if (responseObject.getNO2() != null) {
+			if (responseObject.getPM2_5() != null) {
 				AQI aqiValue = getAQIValue(getAQIValueObject(responseObject.getPM2_5(), Constants.Parameter.PM2_5));
 				PM2_5.add(aqiValue);
 				values.add(aqiValue);

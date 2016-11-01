@@ -19,7 +19,7 @@ import com.ge.predix.entity.util.map.Map;
 import com.tcs.ehs.utils.AqiCalculations.OverallAqiResponse;
 
 @Component
-public class TimeSeriesWaterParser {
+public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
 
 	@SuppressWarnings("unchecked")
 	private Float getValue(List<Object> attributes, String key) {Float value = null;
@@ -117,62 +117,11 @@ public class TimeSeriesWaterParser {
 
 	}*/
 
-	public Collection<com.tcs.ehs.utils.TimeSeriesWaterParser.Floor> parseFloor(DatapointsResponse datapointsResponse) {
-		java.util.Map<String, Floor> floorMap = new HashMap<>();
-		try {
-			Tag tag = datapointsResponse.getTags().get(0);
-			List<Results> results = tag.getResults();
-			for (int i = 0; i < results.size(); i++) {
-				Map attributes = results.get(i).getAttributes();
-				//List values = results.get(i).getValues();
-				if (attributes.size() > 0) {
-					String assetNameStirng = ((ArrayList<String>) attributes.get("assetname")).get(0);
-					String floorNoStirng = ((ArrayList<String>) attributes.get("floorNo")).get(0);
-					String name = ((ArrayList<String>) attributes.get("name")).get(0);
-
-					Floor floor = floorMap.get(floorNoStirng);
-					if (floor == null) {
-						floor = new Floor();
-						floor.setFloorNo(floorNoStirng);
-						floorMap.put(floorNoStirng, floor);
-					}
-					FloorAsset floorAsset = floor.getAssetsMap().get(assetNameStirng);
-					if (floorAsset == null) {
-						floorAsset = new FloorAsset();
-						floorAsset.setAssetName(assetNameStirng);
-						floor.getAssetsMap().put(assetNameStirng, floorAsset);
-					}
-
-					WaterResponseObject responseObject = new WaterResponseObject();
-
-					List<Object> values = results.get(i).getValues();
-					
-					//Map attributes = results.get(i).getAttributes();
-					
-					//responseObject.setName(name);
-					
-					responseObject.setValue(getValue1(values));
-					responseObject.setName(name);
-
-					//responseObject.setName(getValue(values, "name"));
-				/*	responseObject.setHumidity(getValue(attributes, "humidity"));
-					responseObject.setNoise(getValue(attributes, "noise"));*/
-					responseObject.setTimestamp(getValue(values));
-					floorAsset.getData().add(responseObject);
-				}
-
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return floorMap.values();
-	}
-
+	
 	public class ResponseObjectCollections {
 		private List<WaterResponseObject> responseObjects = new ArrayList<>();
-		private String name;
+		private String assetName;
+		private int floor;
 
 		public List<WaterResponseObject> getResponseObjects() {
 			return responseObjects;
@@ -182,13 +131,23 @@ public class TimeSeriesWaterParser {
 			this.responseObjects = responseObjects;
 		}
 
-		public String getName() {
-			return name;
+		public String getAssetName() {
+			return assetName;
 		}
 
-		public void setName(String name) {
-			this.name = name;
+		public void setAssetName(String assetName) {
+			this.assetName = assetName;
 		}
+
+		public int getFloor() {
+			return floor;
+		}
+
+		public void setFloor(int floor) {
+			this.floor = floor;
+		}
+
+		
 	}
 	@JsonInclude(Include.NON_NULL)
 	public static class WaterResponseObject {
@@ -198,26 +157,26 @@ public class TimeSeriesWaterParser {
 		
 		
 		
-		private String name;
-		private Integer value;
-		
+		private String properyName;
+		private Integer propertyValue;
 		private Long timestamp;
 
-		public Integer getValue() {
-			return value;
-		}
-
-		public void setValue(Integer value) {
-			this.value = value;
-		}
-
 		
-		public String getName() {
-			return name;
+
+		public String getProperyName() {
+			return properyName;
 		}
 
-		public void setName(String name) {
-			this.name = name;
+		public void setProperyName(String properyName) {
+			this.properyName = properyName;
+		}
+
+		public Integer getPropertyValue() {
+			return propertyValue;
+		}
+
+		public void setPropertyValue(Integer propertyValue) {
+			this.propertyValue = propertyValue;
 		}
 
 		public Long getTimestamp() {

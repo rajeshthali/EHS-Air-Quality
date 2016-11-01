@@ -1,0 +1,330 @@
+
+<head>
+<script src="bower_components/bootstrap/dist/js/reponsive_tab.js"></script>
+<link rel="stylesheet" type="text/css" href="bower_components\bootstrap\dist\css\bootstrap-responsive-tabs.css">
+</head>
+
+<div class="col-md-6">
+	<h4>Indoor Air Quality</h4>
+
+</div>
+<div class="col-md-6  deskt">
+	<h4>Process Stack Emission</h4>
+</div>
+
+<div class="clearfix"></div>
+<div class="col-md-6 bgwhite_aqi">
+	<div class='col-md-12 padd0'>
+		<ul class="area_list_ui nav nav-tabs responsive-tabs" id="myTab">
+			<li class="active"><a href="#tab2-1" ng-click="graphFunction('x1')">SMT Area</a></li>
+			<li><a href="#tab3-2" ng-click="graphFunction('x2')">Production Ground Floor</a></li>
+			<li><a href="#tab4-3" ng-click="graphFunction('x3')">Near Soldering Machine</a></li>
+		</ul>
+	</div>
+	<div class="clearfix"></div>
+	<div class="tab-content responsive">
+		<div class="tab-pane active" id="tab2-1">
+			<img ng-show="isLoading" src='/images/25.gif' class="lad_img_cmp">
+			<div class="col-md-12 col-xs-12 padd0">
+				<div id="SMT_AQI" class="CampaignPercent" width='100%' ng-click="sub_graph();" style="height: 230px; cursor: pointer;"></div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="col-md-6 col-xs-12">
+				<div id="topChart1" class="c3 topChart"></div>
+			</div>
+			<div class="col-md-6 col-xs-12">
+				<h4 class="status_txt">Status</h4>
+				<h1 class="stis_sta">{{updated_status}}</h1>
+				<h6 class="prami_txt">Prominent pollutant: {{mostAqiValue}}</h6>
+			</div>
+
+		</div>
+
+
+
+
+		<div class="tab-pane " id="tab3-2">
+			<img ng-show="isLoading" src='/images/25.gif' class="lad_img_cmp">
+			<div class="col-md-12 col-xs-12 padd0">
+				<div id="SMT_AQI" class="CampaignPercent" ng-click="sub_graph();" style="height: 230px; cursor: pointer;"></div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="col-md-6 col-xs-12">
+				<div id="topChart2" class="c3 topChart"></div>
+			</div>
+			<div class="col-md-6 col-xs-12">
+				<h4 class="status_txt">Status</h4>
+				<h1 class="stis_sta">{{updated_status}}</h1>
+				<h6 class="prami_txt">Prominent pollutant: {{mostAqiValue}}</h6>
+			</div>
+		</div>
+
+
+		<div class="tab-pane " id="tab4-3">
+			<img ng-show="isLoading" src='/images/25.gif' class="lad_img_cmp">
+			<div class="col-md-12 col-xs-12 padd0">
+				<div id="SMT_AQI" class="CampaignPercent" ng-click="sub_graph();" style="height: 230px; cursor: pointer;"></div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="col-md-6 col-xs-12">
+				<div id="topChart3" class="c3 topChart"></div>
+			</div>
+			<div class="col-md-6 col-xs-12">
+				<h4 class="status_txt">Status</h4>
+				<h1 class="stis_sta">{{updated_status}}</h1>
+				<h6 class="prami_txt">Prominent pollutant: {{mostAqiValue}}</h6>
+			</div>
+		</div>
+
+
+
+	</div>
+
+
+
+</div>
+
+<div class="  mobtit">
+	<div class="clearfix"></div>
+	<div class="col-xs-12">
+		<h4>Process Stack Emission</h4>
+	</div>
+	<div class="clearfix"></div>
+</div>
+<div class="col-md-6 bgwhite_aqi">
+
+	<div class='col-md-12 padd0'>
+
+		<ul class="area_list_ui machine_ui nav nav-tabs responsive-tabs">
+			<li class="active "><a href="#sub_tab11" data-toggle="tab" ng-click="graphFunction('h1')">Heller Machine</a></li>
+			<li><a href="#sub_tab12" data-toggle="tab" ng-click="graphFunction('h2')">Soltech Machine</a></li>
+			<li><a href="#sub_tab3" data-toggle="tab" ng-click="graphFunction('h3')">Relfow Oven</a></li>
+			<li><a href="#sub_tab4" data-toggle="tab" ng-click="graphFunction('h4')">Wave Soldering Machine</a></li>
+		</ul>
+	</div>
+
+	<div class="clearfix"></div>
+	<div class="tab-content responsive">
+		<div class="tab-pane active" id="sub_tab11">
+			<img ng-show="isLoadingMachine" src='/images/25.gif' class="lad_img_cmp">
+			<div ng-show="!isLoadingMachine" class="col-md-6 col-xs-12  paddR0" ng-class="{'bggreen': avg_SO2 < 80, 'bgorange':avg_SO2 > 80}">
+				<div class="col-md-6 mach_val">
+					<h4>SO2</h4>
+					<h3>{{avg_SO2}} ppb</h3>
+				</div>
+				<div class="col-md-6 ">
+					<div ng-class="{'grn_arr': avg_SO2 < 80, 'orag_arr':avg_SO2 > 80}">
+						<i class="fa fa-arrow-up"></i>
+					</div>
+				</div>
+
+			</div>
+			<div ng-show="!isLoadingMachine" class="col-md-6 col-xs-12  paddR0" ng-class="{'bggreen': avg_NO2 < 80, 'bgorange':avg_NO2 > 80}">
+				<div class="col-md-6 mach_val">
+					<h4>NO2</h4>
+					<h3>{{avg_NO2}} ppb</h3>
+				</div>
+				<div class="col-md-6 ">
+					<div ng-class="{'grn_arr': avg_NO2 < 80, 'orag_arr':avg_NO2 > 80}">
+						<i class="fa fa-arrow-up"></i>
+					</div>
+				</div>
+
+
+			</div>
+			<div class="clearfix"></div>
+			<div ng-show="!isLoadingMachine" class="col-md-6 col-xs-12  paddR0" ng-class="{'bggreen': avg_PM2_5 < 80, 'bgorange': avg_PM2_5 > 80}">
+				<div class="col-md-6 mach_val">
+					<h4>PM2.5</h4>
+					<h3>{{avg_PM2_5}} ug/m3</h3>
+				</div>
+				<div class="col-md-6 ">
+					<div ng-class="{'grn_arr': avg_PM2_5 < 80, 'orag_arr': avg_PM2_5 > 80}">
+						<i class="fa fa-arrow-up"></i>
+					</div>
+				</div>
+
+			</div>
+			<div class="clearfix"></div>
+			<div ng-show="!isLoadingMachine" class="col-md-5 col-xs-12">
+				<img src="images/machine.jpg">
+			</div>
+			<div ng-show="!isLoadingMachine" class="col-md-6 col-xs-12">
+				<h4 class="status_txt">Status</h4>
+				<h2 ng-class="{'warn_sta': war_st , 'stis_sta': sats}">{{status_machine}}</h2>
+			</div>
+		</div>
+
+
+		<div class="tab-pane " id="sub_tab12">
+			<img ng-show="isLoadingMachine" src='/images/25.gif' class="lad_img_cmp">
+
+			<div ng-show="!isLoadingMachine" class="col-md-6 col-xs-12 paddR0" ng-class="{'bggreen': avg_SO2 < 80, 'bgorange':avg_SO2 > 80}">
+				<div class="col-md-6 mach_val">
+					<h4>SO2</h4>
+					<h3>{{avg_SO2}} ppb</h3>
+				</div>
+				<div class="col-md-6 ">
+					<div ng-class="{'grn_arr': avg_SO2 < 80, 'orag_arr':avg_SO2 > 80}">
+						<i class="fa fa-arrow-up"></i>
+					</div>
+				</div>
+
+			</div>
+			<div ng-show="!isLoadingMachine" class="col-md-6 col-xs-12 paddR0" ng-class="{'bggreen': avg_NO2 < 80, 'bgorange':avg_NO2 > 80}">
+				<div class="col-md-6 mach_val">
+					<h4>NO2</h4>
+					<h3>{{avg_NO2}} ppb</h3>
+				</div>
+				<div class="col-md-6 ">
+					<div ng-class="{'grn_arr': avg_NO2 < 80, 'orag_arr':avg_NO2 > 80}">
+						<i class="fa fa-arrow-up"></i>
+					</div>
+				</div>
+
+
+			</div>
+			<div class="clearfix"></div>
+			<div ng-show="!isLoadingMachine" class="col-md-6 col-xs-12  paddR0" ng-class="{'bggreen': avg_PM2_5 < 80, 'bgorange': avg_PM2_5 > 80}">
+				<div class="col-md-6 mach_val">
+					<h4>PM2.5</h4>
+					<h3>{{avg_PM2_5}} ug/m3</h3>
+				</div>
+				<div class="col-md-6 ">
+					<div ng-class="{'grn_arr': avg_PM2_5 < 80, 'orag_arr': avg_PM2_5 > 80}">
+						<i class="fa fa-arrow-up"></i>
+					</div>
+				</div>
+
+			</div>
+			<div class="clearfix"></div>
+			<div ng-show="!isLoadingMachine" class="col-md-5 col-xs-12">
+
+				<img src="images/soltech_machine (1).png">
+			</div>
+			<div ng-show="!isLoadingMachine" class="col-md-6 col-xs-12">
+				<h4 class="status_txt">Status</h4>
+				<h2 ng-class="{'warn_sta': war_st , 'stis_sta': sats}">{{status_machine}}</h2>
+			</div>
+		</div>
+
+
+		<div class="tab-pane " id="sub_tab3">
+			<img ng-show="isLoadingMachine" src='/images/25.gif' class="lad_img_cmp">
+			<div ng-show="!isLoadingMachine" class="col-md-6 col-xs-12  paddR0" ng-class="{'bggreen': avg_SO2 < 80, 'bgorange':avg_SO2 > 80}">
+				<div class="col-md-6 mach_val">
+					<h4>SO2</h4>
+					<h3>{{avg_SO2}} ppb</h3>
+				</div>
+				<div class="col-md-6 ">
+					<div ng-class="{'grn_arr': avg_SO2 < 80, 'orag_arr':avg_SO2 > 80}">
+						<i class="fa fa-arrow-up"></i>
+					</div>
+				</div>
+
+			</div>
+			<div ng-show="!isLoadingMachine" class="col-md-6 col-xs-12  paddR0" ng-class="{'bggreen': avg_NO2 < 80, 'bgorange':avg_NO2 > 80}">
+				<div class="col-md-6 mach_val">
+					<h4>NO2</h4>
+					<h3>{{avg_NO2}} ppb</h3>
+				</div>
+				<div class="col-md-6 ">
+					<div ng-class="{'grn_arr': avg_NO2 < 80, 'orag_arr':avg_NO2 > 80}">
+						<i class="fa fa-arrow-up"></i>
+					</div>
+				</div>
+
+
+			</div>
+			<div class="clearfix"></div>
+			<div ng-show="!isLoadingMachine" class="col-md-6  col-xs-12 paddR0" ng-class="{'bggreen': avg_PM2_5 < 80, 'bgorange': avg_PM2_5 > 80}">
+				<div class="col-md-6 mach_val">
+					<h4>PM2.5</h4>
+					<h3>{{avg_PM2_5}} ug/m3</h3>
+				</div>
+				<div class="col-md-6 ">
+					<div ng-class="{'grn_arr': avg_PM2_5 < 80, 'orag_arr': avg_PM2_5 > 80}">
+						<i class="fa fa-arrow-up"></i>
+					</div>
+				</div>
+
+			</div>
+			<div class="clearfix"></div>
+			<div ng-show="!isLoadingMachine" class="col-md-5 col-xs-12">
+
+				<img src="images/reflow_oven.png">
+			</div>
+			<div ng-show="!isLoadingMachine" class="col-md-6 col-xs-12">
+				<h4 class="status_txt">Status</h4>
+				<h2 ng-class="{'warn_sta': war_st , 'stis_sta': sats}">{{status_machine}}</h2>
+			</div>
+		</div>
+
+		<div class="tab-pane " id="sub_tab4">
+			<img ng-show="isLoadingMachine" src='/images/25.gif' class="lad_img_cmp">
+			<div ng-show="!isLoadingMachine" class="col-md-6 col-xs-12  paddR0" ng-class="{'bggreen': avg_SO2 < 80, 'bgorange':avg_SO2 > 80}">
+				<div class="col-md-6 mach_val">
+					<h4>SO2</h4>
+					<h3>{{avg_SO2}} ppb</h3>
+				</div>
+				<div class="col-md-6 ">
+					<div ng-class="{'grn_arr': avg_SO2 < 80, 'orag_arr':avg_SO2 > 80}">
+						<i class="fa fa-arrow-up"></i>
+					</div>
+				</div>
+
+			</div>
+			<div ng-show="!isLoadingMachine" class="col-md-6  col-xs-12 paddR0 custpm" ng-class="{'bggreen': avg_NO2 < 80, 'bgorange':avg_NO2 > 80}">
+				<div class="col-md-6 mach_val">
+					<h4>NO2</h4>
+					<h3>{{avg_NO2}} ppb</h3>
+				</div>
+				<div class="col-md-6 ">
+					<div ng-class="{'grn_arr': avg_NO2 < 80, 'orag_arr':avg_NO2 > 80}">
+						<i class="fa fa-arrow-up"></i>
+					</div>
+				</div>
+
+
+			</div>
+			<div class="clearfix"></div>
+			<div ng-show="!isLoadingMachine" class="col-md-6 col-xs-12  paddR0" ng-class="{'bggreen': avg_PM2_5 < 80, 'bgorange': avg_PM2_5 > 80}">
+				<div class="col-md-6 mach_val">
+					<h4>PM2.5</h4>
+					<h3>{{avg_PM2_5}} ug/m3</h3>
+				</div>
+				<div class="col-md-6 ">
+					<div ng-class="{'grn_arr': avg_PM2_5 < 80, 'orag_arr': avg_PM2_5 > 80}">
+						<i class="fa fa-arrow-up"></i>
+					</div>
+				</div>
+
+			</div>
+			<div class="clearfix"></div>
+			<div ng-show="!isLoadingMachine" class="col-md-5 col-xs-12">
+
+				<img src="images/wave_soldering_machine.png">
+			</div>
+			<div ng-show="!isLoadingMachine" class="col-md-6 col-xs-12">
+				<h4 class="status_txt">Status</h4>
+				<h2 ng-class="{'warn_sta': war_st , 'stis_sta': sats}">{{status_machine}}</h2>
+			</div>
+		</div>
+
+
+	</div>
+
+</div>
+
+
+
+
+
+
+
+<script type="text/javascript">
+	$('.responsive-tabs').responsiveTabs({
+		accordionOn : [ 'xs', 'sm' ]
+	// xs, sm, md, lg
+	});
+</script>

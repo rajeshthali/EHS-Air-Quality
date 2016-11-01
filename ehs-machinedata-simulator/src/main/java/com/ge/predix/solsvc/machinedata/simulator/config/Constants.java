@@ -12,14 +12,25 @@ public class Constants {
 		GOOD, SATISFACTORY, MODERATE, POOR, VERY_POOR, SEVERE
 	};
 
-	public static enum Parameter {
+	public static enum AQI {
 		PM10, PM2_5,NO2, O3, CO, SO2, NH3, PB
 	};
+	
+	/*public static enum AQI_AREA {
+		PM10, O3, CO, NH3, PB
+	};*/
 	
 	public static enum Hygiene {
 		TEMPERATURE, HUMIDITY, NOISE
 	};
+	
+	//amlesh
+	public static enum Water {
+		PH_VALUE, SUSPENDED_SOLIDS, BOD, COD, OIL_GREASE
+	};
 
+	public static String WATER_TYPE[] = new String[] { "Domestic-Water","Industrial-Water" };
+	
 	public static String HYG_ASSET_FLR_0[] = new String[] { "SMTLine1", "SMTLine2", "ProductionGroundFloor" };
 	public static String HYG_ASSET_FLR_1[] = new String[] { "SMTLine1"};
 	public static String HYG_ASSET_FLR_2[] = new String[] { "SMTLine1", "SMTLine2" };

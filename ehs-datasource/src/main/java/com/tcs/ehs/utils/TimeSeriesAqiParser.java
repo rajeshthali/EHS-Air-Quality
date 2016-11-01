@@ -21,9 +21,10 @@ import com.tcs.ehs.utils.AqiCalculations.FloorAsset;
 import com.tcs.ehs.utils.AqiCalculations.GraphValues;
 import com.tcs.ehs.utils.AqiCalculations.OverallAqiResponse;
 import com.tcs.ehs.utils.TimeSeriesAqiParser.ResponseObject;
+import com.tcs.ehs.utils.TimeSeriesHygieneParser.HygieneResponseObject;
 
 @Component
-public class TimeSeriesAqiParser {
+public class TimeSeriesAqiParser extends CommonTimeSeriesParser{
 	@Autowired
 	AqiCalculations aqiCalculations;
 
@@ -313,6 +314,49 @@ public class TimeSeriesAqiParser {
 			returnList.add(calculateAqiMachine);
 		}
 		return returnList;
+	}
+	
+	
+	public Collection<Floor> convertToAqiData(List<CommonResponseObjectCollections> list) {
+		Collection<Floor> floorList = new ArrayList<>();
+		if(list != null) {
+			for(CommonResponseObjectCollections responseObjectCollection : list) {
+				Floor floorObj = new Floor();
+				floorObj.setFloorNo(Integer.toString(responseObjectCollection.getFloor()));
+				java.util.Map<String, FloorAsset> assetsMap =  new HashMap<>();
+				FloorAsset floorAsset =  new FloorAsset();
+				floorAsset.setAssetName(responseObjectCollection.getAssetName());
+				List<CommonResponseObject> commonResponseObjectList = responseObjectCollection.getResponseObjects();
+				List<ResponseObject> aqiList = new ArrayList<>();
+				for(CommonResponseObject commonResponseObject : commonResponseObjectList) {
+					ResponseObject aqiObject = new ResponseObject();
+					if("PM10".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						aqiObject.setPM10(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					}else if("O3".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						aqiObject.setO3(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					}else if("CO".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						aqiObject.setCO2(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					}else if("PB".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						aqiObject.setPB(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					}else if("NH3".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						aqiObject.setNH3(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					}else if("PM2_5".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						aqiObject.setPM2_5(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					}else if("NO2".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						aqiObject.setNO2(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					}else if("SO2".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						aqiObject.setSO2(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					}
+					aqiObject.setTimestamp(commonResponseObject.getTimestamp());
+					aqiList.add(aqiObject);
+				}
+				floorAsset.setResponseObjectList(aqiList);
+				assetsMap.put(responseObjectCollection.getAssetName(), floorAsset);
+				floorObj.setAssetsMap(assetsMap);
+				floorList.add(floorObj);
+				}
+		}
+		return floorList;
 	}
 
 	static class FloatComparator implements Comparator<Float> {

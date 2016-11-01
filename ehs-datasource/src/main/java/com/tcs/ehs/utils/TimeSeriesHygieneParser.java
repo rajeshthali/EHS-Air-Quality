@@ -19,7 +19,7 @@ import com.ge.predix.entity.util.map.Map;
 import com.tcs.ehs.utils.AqiCalculations.OverallAqiResponse;
 
 @Component
-public class TimeSeriesHygieneParser {
+public class TimeSeriesHygieneParser extends CommonTimeSeriesParser {
 
 	@SuppressWarnings("unchecked")
 	private Float getValue(Map attributes, String key) {
@@ -105,6 +105,38 @@ public class TimeSeriesHygieneParser {
 		}
 		return responseObjectCollections;
 
+	}
+	
+	public Collection<Floor> convertToHygieneData(List<CommonResponseObjectCollections> list) {
+		Collection<Floor> floorList = new ArrayList<>();
+		if(list != null) {
+			for(CommonResponseObjectCollections responseObjectCollection : list) {
+				Floor floorObj = new Floor();
+				floorObj.setFloorNo(Integer.toString(responseObjectCollection.getFloor()));
+				java.util.Map<String, FloorAsset> assetsMap =  new HashMap<>();
+				FloorAsset floorAsset =  new FloorAsset();
+				floorAsset.setAssetName(responseObjectCollection.getAssetName());
+				List<CommonResponseObject> commonResponseObjectList = responseObjectCollection.getResponseObjects();
+				List<HygieneResponseObject> hygieneList = new ArrayList<>();
+				for(CommonResponseObject commonResponseObject : commonResponseObjectList) {
+					HygieneResponseObject hygieneResponseObject = new HygieneResponseObject();
+					if("TEMPERATURE".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						hygieneResponseObject.setTemperature(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					}else if("HUMIDITY".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						hygieneResponseObject.setHumidity(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					}else if("NOISE".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						hygieneResponseObject.setNoise(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					}
+					hygieneResponseObject.setTimestamp(commonResponseObject.getTimestamp());
+					hygieneList.add(hygieneResponseObject);
+				}
+				floorAsset.setData(hygieneList);
+				assetsMap.put(responseObjectCollection.getAssetName(), floorAsset);
+				floorObj.setAssetsMap(assetsMap);
+				floorList.add(floorObj);
+				}
+		}
+		return floorList;
 	}
 
 	public Collection<Floor> parseFloor(DatapointsResponse datapointsResponse) {

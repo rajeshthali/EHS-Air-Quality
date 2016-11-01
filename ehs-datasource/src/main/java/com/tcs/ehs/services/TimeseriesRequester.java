@@ -61,11 +61,11 @@ public class TimeseriesRequester {
 		List<Group> groups = new ArrayList<>();
 		MyGroup group = new MyGroup();
 		group.setName("attribute");
-		group.setAttributes(Arrays.asList(Constants.Parameter.list()));
+		group.setAttributes(Arrays.asList(Constants.Water.list()));
 		groups.add(group);
 		tag.setGroups(groups);
 		tag.setName(tagName.toString());
-		tag.setAggregations(null);
+		//stag.setAggregations(null);
 		List<Tag> tags = new ArrayList<>();
 		tags.add(tag);
 		datapointsQuery.setTags(tags);
@@ -102,7 +102,7 @@ public class TimeseriesRequester {
 	}
 
 	public DatapointsResponse requestForHygiene(Constants.QueryTagsHygiene tagName, Map attrMap, String auth, Long startTime, Long endTime) throws JsonProcessingException {
-		List<Header> headers = new ArrayList<Header>();
+		/*List<Header> headers = new ArrayList<Header>();
 		restClient.addSecureTokenToHeaders(headers, auth);
 		restClient.addZoneToHeaders(headers, timeseriesRestConfig.getZoneId());
 
@@ -135,6 +135,39 @@ public class TimeseriesRequester {
 		response.setEnd(endTime);
 		log.info("Response : " + objectMapper.writeValueAsString(response));
 
+		return response;*/
+		List<Header> headers = new ArrayList<Header>();
+		restClient.addSecureTokenToHeaders(headers, auth);
+		restClient.addZoneToHeaders(headers, timeseriesRestConfig.getZoneId());
+
+		DatapointsQuery datapointsQuery = new DatapointsQuery();
+		datapointsQuery.setStart(startTime);
+		datapointsQuery.setEnd(endTime);
+
+		Tag tag = new MyTag();
+
+		Filters filters = new Filters();
+		filters.setAttributes(attrMap);
+		if (attrMap != null)
+			tag.setFilters(filters);
+
+		List<Group> groups = new ArrayList<>();
+		MyGroup group = new MyGroup();
+		group.setName("attribute");
+		group.setAttributes(Arrays.asList(Constants.Water.list()));
+		groups.add(group);
+		tag.setGroups(groups);
+		tag.setName(tagName.toString());
+		tag.setAggregations(null);
+		List<Tag> tags = new ArrayList<>();
+		tags.add(tag);
+		datapointsQuery.setTags(tags);
+		log.info("Query : " + objectMapper.writeValueAsString(datapointsQuery));
+
+		DatapointsResponse response = timeseriesFactory.queryForDatapoints(timeseriesRestConfig.getBaseUrl(), datapointsQuery, headers);
+		response.setStart(startTime);
+		response.setEnd(endTime);
+		log.info("Response : " + objectMapper.writeValueAsString(response));
 		return response;
 	}
 
