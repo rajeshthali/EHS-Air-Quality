@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ge.predix.entity.timeseries.datapoints.queryresponse.DatapointsResponse;
 import com.tcs.ehs.services.TimeseriesRequester;
 import com.tcs.ehs.utils.AqiCalculations;
@@ -34,89 +33,128 @@ public class AQIController {
 	TimeSeriesAqiParser timeSeriesAqiParser;
 
 	@RequestMapping(value = "/demo", method = RequestMethod.GET)
-	public ResponseEntity<Object> demo(@RequestHeader("Authorization") String authorization) throws JsonProcessingException {
+	public ResponseEntity<Object> demo(@RequestHeader("Authorization") String authorization)
+			throws JsonProcessingException {
 		Long startTime = 1473947660000l;
 		Long endTime = 1473947760000l;
-		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Machine, "0", "Heller-Machine", authorization, startTime, endTime);
+		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Machine,
+				"0", "Heller-Machine", authorization, startTime, endTime);
 		Collection<Floor> floors = aqiCalculations.calculateAqiFloor(datapointsResponse, startTime, endTime);
 		if (floors.size() > 0)
 			return new ResponseEntity<Object>(floors, HttpStatus.OK);
 		else
-			return new ResponseEntity<Object>("No Timeseriese data found", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(value = "/machine", method = RequestMethod.GET)
-	public ResponseEntity<Object> aqiQueryMahine(@RequestHeader("Authorization") String authorization, @RequestParam Long interval) throws JsonProcessingException {
+	public ResponseEntity<Object> aqiQueryMahine(@RequestHeader("Authorization") String authorization,
+			@RequestParam Long interval) throws JsonProcessingException {
 		Value value = TimeUtils.calculateInterval(interval);
-		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Machine, authorization, value.getStartTime(), value.getEndTime());
-		Collection<Floor> floors = aqiCalculations.calculateAqiFloor(datapointsResponse, value.getStartTime(), value.getEndTime());
-		
-		datapointsResponse.getTags();
-		
-		ObjectMapper mapper = new ObjectMapper();
-		String response = mapper.writeValueAsString(datapointsResponse);
-		
+		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Machine,
+				authorization, value.getStartTime(), value.getEndTime());
+		Collection<Floor> floors = aqiCalculations.calculateAqiFloor(datapointsResponse, value.getStartTime(),
+				value.getEndTime());
 		if (floors.size() > 0)
 			return new ResponseEntity<Object>(floors, HttpStatus.OK);
-			//return new ResponseEntity<Object>(response, HttpStatus.OK);
 		else
-			return new ResponseEntity<Object>("No Timeseriese data found", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(value = "/machine/{floor}", method = RequestMethod.GET)
-	public ResponseEntity<Object> aqiQueryMahineFloor(@RequestHeader("Authorization") String authorization, @RequestParam Long interval, @PathVariable String floor) throws JsonProcessingException {
+	public ResponseEntity<Object> aqiQueryMahineFloor(@RequestHeader("Authorization") String authorization,
+			@RequestParam Long interval, @PathVariable String floor) throws JsonProcessingException {
 		Value value = TimeUtils.calculateInterval(interval);
-		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Machine, floor, authorization, value.getStartTime(), value.getEndTime());
-		Collection<Floor> floors = aqiCalculations.calculateAqiFloor(datapointsResponse, value.getStartTime(), value.getEndTime());
+		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Machine,
+				floor, authorization, value.getStartTime(), value.getEndTime());
+		Collection<Floor> floors = aqiCalculations.calculateAqiFloor(datapointsResponse, value.getStartTime(),
+				value.getEndTime());
 		if (floors.size() > 0)
 			return new ResponseEntity<Object>(floors, HttpStatus.OK);
 		else
-			return new ResponseEntity<Object>("No Timeseriese data found", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+	}
+
+	@RequestMapping(value = "/machineWithStartTimeEndTime/{floor}", method = RequestMethod.GET)
+	public ResponseEntity<Object> aqiQueryMahineFloorWithStartTimeEndTime(
+			@RequestHeader("Authorization") String authorization, @RequestParam Long startTime,
+			@RequestParam Long endTime, @PathVariable String floor) throws JsonProcessingException {
+		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Machine,
+				floor, authorization, startTime, endTime);
+		Collection<Floor> floors = aqiCalculations.calculateAqiFloor(datapointsResponse, startTime, endTime);
+		if (floors.size() > 0)
+			return new ResponseEntity<Object>(floors, HttpStatus.OK);
+		else
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(value = "/machine/{floor}/{assetName}", method = RequestMethod.GET)
-	public ResponseEntity<Object> aqiQueryMahineFloorAsset(@RequestHeader("Authorization") String authorization, @RequestParam Long interval, @PathVariable String floor,
-			@PathVariable String assetName) throws JsonProcessingException {
+	public ResponseEntity<Object> aqiQueryMahineFloorAsset(@RequestHeader("Authorization") String authorization,
+			@RequestParam Long interval, @PathVariable String floor, @PathVariable String assetName)
+			throws JsonProcessingException {
 		Value value = TimeUtils.calculateInterval(interval);
-		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Machine, floor, assetName, authorization, value.getStartTime(), value.getEndTime());
-		Collection<Floor> floors = aqiCalculations.calculateAqiFloor(datapointsResponse, value.getStartTime(), value.getEndTime());
+		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Machine,
+				floor, assetName, authorization, value.getStartTime(), value.getEndTime());
+		Collection<Floor> floors = aqiCalculations.calculateAqiFloor(datapointsResponse, value.getStartTime(),
+				value.getEndTime());
 		if (floors.size() > 0)
 			return new ResponseEntity<Object>(floors, HttpStatus.OK);
 		else
-			return new ResponseEntity<Object>("No Timeseriese data found", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(value = "/area", method = RequestMethod.GET)
-	public ResponseEntity<Object> aqiQueryArea(@RequestHeader("Authorization") String authorization, @RequestParam Long interval) throws JsonProcessingException {
+	public ResponseEntity<Object> aqiQueryArea(@RequestHeader("Authorization") String authorization,
+			@RequestParam Long interval) throws JsonProcessingException {
 		Value value = TimeUtils.calculateInterval(interval);
-		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Area, authorization, value.getStartTime(), value.getEndTime());
-		Collection<Floor> floors = aqiCalculations.calculateAqiFloor(datapointsResponse, value.getStartTime(), value.getEndTime());
+		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Area,
+				authorization, value.getStartTime(), value.getEndTime());
+		Collection<Floor> floors = aqiCalculations.calculateAqiFloor(datapointsResponse, value.getStartTime(),
+				value.getEndTime());
 		if (floors.size() > 0)
 			return new ResponseEntity<Object>(floors, HttpStatus.OK);
 		else
-			return new ResponseEntity<Object>("No Timeseriese data found", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(value = "/area/{floor}", method = RequestMethod.GET)
-	public ResponseEntity<Object> aqiQueryAreaFloor(@RequestHeader("Authorization") String authorization, @RequestParam Long interval, @PathVariable String floor) throws JsonProcessingException {
+	public ResponseEntity<Object> aqiQueryAreaFloor(@RequestHeader("Authorization") String authorization,
+			@RequestParam Long interval, @PathVariable String floor) throws JsonProcessingException {
 		Value value = TimeUtils.calculateInterval(interval);
-		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Area, floor, authorization, value.getStartTime(), value.getEndTime());
-		Collection<Floor> floors = aqiCalculations.calculateAqiFloor(datapointsResponse, value.getStartTime(), value.getEndTime());
+		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Area,
+				floor, authorization, value.getStartTime(), value.getEndTime());
+		Collection<Floor> floors = aqiCalculations.calculateAqiFloor(datapointsResponse, value.getStartTime(),
+				value.getEndTime());
 		if (floors.size() > 0)
 			return new ResponseEntity<Object>(floors, HttpStatus.OK);
 		else
-			return new ResponseEntity<Object>("No Timeseriese data found", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+	}
+
+	@RequestMapping(value = "/areaWithStartTimeEndTime/{floor}", method = RequestMethod.GET)
+	public ResponseEntity<Object> aqiQueryAreaFloorWithStartTimeEndTime(
+			@RequestHeader("Authorization") String authorization, @RequestParam Long startTime,
+			@RequestParam Long endTime, @PathVariable String floor) throws JsonProcessingException {
+		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Area,
+				floor, authorization, startTime, endTime);
+		Collection<Floor> floors = aqiCalculations.calculateAqiFloor(datapointsResponse, startTime, endTime);
+		if (floors.size() > 0)
+			return new ResponseEntity<Object>(floors, HttpStatus.OK);
+		else
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(value = "/area/{floor}/{assetName}", method = RequestMethod.GET)
-	public ResponseEntity<Object> aqiQueryAreaFloorAsset(@RequestHeader("Authorization") String authorization, @RequestParam Long interval, @PathVariable String floor, @PathVariable String assetName)
+	public ResponseEntity<Object> aqiQueryAreaFloorAsset(@RequestHeader("Authorization") String authorization,
+			@RequestParam Long interval, @PathVariable String floor, @PathVariable String assetName)
 			throws JsonProcessingException {
 		Value value = TimeUtils.calculateInterval(interval);
-		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Area, floor, assetName, authorization, value.getStartTime(), value.getEndTime());
-		Collection<Floor> floors = aqiCalculations.calculateAqiFloor(datapointsResponse, value.getStartTime(), value.getEndTime());
+		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Area,
+				floor, assetName, authorization, value.getStartTime(), value.getEndTime());
+		Collection<Floor> floors = aqiCalculations.calculateAqiFloor(datapointsResponse, value.getStartTime(),
+				value.getEndTime());
 		if (floors.size() > 0)
 			return new ResponseEntity<Object>(floors, HttpStatus.OK);
 		else
-			return new ResponseEntity<Object>("No Timeseriese data found", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
 }
