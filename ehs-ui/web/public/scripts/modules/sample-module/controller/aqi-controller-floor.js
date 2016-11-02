@@ -292,7 +292,8 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				var loadGaugeChart = function(id, value) {
 					loadChart(id, 0, 200, value);
 				};
-
+				
+				
 				var loadValuesToGraph = function(id, dataX, dataY, index) {
 					$(id).each(function() {
 						// console.log('each');

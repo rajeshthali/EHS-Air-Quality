@@ -5,7 +5,7 @@ import java.util.List;
 public class SensorDataResponse {
 
 	private String name;
-	private List<SensorDataValues> SensorDataValues;
+	private List<SensorDataValues> sensorDataValues;
 	public String getName() {
 		return name;
 	}
@@ -13,10 +13,10 @@ public class SensorDataResponse {
 		this.name = name;
 	}
 	public List<SensorDataValues> getSensorDataValues() {
-		return SensorDataValues;
+		return sensorDataValues;
 	}
 	public void setSensorDataValues(List<SensorDataValues> sensorDataValues) {
-		SensorDataValues = sensorDataValues;
+		this.sensorDataValues = sensorDataValues;
 	}
 	
 	

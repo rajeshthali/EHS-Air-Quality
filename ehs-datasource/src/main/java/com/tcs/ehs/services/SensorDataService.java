@@ -34,7 +34,7 @@ public class SensorDataService {
 	public DatapointsResponse getSensorData(List<String> tagNames, String auth, Long startTime, Long endTime) throws JsonProcessingException {
 		List<Header> headers = new ArrayList<Header>();
 		restClient.addSecureTokenToHeaders(headers, auth);
-		restClient.addZoneToHeaders(headers, timeseriesRestConfig.getZoneId());
+		restClient.addZoneToHeaders(headers, "3957f3cd-fd6e-4548-b5db-803de49b0d3a");
 		DatapointsQuery datapointsQuery = new DatapointsQuery();
 		datapointsQuery.setStart(startTime);
 		datapointsQuery.setEnd(endTime);
