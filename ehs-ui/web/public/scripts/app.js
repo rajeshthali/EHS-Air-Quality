@@ -82,21 +82,18 @@ define([ 'jquery',
 				/* {state: 'blanksubpage', label: 'Blank Sub Page'} */
 				]
 			} ,
-			{    
+			/*{    
 				   icon: 'fa fa-tint fa-lg', 
 				   state: 'water-discharge', 
-			       /*label: 'Water and Discharge Management', */
-				   label: 'Water Consumption',
+			       label: 'Water Consumption',
 			       subitems: [
-			           /*{state: 'blanksubpage', label: 'Blank Sub Page'}*/
-			    ]
+			     ]
 			},
 			{    
 				   icon: 'fa fa-plug', 
 				   state: 'Energy-Management', 
 			       label: 'Energy Management', 
 			       subitems: [
-			           /*{state: 'blanksubpage', label: 'Blank Sub Page'}*/
 			    ]
 			},
 			{    
@@ -104,9 +101,8 @@ define([ 'jquery',
 				   state: 'Waste-Management', 
 			       label: 'Waste Management', 
 			       subitems: [
-			           /*{state: 'blanksubpage', label: 'Blank Sub Page'}*/
 			    ]
-			},
+			},*/
 			{    
 				   icon: 'fa fa-recycle', 
 				   state: 'Sensor-Data', 

@@ -2,13 +2,13 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 	'use strict';
 	controllers.controller('SensorDataController', [ '$scope', '$http', '$state', '$log', '$interval','$rootScope', 'AuthService',  'SensorDataService',
 			function($scope, $http, $state, $log, $interval, $rootScope, AuthService, SensorDataService) {
-		
+		$scope.isLoading = true;
 		var intervalPromiseSensor = null;
 		var sensorCharts = [];
 		var startDynamiUpdate = function() {
 			intervalPromiseSensor = $interval(function() {
-				realSensorData();
-			}, 40000);
+				realSensorData(60000);
+			}, 10000);
 		};
 		$scope.$on('$destroy', function() {
 			$scope.stop();
@@ -21,14 +21,17 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		
 		var loadData = function() {
 			AuthService.getTocken(function(token) {
-				realSensorData();
+				realSensorData(120000);
+				startDynamiUpdate();
 				
 			});
 		};
 		loadData();
 		 
-		var realSensorData = function() {
-			SensorDataService.loadSensorData($rootScope.token,40000, function(res){
+		var realSensorData = function(interval) {
+			
+			SensorDataService.loadSensorData($rootScope.token,interval, function(res){
+				$scope.isLoading = false;
 				   var sensorDataList= angular.copy(res);
 				   for (var i = 0; i < sensorDataList.length; i++) {
 					   var sensorName = sensorDataList[i].name;
@@ -39,119 +42,13 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						   dataXaxis.push(sensorDataValues[j].timeStamp);
 						   dataYaxis.push(sensorDataValues[j].sensorValue);
 					   }
-					   
-					   setTimeout(function() {
-							$('.aqi_details_graph_class').fadeIn();
-							loadValuesToGraph('Container_'+sensorName,convertTimeStamps(dataXaxis),dataYaxis,sensorName);
-						}, 300);
-				
-					   
-				   }
-				 
-				   //  var series = getSeries($scope.data);
+					   loadValuesToGraph('Container_'+sensorName,convertTimeStamps(dataXaxis),dataYaxis,sensorName);
+					   }
 			   });
 				   
 			   
 			
        	 }
-		   var getMaxIndex = function(data) {
-				var big = 0;
-				var index = 0;
-				for (var i = 0; i < data.timestamp.length; i++) {
-					if (big < data.timestamp[i]) {
-						big = data.timestamp[i];
-						index = i;
-					}
-				}
-				return index;
-			};
-			
-			
-			var getSeries = function(dataArg) {
-				var colors = [ '#8769FF', '#27A9E3', '#28B779', '#ff9000', '#8bd6f6', '#8669ff', '#28b779' ];
-				var series = [];
-				var data = null;
-				if (dataArg) {
-					data = dataArg;
-				} else {
-					data = $scope.hygieneData[tabId];
-				}
-				series.push({
-					name : 'Temperature',
-					data : data.temperature,
-					color : colors[1],
-					lineWidth : 1,
-					marker : {
-						enabled : false,
-					}
-				});
-				series.push({
-					name : 'PB',
-					data : data.PB,
-					color : colors[0],
-				    lineWidth : 1,
-					marker : {
-						enabled : false,
-					}
-				});
-                series.push({
-					name : 'O3',
-					data : data.O3,
-					color : colors[2],
-					lineWidth : 1,
-					marker : {
-						enabled : false,
-					}
-				});
-                series.push({
-					name : 'CO2',
-					data : data.CO2,
-					color : colors[2],
-					lineWidth : 1,
-					marker : {
-						enabled : false,
-					}
-				});
-                series.push({
-					name : 'PM2_5',
-					data : data.PM2_5,
-					color : colors[2],
-					lineWidth : 1,
-					marker : {
-						enabled : false,
-					}
-				});
-                series.push({
-					name : 'NH3',
-					data : data.NH3,
-					color : colors[2],
-					lineWidth : 1,
-					marker : {
-						enabled : false,
-					}
-				});
-                series.push({
-					name : 'PM10',
-					data : data.PM10,
-					color : colors[2],
-					lineWidth : 1,
-					marker : {
-						enabled : false,
-					}
-				});
-				series.push({
-						name : 'SO2',
-						data : data.SO2,
-						color : colors[2],
-						lineWidth : 1,
-						marker : {
-							enabled : false,
-						}
-					});
-				
-				return series;
-			};
-			
 			var convertTimeStamps =  function(timestamps) {
 				var dates = [];
 				for (var i = 0; i < timestamps.length; i++) {
@@ -181,15 +78,18 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			
 			
 			var loadValuesToGraph = function(id, dataX, dataY, sensorName) {
-				// console.log(id + ' >> ' + tabIndex);
-				$(id).each(function() {
+				 console.log(id + ' >> ');
+				 console.log(dataX + ' >dataX> ' );
+				 console.log(dataY + ' >dataY> ' );
+				 console.log(sensorName + ' >sensorName> ' );
+				 $('#'+id).each(function() {
 					// console.log('each');
 					var chart = new Highcharts.Chart({
-						type : 'spline',
+						//type : 'spline',
 						animation : Highcharts.svg,
 						marginRight : 10,
 						chart : {
-							renderTo : this
+							renderTo : id
 						},
 						title : {
 							text : ''
@@ -219,7 +119,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 							title : {
 								text : 'Time'
 							},
-							categories : dataX
+							categories :dataX
 						},
 
 						yAxis : {
@@ -228,7 +128,15 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 							},
 						},
 
-						series : dataY
+						series : [{
+				        	name: sensorName,
+				            data: dataY,
+				            type: 'spline',
+				            color: 'Black'
+				           
+
+				        }
+				        ]
 
 					});
 				
