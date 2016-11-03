@@ -7,7 +7,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		var sensorCharts = [];
 		var startDynamiUpdate = function() {
 			intervalPromiseSensor = $interval(function() {
-				realSensorData(60000);
+				realSensorData(120000);
 			}, 10000);
 		};
 		$scope.$on('$destroy', function() {
