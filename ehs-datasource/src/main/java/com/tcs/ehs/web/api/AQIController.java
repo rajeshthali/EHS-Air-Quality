@@ -2,6 +2,7 @@ package com.tcs.ehs.web.api;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import com.tcs.ehs.utils.TimeUtils.Value;
 @RestController
 @RequestMapping("/api/aqi")
 public class AQIController {
+	private Logger log = Logger.getLogger(AQIController.class);
 	@Autowired
 	TimeseriesRequester timeseriesRequester;
 	@Autowired
@@ -63,6 +65,7 @@ public class AQIController {
 	@RequestMapping(value = "/machine/{floor}", method = RequestMethod.GET)
 	public ResponseEntity<Object> aqiQueryMahineFloor(@RequestHeader("Authorization") String authorization,
 			@RequestParam Long interval, @PathVariable String floor) throws JsonProcessingException {
+		log.info("Machine floor :: interval ---- "+interval);
 		Value value = TimeUtils.calculateInterval(interval);
 		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Machine,
 				floor, authorization, value.getStartTime(), value.getEndTime());
@@ -119,6 +122,7 @@ public class AQIController {
 	@RequestMapping(value = "/area/{floor}", method = RequestMethod.GET)
 	public ResponseEntity<Object> aqiQueryAreaFloor(@RequestHeader("Authorization") String authorization,
 			@RequestParam Long interval, @PathVariable String floor) throws JsonProcessingException {
+		log.info("Area floor :: interval ---- "+interval);
 		Value value = TimeUtils.calculateInterval(interval);
 		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Area,
 				floor, authorization, value.getStartTime(), value.getEndTime());

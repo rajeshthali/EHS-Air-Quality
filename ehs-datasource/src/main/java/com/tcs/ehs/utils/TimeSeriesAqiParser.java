@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -318,17 +319,27 @@ public class TimeSeriesAqiParser extends CommonTimeSeriesParser{
 	
 	
 	public Collection<Floor> convertToAqiData(Collection<CommonResponseObjectCollections> list) {
-		Collection<Floor> floorList = new ArrayList<>();
+		java.util.Map<String, Floor> floorMap = new HashMap<>();
 		if(list != null) {
+			Floor floorObj = null;
 			for(CommonResponseObjectCollections responseObjectCollection : list) {
-				Floor floorObj = new Floor();
-				floorObj.setFloorNo(Integer.toString(responseObjectCollection.getFloor()));
-				java.util.Map<String, FloorAsset> assetsMap =  new HashMap<>();
-				FloorAsset floorAsset =  new FloorAsset();
-				floorAsset.setAssetName(responseObjectCollection.getAssetName());
+				String floorNoStirng = Integer.toString(responseObjectCollection.getFloor());
+				floorObj = floorMap.get(floorNoStirng);
+				if (floorObj == null) {
+					floorObj = new Floor();
+					floorObj.setFloorNo(floorNoStirng);
+					floorMap.put(floorNoStirng, floorObj);
+				}
+				String assetNameStirng = responseObjectCollection.getAssetName();
+				FloorAsset floorAsset = floorObj.getAssetsMap().get(assetNameStirng);
+				if (floorAsset == null) {
+					floorAsset = new FloorAsset();
+					floorAsset.setAssetName(assetNameStirng);
+					floorObj.getAssetsMap().put(assetNameStirng, floorAsset);
+				}
 				List<CommonResponseObject> commonResponseObjectList = responseObjectCollection.getResponseObjects();
 				List<ResponseObject> aqiList = new ArrayList<>();
-				java.util.Map<Long, ResponseObject> aqiMap = new HashMap<>();
+				java.util.Map<Long, ResponseObject> aqiMap = new TreeMap<>();
 				ResponseObject aqiObject = null;
 				for(CommonResponseObject commonResponseObject : commonResponseObjectList) {
 					
@@ -356,8 +367,6 @@ public class TimeSeriesAqiParser extends CommonTimeSeriesParser{
 					}else if("SO2".equalsIgnoreCase(commonResponseObject.getProperyName())) {
 						aqiObject.setSO2(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
 					}
-					//aqiObject.setTimestamp(commonResponseObject.getTimestamp());
-					//aqiList.add(aqiObject);
 				}
 				
 				for(ResponseObject obj : aqiMap.values()) {
@@ -365,12 +374,9 @@ public class TimeSeriesAqiParser extends CommonTimeSeriesParser{
 				}
 				
 				floorAsset.setResponseObjectList(aqiList);
-				assetsMap.put(responseObjectCollection.getAssetName(), floorAsset);
-				floorObj.setAssetsMap(assetsMap);
-				floorList.add(floorObj);
 				}
 		}
-		return floorList;
+		return floorMap.values();
 	}
 
 	static class FloatComparator implements Comparator<Float> {

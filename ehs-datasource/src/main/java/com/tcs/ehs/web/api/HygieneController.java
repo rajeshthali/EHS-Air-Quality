@@ -1,7 +1,6 @@
 package com.tcs.ehs.web.api;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ge.predix.entity.timeseries.datapoints.queryresponse.DatapointsResponse;
 import com.tcs.ehs.services.TimeseriesRequester;
 import com.tcs.ehs.utils.CommonResponseObjectCollections;
-import com.tcs.ehs.utils.CommonTimeSeriesParser;
 import com.tcs.ehs.utils.Constants;
 import com.tcs.ehs.utils.HygieneCalculation;
 import com.tcs.ehs.utils.TimeSeriesHygieneParser;

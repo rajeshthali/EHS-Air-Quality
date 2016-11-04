@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import org.springframework.stereotype.Component;
 
@@ -108,19 +109,27 @@ public class TimeSeriesHygieneParser extends CommonTimeSeriesParser {
 	}
 	
 	public Collection<Floor> convertToHygieneData(Collection<CommonResponseObjectCollections> list) {
-		Collection<Floor> floorList = new ArrayList<>();
 		java.util.Map<String, Floor> floorMap = new HashMap<>();
 		if(list != null) {
-			
+			Floor floorObj = null;
 			for(CommonResponseObjectCollections responseObjectCollection : list) {
-				Floor floorObj = new Floor();
-				floorObj.setFloorNo(Integer.toString(responseObjectCollection.getFloor()));
-				java.util.Map<String, FloorAsset> assetsMap =  new HashMap<>();
-				FloorAsset floorAsset =  new FloorAsset();
-				floorAsset.setAssetName(responseObjectCollection.getAssetName());
+				String floorNoStirng = Integer.toString(responseObjectCollection.getFloor());
+				floorObj = floorMap.get(floorNoStirng);
+				if (floorObj == null) {
+					floorObj = new Floor();
+					floorObj.setFloorNo(floorNoStirng);
+					floorMap.put(floorNoStirng, floorObj);
+				}
+				String assetNameStirng = responseObjectCollection.getAssetName();
+				FloorAsset floorAsset = floorObj.getAssetsMap().get(assetNameStirng);
+				if (floorAsset == null) {
+					floorAsset = new FloorAsset();
+					floorAsset.setAssetName(assetNameStirng);
+					floorObj.getAssetsMap().put(assetNameStirng, floorAsset);
+				}
 				List<CommonResponseObject> commonResponseObjectList = responseObjectCollection.getResponseObjects();
 				List<HygieneResponseObject> hygieneList = new ArrayList<>();
-				java.util.Map<Long, HygieneResponseObject> hygieneMap = new HashMap<>();
+				java.util.Map<Long, HygieneResponseObject> hygieneMap = new TreeMap<>();
 				HygieneResponseObject hygieneResponseObject = null;
 				for(CommonResponseObject commonResponseObject : commonResponseObjectList) {
 					if(hygieneMap.get(commonResponseObject.getTimestamp()) == null) {
@@ -142,58 +151,10 @@ public class TimeSeriesHygieneParser extends CommonTimeSeriesParser {
 					hygieneList.add(obj);
 				}
 				floorAsset.setData(hygieneList);
-				assetsMap.put(responseObjectCollection.getAssetName(), floorAsset);
-				floorObj.setAssetsMap(assetsMap);
-				floorList.add(floorObj);
 				}
 		}
-		return floorList;
-	}
-
-	public Collection<Floor> parseFloor(DatapointsResponse datapointsResponse) {
-		java.util.Map<String, Floor> floorMap = new HashMap<>();
-		try {
-			Tag tag = datapointsResponse.getTags().get(0);
-			List<Results> results = tag.getResults();
-			for (int i = 0; i < results.size(); i++) {
-				Map attributes = results.get(i).getAttributes();
-				if (attributes.size() > 0) {
-					String assetNameStirng = ((ArrayList<String>) attributes.get("assetname")).get(0);
-					String floorNoStirng = ((ArrayList<String>) attributes.get("floorNo")).get(0);
-
-					Floor floor = floorMap.get(floorNoStirng);
-					if (floor == null) {
-						floor = new Floor();
-						floor.setFloorNo(floorNoStirng);
-						floorMap.put(floorNoStirng, floor);
-					}
-					FloorAsset floorAsset = floor.getAssetsMap().get(assetNameStirng);
-					if (floorAsset == null) {
-						floorAsset = new FloorAsset();
-						floorAsset.setAssetName(assetNameStirng);
-						floor.getAssetsMap().put(assetNameStirng, floorAsset);
-					}
-
-					HygieneResponseObject responseObject = new HygieneResponseObject();
-
-					List<Object> values = results.get(i).getValues();
-
-					responseObject.setTemperature(getValue(attributes, "temperature"));
-					responseObject.setHumidity(getValue(attributes, "humidity"));
-					responseObject.setNoise(getValue(attributes, "noise"));
-					responseObject.setTimestamp(getValue(values));
-					floorAsset.getData().add(responseObject);
-				}
-
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		return floorMap.values();
 	}
-
 	public class ResponseObjectCollections {
 		private List<HygieneResponseObject> responseObjects = new ArrayList<>();
 		private String name;
