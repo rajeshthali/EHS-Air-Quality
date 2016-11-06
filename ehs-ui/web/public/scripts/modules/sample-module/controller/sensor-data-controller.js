@@ -5,9 +5,13 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		$scope.isLoading = true;
 		var intervalPromiseSensor = null;
 		var sensorCharts = [];
+		$scope.sensorTabList=['Sensor Data','Alerts'];
+		$scope.sensorTabEnableList=[true,false];
+		$scope.sensorAlert =[];
+		$scope.sensorAlertTimeStamp =[];
 		var startDynamiUpdate = function() {
 			intervalPromiseSensor = $interval(function() {
-				realSensorData(120000);
+				realSensorData(20*20000);
 			}, 10000);
 		};
 		$scope.$on('$destroy', function() {
@@ -18,10 +22,17 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			$interval.cancel(intervalPromiseSensor);
 		};
 		
+		$scope.displaySensorTab= function(index) {
+			for(var i=0;i<2;i++){
+				$scope.sensorTabEnableList[i] = false;
+			}
+			$scope.sensorTabEnableList[index] = true;
+		};
 		
+		   
 		var loadData = function() {
 			AuthService.getTocken(function(token) {
-				realSensorData(120000);
+				realSensorData(20*20000);
 				startDynamiUpdate();
 				
 			});
@@ -36,11 +47,32 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				   for (var i = 0; i < sensorDataList.length; i++) {
 					   var sensorName = sensorDataList[i].name;
 					   var sensorDataValues = sensorDataList[i].sensorDataValues;
+					   //'PM2_5','Temperature'
+					  
 					   var dataXaxis =[];
 					   var dataYaxis =[];
+					   if($scope.sensorAlert.length >= 22){
+						   for(var j=0;j<5;j++) {
+							   $scope.sensorAlert.splice(j, 1);
+							   $scope.sensorAlertTimeStamp.splice(j, 1);
+							   
+						   }
+						   
+					   }
 					   for (var j = 0; j < sensorDataValues.length; j++) {
 						   dataXaxis.push(sensorDataValues[j].timeStamp);
 						   dataYaxis.push(sensorDataValues[j].sensorValue);
+						   if("PM2_5" === sensorName && sensorDataValues[j].sensorValue > 1010) {
+							   if($scope.sensorAlertTimeStamp.indexOf(sensorDataValues[j].timeStamp) === -1) {
+								   $scope.sensorAlert.push("PM2_5 is "+sensorDataValues[j].sensorValue + " at "+ convertTimeStamp(sensorDataValues[j].timeStamp));
+								   $scope.sensorAlertTimeStamp.push(sensorDataValues[j].timeStamp);
+							   }
+						   }else if("Temperature" === sensorName && sensorDataValues[j].sensorValue > 22) {
+							   if($scope.sensorAlertTimeStamp.indexOf(sensorDataValues[j].timeStamp) === -1) {
+								   $scope.sensorAlert.push("Temperature is "+sensorDataValues[j].sensorValue + " at "+ convertTimeStamp(sensorDataValues[j].timeStamp));
+								   $scope.sensorAlertTimeStamp.push(sensorDataValues[j].timeStamp);
+							   }
+							}
 					   }
 					   loadValuesToGraph('Container_'+sensorName,convertTimeStamps(dataXaxis),dataYaxis,sensorName);
 					   }
@@ -52,30 +84,32 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			var convertTimeStamps =  function(timestamps) {
 				var dates = [];
 				for (var i = 0; i < timestamps.length; i++) {
-					var date = new Date(timestamps[i]);
-					var h = 0;
-					var m = 0;
-					var s = 0;
-					if (date.getHours() < 10)
-						h = '0' + date.getHours();
-					else
-						h = date.getHours();
-					if (date.getMinutes() < 10)
-						m = '0' + date.getMinutes();
-					else
-						m = date.getMinutes();
-					if (date.getSeconds() < 10)
-						s = '0' + date.getSeconds();
-					else
-						s = date.getSeconds();
-
-					var dateString = h + ':' + m + ':' + s;
-					dates.push(dateString);
+					dates.push(convertTimeStamp(timestamps[i]));
 				}
 				return dates;
 			};
 
-			
+			var convertTimeStamp = function(timestamp) {
+				var date = new Date(timestamp);
+				var h = 0;
+				var m = 0;
+				var s = 0;
+				if (date.getHours() < 10)
+					h = '0' + date.getHours();
+				else
+					h = date.getHours();
+				if (date.getMinutes() < 10)
+					m = '0' + date.getMinutes();
+				else
+					m = date.getMinutes();
+				if (date.getSeconds() < 10)
+					s = '0' + date.getSeconds();
+				else
+					s = date.getSeconds();
+
+				var dateString = h + ':' + m + ':' + s;
+				return dateString; 
+			};
 			
 			var loadValuesToGraph = function(id, dataX, dataY, sensorName) {
 				 console.log(id + ' >> ');

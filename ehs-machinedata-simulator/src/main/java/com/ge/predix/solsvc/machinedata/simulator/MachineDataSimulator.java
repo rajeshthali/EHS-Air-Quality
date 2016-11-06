@@ -985,10 +985,10 @@ public class MachineDataSimulator {
 				break;
 			case PB:
 				minLimit = 500;
-				maxLimit = 1000;
+				maxLimit = 1500;
 				break;
 			case CO:
-				minLimit = 1000;
+				minLimit = 500;
 				maxLimit = 2000;
 				break;
 			case SO2:

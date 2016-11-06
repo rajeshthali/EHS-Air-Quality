@@ -22,6 +22,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				var isMachineCompleated = false;
 				var isAreaCompleated = false;
 				var compliant = 'all';
+				$rootScope.floor = '0';
 				$scope.setCompliant = function(compliantValue) {
 					compliant = compliantValue;
 					$scope.selectFoor($scope.floor);
