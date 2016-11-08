@@ -5,13 +5,13 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		$scope.isLoading = true;
 		var intervalPromiseSensor = null;
 		var sensorCharts = [];
-		$scope.sensorTabList=['Sensor Data','Alerts'];
-		$scope.sensorTabEnableList=[true,false];
-		$scope.sensorAlert =[];
-		$scope.sensorAlertTimeStamp =[];
+		//"Temperature:MY-APPENDER-VINAYAK","PB:MY-APPENDER-VINAYAK","O3:MY-APPENDER-VINAYAK","CO2:MY-APPENDER-VINAYAK","PM2_5:MY-APPENDER-VINAYAK","NH3:MY-APPENDER-VINAYAK","PM10:MY-APPENDER-VINAYAK","SO2:MY-APPENDER-VINAYAK"
+		$scope.sensorTabList=['PM2_5','Temperature','PB','O3','CO2','NH3','PM10','SO2'];
+		$scope.sensorTabEnableList=[true,false,false,false,false,false,false,false];
+		$scope.tabIndex = 0;
 		var startDynamiUpdate = function() {
 			intervalPromiseSensor = $interval(function() {
-				realSensorData(20*20000);
+				realSensorData(7*20000);
 			}, 10000);
 		};
 		$scope.$on('$destroy', function() {
@@ -22,17 +22,26 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			$interval.cancel(intervalPromiseSensor);
 		};
 		
+		$scope.selectTab = function(index) {
+			$scope.tabIndex = index;
+			$('.sensor_details_graph_class').hide();
+		    console.log("select tab index is: " +$scope.tabIndex)
+		    setTimeout(function() {
+					$('.sensor_details_graph_class').fadeIn();
+			     	loadGraph($scope.sensorDataList,index);
+		    }, 300);
+	     };
+		
 		$scope.displaySensorTab= function(index) {
-			for(var i=0;i<2;i++){
+			for(var i=0;i<8;i++){
 				$scope.sensorTabEnableList[i] = false;
 			}
 			$scope.sensorTabEnableList[index] = true;
 		};
 		
-		   
 		var loadData = function() {
 			AuthService.getTocken(function(token) {
-				realSensorData(20*20000);
+				realSensorData(7*20000);
 				startDynamiUpdate();
 				
 			});
@@ -40,47 +49,40 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		loadData();
 		 
 		var realSensorData = function(interval) {
-			
 			SensorDataService.loadSensorData($rootScope.token,interval, function(res){
 				$scope.isLoading = false;
-				   var sensorDataList= angular.copy(res);
-				   for (var i = 0; i < sensorDataList.length; i++) {
+				$scope.sensorDataList= angular.copy(res);
+				$('.sensor_details_graph_class').hide();
+			    console.log("select tab index is: " +$scope.tabIndex)
+			    setTimeout(function() {
+						$('.sensor_details_graph_class').fadeIn();
+				     	loadGraph($scope.sensorDataList,0);
+			    }, 300);
+				});
+			};
+			
+			var loadGraph = function(sensorDataList,index) {
+				 for (var i = 0; i < sensorDataList.length; i++) {
 					   var sensorName = sensorDataList[i].name;
 					   var sensorDataValues = sensorDataList[i].sensorDataValues;
 					   //'PM2_5','Temperature'
-					  
 					   var dataXaxis =[];
 					   var dataYaxis =[];
-					   if($scope.sensorAlert.length >= 22){
-						   for(var j=0;j<5;j++) {
-							   $scope.sensorAlert.splice(j, 1);
-							   $scope.sensorAlertTimeStamp.splice(j, 1);
-							   
-						   }
-						   
-					   }
 					   for (var j = 0; j < sensorDataValues.length; j++) {
 						   dataXaxis.push(sensorDataValues[j].timeStamp);
 						   dataYaxis.push(sensorDataValues[j].sensorValue);
-						   if("PM2_5" === sensorName && sensorDataValues[j].sensorValue > 1010) {
-							   if($scope.sensorAlertTimeStamp.indexOf(sensorDataValues[j].timeStamp) === -1) {
-								   $scope.sensorAlert.push("PM2_5 is "+sensorDataValues[j].sensorValue + " at "+ convertTimeStamp(sensorDataValues[j].timeStamp));
-								   $scope.sensorAlertTimeStamp.push(sensorDataValues[j].timeStamp);
-							   }
-						   }else if("Temperature" === sensorName && sensorDataValues[j].sensorValue > 22) {
-							   if($scope.sensorAlertTimeStamp.indexOf(sensorDataValues[j].timeStamp) === -1) {
-								   $scope.sensorAlert.push("Temperature is "+sensorDataValues[j].sensorValue + " at "+ convertTimeStamp(sensorDataValues[j].timeStamp));
-								   $scope.sensorAlertTimeStamp.push(sensorDataValues[j].timeStamp);
-							   }
-							}
 					   }
-					   loadValuesToGraph('Container_'+sensorName,convertTimeStamps(dataXaxis),dataYaxis,sensorName);
+					   for (var index = 0; index < $scope.sensorTabList.length;index++) {
+						   if($scope.sensorTabList[index] == sensorName) {
+							   loadValuesToGraph('container_'+index,convertTimeStamps(dataXaxis),dataYaxis,sensorName);
+							   break;
+						   }
 					   }
-			   });
-				   
-			   
+					   
+				   }
+			};
+		
 			
-       	 }
 			var convertTimeStamps =  function(timestamps) {
 				var dates = [];
 				for (var i = 0; i < timestamps.length; i++) {
@@ -110,12 +112,33 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				var dateString = h + ':' + m + ':' + s;
 				return dateString; 
 			};
+			var getTresholdLimits = function(sensorName) {
+				var tresholdLimits =[];
+				if("Temperature" === sensorName) {
+					tresholdLimits.push(22.25); 
+					tresholdLimits.push(20.75);
+				}else if("PM2_5" === sensorName){
+					tresholdLimits.push(160);
+					tresholdLimits.push(120);
+				}
+				return tresholdLimits;
+			};
+			
+			var getYAxisType = function(sensorName) {
+				var returnValue;
+				if("Temperature" === sensorName) {
+					returnValue = "Deg C";
+				}else if("PM2_5" === sensorName){
+					returnValue = "PPM";
+				}else{
+					returnValue = "Sensor Values";
+				}
+				return returnValue;
+			};
 			
 			var loadValuesToGraph = function(id, dataX, dataY, sensorName) {
-				 console.log(id + ' >> ');
-				 console.log(dataX + ' >dataX> ' );
-				 console.log(dataY + ' >dataY> ' );
-				 console.log(sensorName + ' >sensorName> ' );
+				 var tresholdLimits = getTresholdLimits(sensorName);
+				 var yAxisType = getYAxisType(sensorName);
 				 $('#'+id).each(function() {
 					// console.log('each');
 					var chart = new Highcharts.Chart({
@@ -151,22 +174,37 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 
 						xAxis : {
 							title : {
-								text : 'Time'
+								text : '<b>'+'Time' + '</b>'
 							},
 							categories :dataX
-						},
+							},
 
 						yAxis : {
 							title : {
-								text : 'Sensor Values'
+								text : '<b>'+ yAxisType + '</b>'
 							},
+							
+							plotLines: [{
+							    color: 'red', // Color value
+							    dashStyle: 'solid', // Style of the plot line. Default to solid
+							    value: tresholdLimits[0], // Value of where the line will appear
+							    width: 2 // Width of the line    
+							  },{
+								    color: 'red', // Color value
+								    dashStyle: 'solid', // Style of the plot line. Default to solid
+								    value: tresholdLimits[1], // Value of where the line will appear
+								    width: 2 // Width of the line    
+								  }],
+							  
+							  
+
 						},
 
 						series : [{
 				        	name: sensorName,
 				            data: dataY,
 				            type: 'spline',
-				            color: 'Black'
+				            color: 'Blue'
 				           
 
 				        }
