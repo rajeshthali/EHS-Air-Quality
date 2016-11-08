@@ -51,7 +51,6 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 			params : {
 				'smtare' : null
 			}
-		  
 		 
 		}).state('detail_parameter', {
 			url : '/detail_parameter',

@@ -111,7 +111,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 
 				var dateString = h + ':' + m + ':' + s;
 				return dateString; 
-			};
+			}; 
 			var getTresholdLimits = function(sensorName) {
 				var tresholdLimits =[];
 				if("Temperature" === sensorName) {
