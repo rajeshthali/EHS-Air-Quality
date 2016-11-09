@@ -6,12 +6,13 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		var intervalPromiseSensor = null;
 		var sensorCharts = [];
 		//"Temperature:MY-APPENDER-VINAYAK","PB:MY-APPENDER-VINAYAK","O3:MY-APPENDER-VINAYAK","CO2:MY-APPENDER-VINAYAK","PM2_5:MY-APPENDER-VINAYAK","NH3:MY-APPENDER-VINAYAK","PM10:MY-APPENDER-VINAYAK","SO2:MY-APPENDER-VINAYAK"
-		$scope.sensorTabList=['PM2_5','Temperature','PB','O3','CO2','NH3','PM10','SO2'];
+		$scope.sensorTabListForUI=['Methanol','Temperature','PB','O3','CO2','NH3','PM10','SO2'];
+		$scope.sensorTabListForService=['PM2_5','Temperature','PB','O3','CO2','NH3','PM10','SO2'];
 		$scope.sensorTabEnableList=[true,false,false,false,false,false,false,false];
 		$scope.tabIndex = 0;
 		var startDynamiUpdate = function() {
 			intervalPromiseSensor = $interval(function() {
-				realSensorData(7*20000);
+				realSensorDataReload(7*20000);
 			}, 10000);
 		};
 		$scope.$on('$destroy', function() {
@@ -61,6 +62,14 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				});
 			};
 			
+			var realSensorDataReload = function(interval) {
+				SensorDataService.loadSensorData($rootScope.token,interval, function(res){
+					$scope.isLoading = false;
+					$scope.sensorDataList= angular.copy(res);
+					loadGraph($scope.sensorDataList,0);
+					});
+				};
+			
 			var loadGraph = function(sensorDataList,index) {
 				 for (var i = 0; i < sensorDataList.length; i++) {
 					   var sensorName = sensorDataList[i].name;
@@ -72,8 +81,8 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						   dataXaxis.push(sensorDataValues[j].timeStamp);
 						   dataYaxis.push(sensorDataValues[j].sensorValue);
 					   }
-					   for (var index = 0; index < $scope.sensorTabList.length;index++) {
-						   if($scope.sensorTabList[index] == sensorName) {
+					   for (var index = 0; index < $scope.sensorTabListForService.length;index++) {
+						   if($scope.sensorTabListForService[index] == sensorName) {
 							   loadValuesToGraph('container_'+index,convertTimeStamps(dataXaxis),dataYaxis,sensorName);
 							   break;
 						   }
@@ -117,8 +126,8 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				if("Temperature" === sensorName) {
 					tresholdLimits.push(22.25); 
 					tresholdLimits.push(20.75);
-				}else if("PM2_5" === sensorName){
-					tresholdLimits.push(160);
+				}else if("Methanol" === sensorName){
+					tresholdLimits.push(400);
 					tresholdLimits.push(120);
 				}
 				return tresholdLimits;
@@ -128,7 +137,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				var returnValue;
 				if("Temperature" === sensorName) {
 					returnValue = "Deg C";
-				}else if("PM2_5" === sensorName){
+				}else if("Methanol" === sensorName){
 					returnValue = "PPM";
 				}else{
 					returnValue = "Sensor Values";
@@ -137,8 +146,9 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			};
 			
 			var loadValuesToGraph = function(id, dataX, dataY, sensorName) {
-				 var tresholdLimits = getTresholdLimits(sensorName);
-				 var yAxisType = getYAxisType(sensorName);
+				 var sensorNameForUI =  sensorName === "PM2_5" ? "Methanol" : sensorName;
+				 var tresholdLimits = getTresholdLimits(sensorNameForUI);
+				 var yAxisType = getYAxisType(sensorNameForUI);
 				 $('#'+id).each(function() {
 					// console.log('each');
 					var chart = new Highcharts.Chart({
@@ -153,7 +163,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						},
 						tooltip : {
 							formatter : function() {
-								return '<b>' + sensorName + '</b><br/>' + Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' + Highcharts.numberFormat(this.y, 2);
+								return '<b>' + sensorNameForUI + '</b><br/>' + Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' + Highcharts.numberFormat(this.y, 2);
 							}
 						},
 						exporting : {
@@ -201,7 +211,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						},
 
 						series : [{
-				        	name: sensorName,
+				        	name: sensorNameForUI,
 				            data: dataY,
 				            type: 'spline',
 				            color: 'Blue'

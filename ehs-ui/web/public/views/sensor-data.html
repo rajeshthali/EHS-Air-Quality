@@ -3,11 +3,11 @@
 		<div id="Sensor-detailse" class="tab-pane fade in active details-tab-base-content">
 			<img alt="" class="loading_image" ng-show=isLoading src="images/25.gif">
 			<ul class="nav nav-tabs" id="sensor-tab"> 
-				<li ng-repeat="sensorTab in sensorTabList" ng-class="{'active':$index==tabIndex}"><a data-toggle="tab" href="#" data-target="#sensor_{{$index}}" ng-click="selectTab($index)">{{sensorTab}}</a></li>
+				<li ng-repeat="sensorTab in sensorTabListForUI" ng-class="{'active':$index==tabIndex}"><a data-toggle="tab" href="#" data-target="#sensor_{{$index}}" ng-click="selectTab($index)">{{sensorTab}}</a></li>
 			</ul>
 			<div width="10%"></div>
 			<div id="sensor-tab-content" ng-show="!isLoading" class="tab-content details-tab-base-content-waste">
-		       <div ng-repeat="sensorTab in sensorTabList" id="sensor_{{$index}}" ng-class="{'active':$index==tabIndex}" class="tab-pane fade in">
+		       <div ng-repeat="sensorTab in sensorTabListForUI" id="sensor_{{$index}}" ng-class="{'active':$index==tabIndex}" class="tab-pane fade in">
 		         <div id="container_{{$index}}" class="sensor_details_graph_class sensor_details_graph_class_machine data-graph"></div>
 			   </div>
 		   </div>
