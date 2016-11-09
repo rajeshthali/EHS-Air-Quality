@@ -17,12 +17,11 @@ import com.ge.predix.entity.timeseries.datapoints.queryresponse.DatapointsRespon
 import com.ge.predix.entity.timeseries.datapoints.queryresponse.Results;
 import com.ge.predix.entity.timeseries.datapoints.queryresponse.Tag;
 import com.ge.predix.entity.util.map.Map;
-import com.tcs.ehs.utils.AqiCalculations.OverallAqiResponse;
 
 @Component
-public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
+public class TimeSeriesEnergyParser extends CommonTimeSeriesParser {
 
-	public Collection<Floor> convertToWaterData(Collection<CommonResponseObjectCollections> list) {
+	public Collection<Floor> convertToEnergyData(Collection<CommonResponseObjectCollections> list) {
 		java.util.Map<String, Floor> floorMap = new HashMap<>();
 		if(list != null) {
 			Floor floorObj = null;
@@ -42,49 +41,44 @@ public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
 					floorObj.getAssetsMap().put(assetNameStirng, floorAsset);
 				}
 				List<CommonResponseObject> commonResponseObjectList = responseObjectCollection.getResponseObjects();
-				List<WaterResponseObject> waterList = new ArrayList<>();
-				java.util.Map<Long, WaterResponseObject> waterMap = new TreeMap<>();
-				WaterResponseObject WaterResponseObject = null;
+				List<EnergyResponseObject> energyList = new ArrayList<>();
+				java.util.Map<Long, EnergyResponseObject> energyMap = new TreeMap<>();
+				EnergyResponseObject EnergyResponseObject = null;
 				for(CommonResponseObject commonResponseObject : commonResponseObjectList) {
-					if(waterMap.get(commonResponseObject.getTimestamp()) == null) {
-						WaterResponseObject = new WaterResponseObject();
-						WaterResponseObject.setTimestamp(commonResponseObject.getTimestamp());
-						waterMap.put(commonResponseObject.getTimestamp(), WaterResponseObject);
+					if(energyMap.get(commonResponseObject.getTimestamp()) == null) {
+						EnergyResponseObject = new EnergyResponseObject();
+						EnergyResponseObject.setTimestamp(commonResponseObject.getTimestamp());
+						energyMap.put(commonResponseObject.getTimestamp(), EnergyResponseObject);
 					}else{
-						WaterResponseObject = waterMap.get(commonResponseObject.getTimestamp());
+						EnergyResponseObject = energyMap.get(commonResponseObject.getTimestamp());
 					}
-					if("PH_VALUE".equalsIgnoreCase(commonResponseObject.getProperyName())) {
-						WaterResponseObject.setpHValue(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
-					}else if("SUSPENDED_SOLIDS".equalsIgnoreCase(commonResponseObject.getProperyName())) {
-						WaterResponseObject.setSuspendedSolids(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+
+					if("SMTLine1".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						EnergyResponseObject.setSmtLine1EnergyValue(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					}else if("SMTLine2".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						EnergyResponseObject.setSmtLine2EnergyValue(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
 					}
-					else if("BOD".equalsIgnoreCase(commonResponseObject.getProperyName())) {
-						WaterResponseObject.setBod(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
-					}
-					else if("COD".equalsIgnoreCase(commonResponseObject.getProperyName())) {
-						WaterResponseObject.setCod(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
-					}
-					else if("OIL_GREASE".equalsIgnoreCase(commonResponseObject.getProperyName())) {
-						WaterResponseObject.setOilGrease(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
-					}
+					else if("ProductionGroundFloor".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						EnergyResponseObject.setProductionGroundFloorEnergyValue(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					}	
 				}
-				for(WaterResponseObject obj : waterMap.values()) {
-					waterList.add(obj);
+				for(EnergyResponseObject obj : energyMap.values()) {
+					energyList.add(obj);
 				}
-				floorAsset.setData(waterList);
+				floorAsset.setData(energyList);
 			}
 		}
 		return floorMap.values();
 	}
 	public class ResponseObjectCollections {
-		private List<WaterResponseObject> responseObjects = new ArrayList<>();
+		private List<EnergyResponseObject> responseObjects = new ArrayList<>();
 		private String name;
 
-		public List<WaterResponseObject> getResponseObjects() {
+		public List<EnergyResponseObject> getResponseObjects() {
 			return responseObjects;
 		}
 
-		public void setResponseObjects(List<WaterResponseObject> responseObjects) {
+		public void setResponseObjects(List<EnergyResponseObject> responseObjects) {
 			this.responseObjects = responseObjects;
 		}
 
@@ -97,61 +91,38 @@ public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
 		}
 	}
 	@JsonInclude(Include.NON_NULL)
-	public static class WaterResponseObject {
-		private Float pHValue;
-		private Float suspendedSolids;
-		private Float bod;
-		private Float cod;
-		private Float oilGrease;		
+	public static class EnergyResponseObject {
+
+		private Float smtLine1EnergyValue;
+		private Float smtLine2EnergyValue;
+		private Float productionGroundFloorEnergyValue;		
 		private Long timestamp;
 
-		public Float getSuspendedSolids() {
-			return suspendedSolids;
+		public Float getSmtLine1EnergyValue() {
+			return smtLine1EnergyValue;
 		}
-
-		public void setSuspendedSolids(Float suspendedSolids) {
-			this.suspendedSolids = suspendedSolids;
+		public void setSmtLine1EnergyValue(Float smtLine1EnergyValue) {
+			this.smtLine1EnergyValue = smtLine1EnergyValue;
 		}
-
-		public Float getBod() {
-			return bod;
+		public Float getSmtLine2EnergyValue() {
+			return smtLine2EnergyValue;
 		}
-
-		public void setBod(Float bod) {
-			this.bod = bod;
+		public void setSmtLine2EnergyValue(Float smtLine2EnergyValue) {
+			this.smtLine2EnergyValue = smtLine2EnergyValue;
 		}
-
-		public Float getCod() {
-			return cod;
+		public Float getProductionGroundFloorEnergyValue() {
+			return productionGroundFloorEnergyValue;
 		}
-
-		public void setCod(Float cod) {
-			this.cod = cod;
+		public void setProductionGroundFloorEnergyValue(Float productionGroundFloorEnergyValue) {
+			this.productionGroundFloorEnergyValue = productionGroundFloorEnergyValue;
 		}
-
-		public Float getOilGrease() {
-			return oilGrease;
-		}
-
-		public void setOilGrease(Float oilGrease) {
-			this.oilGrease = oilGrease;
-		}
-
-		public Float getpHValue() {
-			return pHValue;
-		}
-
 		public Long getTimestamp() {
 			return timestamp;
 		}
-
 		public void setTimestamp(Long timestamp) {
 			this.timestamp = timestamp;
 		}
 
-		public void setpHValue(Float pHValue) {
-			this.pHValue = pHValue;
-		}
 	}
 
 	public static class Floor {
@@ -184,7 +155,7 @@ public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
 	@JsonInclude(Include.NON_NULL)
 	public static class FloorAsset {
 		private String assetName;
-		private List<WaterResponseObject> data = new ArrayList<>();
+		private List<EnergyResponseObject> data = new ArrayList<>();
 
 		public String getAssetName() {
 			return assetName;
@@ -194,11 +165,11 @@ public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
 			this.assetName = assetName;
 		}
 
-		public List<WaterResponseObject> getData() {
+		public List<EnergyResponseObject> getData() {
 			return data;
 		}
 
-		public void setData(List<WaterResponseObject> data) {
+		public void setData(List<EnergyResponseObject> data) {
 			this.data = data;
 		}
 

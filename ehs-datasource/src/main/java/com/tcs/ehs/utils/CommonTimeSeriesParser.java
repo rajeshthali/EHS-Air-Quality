@@ -26,10 +26,16 @@ public class CommonTimeSeriesParser {
 			List<CommonResponseObject> responseObjectList = null;
 			for (int i = 0; i < results.size(); i++) {
 				Map attributes = results.get(i).getAttributes();
-				if (attributes.size() > 0) {
-					
+				if (attributes.size() > 0) {					
 					//CommonResponseObjectCollections reponseObject = new CommonResponseObjectCollections();
-					String assetNameStirng = ((List<String>) attributes.get("assetname")).get(0);
+					String assetNameStirng=null;
+					if(null!=(List<String>) attributes.get("assetname")){
+
+						assetNameStirng = ((List<String>) attributes.get("assetname")).get(0);
+					}else{
+						assetNameStirng = ((List<String>) attributes.get("name")).get(0);
+					}
+
 					if(commonCollectionMap.get(assetNameStirng) == null) {
 						reponseObject = new CommonResponseObjectCollections();
 						responseObjectList = new ArrayList<CommonResponseObject>();

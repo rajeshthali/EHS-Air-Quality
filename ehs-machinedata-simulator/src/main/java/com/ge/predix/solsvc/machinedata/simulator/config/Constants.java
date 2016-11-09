@@ -28,8 +28,19 @@ public class Constants {
 	public static enum Water {
 		PH_VALUE, SUSPENDED_SOLIDS, BOD, COD, OIL_GREASE
 	};
+	
+	public static enum Waste {
+		SOLDER_DROSS, USED_OIL, DISCARDED_CONTAINERS
+	};
+
+	public static enum Energy {
+		SMTLine1, SMTLine2, ProductionGroundFloor
+	};
 
 	public static String WATER_TYPE[] = new String[] { "Domestic-Water","Industrial-Water" };
+	
+	//public static String WASTE_TYPE[] = new String[] { "SOLDER_DROSS","USED_OIL","DISCARDED_CONTAINERS"};
+	
 	
 	public static String HYG_ASSET_FLR_0[] = new String[] { "SMTLine1", "SMTLine2", "ProductionGroundFloor" };
 	public static String HYG_ASSET_FLR_1[] = new String[] { "SMTLine1"};

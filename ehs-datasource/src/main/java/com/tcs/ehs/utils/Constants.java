@@ -1,5 +1,8 @@
 package com.tcs.ehs.utils;
 
+import com.tcs.ehs.utils.Constants.Energy;
+import com.tcs.ehs.utils.Constants.Waste;
+
 public class Constants {
 	public static enum QueryTagsAQI {
 		AQI_Machine {
@@ -27,8 +30,27 @@ public class Constants {
 		
 	}
 	
+	//amlesh
+	public static enum QueryTagsWaste {
+		Waste{			
+		@Override
+		public String toString(){
+			return "Waste";			
+		}		
+	  }
+		
+	}
 	
-
+	public static enum QueryTagsEnergy {
+		Energy{			
+		@Override
+		public String toString(){
+			return "Energy";			
+		}		
+	  }
+		
+	}
+	
 	public static enum QueryTagsHygiene {
 		Hygiene {
 			@Override
@@ -117,6 +139,73 @@ public class Constants {
 			return names;
 		}*/
 	//};
+	
+	public static enum Waste {
+		/*assetname {
+			@Override
+			public String toString() {
+				return "assetname";
+			}
+		},*/
+		floorNo {
+			@Override
+			public String toString() {
+				return "floorNo";
+			}
+		},
+		name {
+			@Override
+			public String toString() {
+				return "name";
+			}
+		};	
+		
+		public static String[] list() {
+			Waste[] water = values();
+			String[] names = new String[water.length];
+
+			for (int i = 0; i < water.length; i++) {
+				names[i] = water[i].toString();
+			}
+
+			return names;
+		}
+		
+	};
+	
+	
+	public static enum Energy {
+		/*assetname {
+			@Override
+			public String toString() {
+				return "assetname";
+			}
+		},*/
+		floorNo {
+			@Override
+			public String toString() {
+				return "floorNo";
+			}
+		},
+		name {
+			@Override
+			public String toString() {
+				return "name";
+			}
+		};	
+		
+		public static String[] list() {
+			Energy[] energy = values();
+			String[] names = new String[energy.length];
+
+			for (int i = 0; i < energy.length; i++) {
+				names[i] = energy[i].toString();
+			}
+
+			return names;
+		}
+		
+	};	
 	
 
 	public static enum Hygiene {

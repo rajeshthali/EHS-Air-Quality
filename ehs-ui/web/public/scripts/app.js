@@ -82,7 +82,7 @@ define([ 'jquery',
 				/* {state: 'blanksubpage', label: 'Blank Sub Page'} */
 				]
 			} ,
-			/*{    
+			{    
 				   icon: 'fa fa-tint fa-lg', 
 				   state: 'water-discharge', 
 			       label: 'Water Consumption',
@@ -102,7 +102,7 @@ define([ 'jquery',
 			       label: 'Waste Management', 
 			       subitems: [
 			    ]
-			},*/
+			},
 			{    
 				   icon: 'fa fa-recycle', 
 				   state: 'Sensor-Data', 

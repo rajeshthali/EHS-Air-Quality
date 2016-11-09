@@ -4,13 +4,13 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class WaterObjectVO {
-
+public class WasteObjectVO {
+	
 	@JsonProperty("messageId")
 	private Long messageId;
 	
 	@JsonProperty("body")
-	private List<WaterBody> body;
+	private List<WasteBody> body;
 
 	public Long getMessageId() {
 		return messageId;
@@ -20,11 +20,11 @@ public class WaterObjectVO {
 		this.messageId = messageId;
 	}
 
-	public List<WaterBody> getBody() {
+	public List<WasteBody> getBody() {
 		return body;
 	}
 
-	public void setBody(List<WaterBody> body) {
+	public void setBody(List<WasteBody> body) {
 		this.body = body;
 	}
 	

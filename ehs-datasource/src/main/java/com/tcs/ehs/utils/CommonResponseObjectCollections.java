@@ -3,8 +3,6 @@ package com.tcs.ehs.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tcs.ehs.utils.TimeSeriesWaterParser.WaterResponseObject;
-
 public class CommonResponseObjectCollections {
 	private List<CommonResponseObject> responseObjects = new ArrayList<>();
 	private String assetName;

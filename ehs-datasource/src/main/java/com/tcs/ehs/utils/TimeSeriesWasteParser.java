@@ -17,12 +17,11 @@ import com.ge.predix.entity.timeseries.datapoints.queryresponse.DatapointsRespon
 import com.ge.predix.entity.timeseries.datapoints.queryresponse.Results;
 import com.ge.predix.entity.timeseries.datapoints.queryresponse.Tag;
 import com.ge.predix.entity.util.map.Map;
-import com.tcs.ehs.utils.AqiCalculations.OverallAqiResponse;
 
 @Component
-public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
+public class TimeSeriesWasteParser extends CommonTimeSeriesParser {
 
-	public Collection<Floor> convertToWaterData(Collection<CommonResponseObjectCollections> list) {
+	public Collection<Floor> convertToWasteData(Collection<CommonResponseObjectCollections> list) {
 		java.util.Map<String, Floor> floorMap = new HashMap<>();
 		if(list != null) {
 			Floor floorObj = null;
@@ -42,49 +41,45 @@ public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
 					floorObj.getAssetsMap().put(assetNameStirng, floorAsset);
 				}
 				List<CommonResponseObject> commonResponseObjectList = responseObjectCollection.getResponseObjects();
-				List<WaterResponseObject> waterList = new ArrayList<>();
-				java.util.Map<Long, WaterResponseObject> waterMap = new TreeMap<>();
-				WaterResponseObject WaterResponseObject = null;
+				List<WasteResponseObject> wasteList = new ArrayList<>();
+				java.util.Map<Long, WasteResponseObject> wasteMap = new TreeMap<>();
+				WasteResponseObject WasteResponseObject = null;
 				for(CommonResponseObject commonResponseObject : commonResponseObjectList) {
-					if(waterMap.get(commonResponseObject.getTimestamp()) == null) {
-						WaterResponseObject = new WaterResponseObject();
-						WaterResponseObject.setTimestamp(commonResponseObject.getTimestamp());
-						waterMap.put(commonResponseObject.getTimestamp(), WaterResponseObject);
+					if(wasteMap.get(commonResponseObject.getTimestamp()) == null) {
+						WasteResponseObject = new WasteResponseObject();
+						WasteResponseObject.setTimestamp(commonResponseObject.getTimestamp());
+						wasteMap.put(commonResponseObject.getTimestamp(), WasteResponseObject);
 					}else{
-						WaterResponseObject = waterMap.get(commonResponseObject.getTimestamp());
+						WasteResponseObject = wasteMap.get(commonResponseObject.getTimestamp());
 					}
-					if("PH_VALUE".equalsIgnoreCase(commonResponseObject.getProperyName())) {
-						WaterResponseObject.setpHValue(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
-					}else if("SUSPENDED_SOLIDS".equalsIgnoreCase(commonResponseObject.getProperyName())) {
-						WaterResponseObject.setSuspendedSolids(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+
+					if("SOLDER_DROSS".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						WasteResponseObject.setSolderDrossValue(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					}else if("USED_OIL".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						WasteResponseObject.setUsedOilValue(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
 					}
-					else if("BOD".equalsIgnoreCase(commonResponseObject.getProperyName())) {
-						WaterResponseObject.setBod(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
-					}
-					else if("COD".equalsIgnoreCase(commonResponseObject.getProperyName())) {
-						WaterResponseObject.setCod(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
-					}
-					else if("OIL_GREASE".equalsIgnoreCase(commonResponseObject.getProperyName())) {
-						WaterResponseObject.setOilGrease(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					else if("DISCARDED_CONTAINERS".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						WasteResponseObject.setDiscardedContainersValue(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
 					}
 				}
-				for(WaterResponseObject obj : waterMap.values()) {
-					waterList.add(obj);
+
+				for(WasteResponseObject obj : wasteMap.values()) {
+					wasteList.add(obj);
 				}
-				floorAsset.setData(waterList);
+				floorAsset.setData(wasteList);
 			}
 		}
 		return floorMap.values();
 	}
 	public class ResponseObjectCollections {
-		private List<WaterResponseObject> responseObjects = new ArrayList<>();
+		private List<WasteResponseObject> responseObjects = new ArrayList<>();
 		private String name;
 
-		public List<WaterResponseObject> getResponseObjects() {
+		public List<WasteResponseObject> getResponseObjects() {
 			return responseObjects;
 		}
 
-		public void setResponseObjects(List<WaterResponseObject> responseObjects) {
+		public void setResponseObjects(List<WasteResponseObject> responseObjects) {
 			this.responseObjects = responseObjects;
 		}
 
@@ -97,60 +92,35 @@ public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
 		}
 	}
 	@JsonInclude(Include.NON_NULL)
-	public static class WaterResponseObject {
-		private Float pHValue;
-		private Float suspendedSolids;
-		private Float bod;
-		private Float cod;
-		private Float oilGrease;		
+	public static class WasteResponseObject {
+		private Float solderDrossValue;
+		private Float usedOilValue;
+		private Float discardedContainersValue;		
 		private Long timestamp;
 
-		public Float getSuspendedSolids() {
-			return suspendedSolids;
+		public Float getSolderDrossValue() {
+			return solderDrossValue;
 		}
-
-		public void setSuspendedSolids(Float suspendedSolids) {
-			this.suspendedSolids = suspendedSolids;
+		public void setSolderDrossValue(Float solderDrossValue) {
+			this.solderDrossValue = solderDrossValue;
 		}
-
-		public Float getBod() {
-			return bod;
+		public Float getUsedOilValue() {
+			return usedOilValue;
 		}
-
-		public void setBod(Float bod) {
-			this.bod = bod;
+		public void setUsedOilValue(Float usedOilValue) {
+			this.usedOilValue = usedOilValue;
 		}
-
-		public Float getCod() {
-			return cod;
+		public Float getDiscardedContainersValue() {
+			return discardedContainersValue;
 		}
-
-		public void setCod(Float cod) {
-			this.cod = cod;
+		public void setDiscardedContainersValue(Float discardedContainersValue) {
+			this.discardedContainersValue = discardedContainersValue;
 		}
-
-		public Float getOilGrease() {
-			return oilGrease;
-		}
-
-		public void setOilGrease(Float oilGrease) {
-			this.oilGrease = oilGrease;
-		}
-
-		public Float getpHValue() {
-			return pHValue;
-		}
-
 		public Long getTimestamp() {
 			return timestamp;
 		}
-
 		public void setTimestamp(Long timestamp) {
 			this.timestamp = timestamp;
-		}
-
-		public void setpHValue(Float pHValue) {
-			this.pHValue = pHValue;
 		}
 	}
 
@@ -184,7 +154,7 @@ public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
 	@JsonInclude(Include.NON_NULL)
 	public static class FloorAsset {
 		private String assetName;
-		private List<WaterResponseObject> data = new ArrayList<>();
+		private List<WasteResponseObject> data = new ArrayList<>();
 
 		public String getAssetName() {
 			return assetName;
@@ -194,11 +164,11 @@ public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
 			this.assetName = assetName;
 		}
 
-		public List<WaterResponseObject> getData() {
+		public List<WasteResponseObject> getData() {
 			return data;
 		}
 
-		public void setData(List<WaterResponseObject> data) {
+		public void setData(List<WasteResponseObject> data) {
 			this.data = data;
 		}
 

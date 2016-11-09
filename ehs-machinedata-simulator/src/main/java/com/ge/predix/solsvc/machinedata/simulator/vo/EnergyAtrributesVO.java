@@ -3,7 +3,7 @@ package com.ge.predix.solsvc.machinedata.simulator.vo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ge.predix.solsvc.machinedata.simulator.config.Constants;
 
-public class WaterAtrributesVO {
+public class EnergyAtrributesVO {
 
 	@JsonProperty("floor")
 	private int floor;
@@ -12,8 +12,8 @@ public class WaterAtrributesVO {
 	private String assetName;
 	
 	@JsonProperty("name")
-	private Constants.Water name;
-		
+	private Constants.Energy name;
+	
 	public int getFloor() {
 		return floor;
 	}
@@ -30,12 +30,13 @@ public class WaterAtrributesVO {
 		this.assetName = assetName;
 	}
 
-	public Constants.Water getName() {
+	public Constants.Energy getName() {
 		return name;
 	}
 
-	public void setName(Constants.Water name) {
+	public void setName(Constants.Energy name) {
 		this.name = name;
 	}
+
 	
 }

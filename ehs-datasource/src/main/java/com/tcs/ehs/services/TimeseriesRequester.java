@@ -79,10 +79,6 @@ public class TimeseriesRequester {
 		return response;
 	}
 
-	
-	
-	
-	
 	public DatapointsResponse requestForAQI(Constants.QueryTagsAQI tagName, String floorNo, String assetName, String auth, Long startTime, Long endTime) throws JsonProcessingException {
 		Map attrMap = new Map();
 		attrMap.put("floorNo", floorNo);
@@ -154,69 +150,157 @@ public class TimeseriesRequester {
 		Map attrMap = new Map();
 		return requestForHygiene(tagName, attrMap, auth, startTime, endTime);
 	}
-	
-	    //amlesh
-		public DatapointsResponse requestForWater(Constants.QueryTagsWater tagName, Map attrMap, String auth, Long startTime, Long endTime) throws JsonProcessingException {
-			List<Header> headers = new ArrayList<Header>();
-			restClient.addSecureTokenToHeaders(headers, auth);
-			restClient.addZoneToHeaders(headers, timeseriesRestConfig.getZoneId());
 
-			DatapointsQuery datapointsQuery = new DatapointsQuery();
-			datapointsQuery.setStart(startTime);
-			datapointsQuery.setEnd(endTime);
-
-			Tag tag = new MyTag();
-
-			Filters filters = new Filters();
-			filters.setAttributes(attrMap);
-			if (attrMap != null)
-				tag.setFilters(filters);
-
-			List<Group> groups = new ArrayList<>();
-			MyGroup group = new MyGroup();
-			group.setName("attribute");
-			group.setAttributes(Arrays.asList(Constants.Water.list()));
-			groups.add(group);
-			tag.setGroups(groups);
-			tag.setName(tagName.toString());
-			tag.setAggregations(null);
-			List<Tag> tags = new ArrayList<>();
-			tags.add(tag);
-			datapointsQuery.setTags(tags);
-			log.info("Query : " + objectMapper.writeValueAsString(datapointsQuery));
-
-			DatapointsResponse response = timeseriesFactory.queryForDatapoints(timeseriesRestConfig.getBaseUrl(), datapointsQuery, headers);
-			response.setStart(startTime);
-			response.setEnd(endTime);
-			log.info("Response : " + objectMapper.writeValueAsString(response));
-
-			return response;
-		}
-	
-		public DatapointsResponse requestForWater(Constants.QueryTagsWater tagName, String floorNo, String assetName, String auth, Long startTime, Long endTime) throws JsonProcessingException {
-			Map attrMap = new Map();
-			attrMap.put("floorNo", floorNo);
-			attrMap.put("assetname", assetName);
-			return requestForWater(tagName, attrMap, auth, startTime, endTime);
-		}
-
-		public DatapointsResponse requestForWater(Constants.QueryTagsWater tagName, String floorNo, String auth, Long startTime, Long endTime) throws JsonProcessingException {
-			Map attrMap = new Map();
-			attrMap.put("floorNo", floorNo);
-			return requestForWater(tagName, attrMap, auth, startTime, endTime);
-		}
-
-		public DatapointsResponse requestForWater(Constants.QueryTagsWater tagName, String auth, Long startTime, Long endTime) throws JsonProcessingException {
-			Map attrMap = new Map();
-			return requestForWater(tagName, attrMap, auth, startTime, endTime);
-		}
-		
-	
 	//amlesh
-	/*public DatapointsResponse requestForWater(Constants.QueryTagsWater tagName, String auth, Long startTime, Long endTime) throws JsonProcessingException {
+	public DatapointsResponse requestForWater(Constants.QueryTagsWater tagName, Map attrMap, String auth, Long startTime, Long endTime) throws JsonProcessingException {
+		List<Header> headers = new ArrayList<Header>();
+		restClient.addSecureTokenToHeaders(headers, auth);
+		restClient.addZoneToHeaders(headers, timeseriesRestConfig.getZoneId());
+
+		DatapointsQuery datapointsQuery = new DatapointsQuery();
+		datapointsQuery.setStart(startTime);
+		datapointsQuery.setEnd(endTime);
+
+		Tag tag = new MyTag();
+
+		Filters filters = new Filters();
+		filters.setAttributes(attrMap);
+		if (attrMap != null)
+			tag.setFilters(filters);
+
+		List<Group> groups = new ArrayList<>();
+		MyGroup group = new MyGroup();
+		group.setName("attribute");
+		group.setAttributes(Arrays.asList(Constants.Water.list()));
+		groups.add(group);
+		tag.setGroups(groups);
+		tag.setName(tagName.toString());
+		tag.setAggregations(null);
+		List<Tag> tags = new ArrayList<>();
+		tags.add(tag);
+		datapointsQuery.setTags(tags);
+		log.info("Query : " + objectMapper.writeValueAsString(datapointsQuery));
+
+		DatapointsResponse response = timeseriesFactory.queryForDatapoints(timeseriesRestConfig.getBaseUrl(), datapointsQuery, headers);
+		response.setStart(startTime);
+		response.setEnd(endTime);
+		log.info("Response : " + objectMapper.writeValueAsString(response));
+
+		return response;
+	}
+
+	public DatapointsResponse requestForWater(Constants.QueryTagsWater tagName, String floorNo, String auth, Long startTime, Long endTime) throws JsonProcessingException {
+		Map attrMap = new Map();
+		attrMap.put("floorNo", floorNo);
+		return requestForWater(tagName, attrMap, auth, startTime, endTime);
+	}
+
+	public DatapointsResponse requestForWater(Constants.QueryTagsWater tagName, String auth, Long startTime, Long endTime) throws JsonProcessingException {
 		Map attrMap = new Map();
 		return requestForWater(tagName, attrMap, auth, startTime, endTime);
-	}*/
+	}
+
+	// amlesh - Waste
+	public DatapointsResponse requestForWaste(Constants.QueryTagsWaste tagName, Map attrMap, String auth, Long startTime, Long endTime) throws JsonProcessingException {
+		List<Header> headers = new ArrayList<Header>();
+		restClient.addSecureTokenToHeaders(headers, auth);
+		restClient.addZoneToHeaders(headers, timeseriesRestConfig.getZoneId());
+
+		DatapointsQuery datapointsQuery = new DatapointsQuery();
+		datapointsQuery.setStart(startTime);
+		datapointsQuery.setEnd(endTime);
+
+		Tag tag = new MyTag();
+
+		Filters filters = new Filters();
+		filters.setAttributes(attrMap);
+		if (attrMap != null)
+			tag.setFilters(filters);
+
+		List<Group> groups = new ArrayList<>();
+		MyGroup group = new MyGroup();
+		group.setName("attribute");
+		group.setAttributes(Arrays.asList(Constants.Waste.list()));
+		groups.add(group);
+		tag.setGroups(groups);
+		tag.setName(tagName.toString());
+		tag.setAggregations(null);
+		List<Tag> tags = new ArrayList<>();
+		tags.add(tag);
+		datapointsQuery.setTags(tags);
+		log.info("Query : " + objectMapper.writeValueAsString(datapointsQuery));
+
+		DatapointsResponse response = timeseriesFactory.queryForDatapoints(timeseriesRestConfig.getBaseUrl(), datapointsQuery, headers);
+		response.setStart(startTime);
+		response.setEnd(endTime);
+		log.info("Response : " + objectMapper.writeValueAsString(response));
+
+		return response;
+	}		
+
+
+	public DatapointsResponse requestForWaste(Constants.QueryTagsWaste tagName, String floorNo, String auth, Long startTime, Long endTime) throws JsonProcessingException {
+		Map attrMap = new Map();
+		attrMap.put("floorNo", floorNo);
+		return requestForWaste(tagName, attrMap, auth, startTime, endTime);
+	}
+
+	public DatapointsResponse requestForWaste(Constants.QueryTagsWaste tagName, String auth, Long startTime, Long endTime) throws JsonProcessingException {
+		Map attrMap = new Map();
+		return requestForWaste(tagName, attrMap, auth, startTime, endTime);
+	}
+
+
+	//amlesh - Energy
+	public DatapointsResponse requestForEnergy(Constants.QueryTagsEnergy tagName, Map attrMap, String auth, Long startTime, Long endTime) throws JsonProcessingException {
+		List<Header> headers = new ArrayList<Header>();
+		restClient.addSecureTokenToHeaders(headers, auth);
+		restClient.addZoneToHeaders(headers, timeseriesRestConfig.getZoneId());
+
+		DatapointsQuery datapointsQuery = new DatapointsQuery();
+		datapointsQuery.setStart(startTime);
+		datapointsQuery.setEnd(endTime);
+
+		Tag tag = new MyTag();
+
+		Filters filters = new Filters();
+		filters.setAttributes(attrMap);
+		if (attrMap != null)
+			tag.setFilters(filters);
+
+		List<Group> groups = new ArrayList<>();
+		MyGroup group = new MyGroup();
+		group.setName("attribute");
+		group.setAttributes(Arrays.asList(Constants.Energy.list()));
+		groups.add(group);
+		tag.setGroups(groups);
+		tag.setName(tagName.toString());
+		tag.setAggregations(null);
+		List<Tag> tags = new ArrayList<>();
+		tags.add(tag);
+		datapointsQuery.setTags(tags);
+		log.info("Query : " + objectMapper.writeValueAsString(datapointsQuery));
+
+		DatapointsResponse response = timeseriesFactory.queryForDatapoints(timeseriesRestConfig.getBaseUrl(), datapointsQuery, headers);
+		response.setStart(startTime);
+		response.setEnd(endTime);
+		log.info("Response : " + objectMapper.writeValueAsString(response));
+
+		return response;
+	}
+
+
+	public DatapointsResponse requestForEnergy(Constants.QueryTagsEnergy tagName, String floorNo, String auth, Long startTime, Long endTime) throws JsonProcessingException {
+		Map attrMap = new Map();
+		attrMap.put("floorNo", floorNo);
+		return requestForEnergy(tagName, attrMap, auth, startTime, endTime);
+	}
+
+	public DatapointsResponse requestForEnergy(Constants.QueryTagsEnergy tagName, String auth, Long startTime, Long endTime) throws JsonProcessingException {
+		Map attrMap = new Map();
+		return requestForEnergy(tagName, attrMap, auth, startTime, endTime);
+	}
+
 
 	@JsonInclude(Include.NON_NULL)
 	class MyTag extends Tag {
