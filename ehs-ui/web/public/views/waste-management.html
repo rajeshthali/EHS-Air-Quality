@@ -14,6 +14,7 @@
         <h4 class= "stat_col">Status</h4>
         <h3 class= "stat_param">Good</h3>
     </div>
+    <div class="max_value_style"><h6>[max, 100]</h6></div>
   </div>
   <div class="col-md-4 sub_div_two">
      <div class= "second_title_div">
@@ -24,6 +25,7 @@
           <h4 class= "stat_col">Status</h4>
           <h3 class= "stat_param">Good</h3>
     </div>
+    <div class="max_value_style"><h6>[max, 10]</h6></div>
   </div>
   <div class="col-md-4 sub_div_three">
      <div class="third_title_div">
@@ -34,6 +36,7 @@
        <h4 class= "stat_col">Status</h4>
        <h3 class= "stat_param">Good</h3>
      </div>
+     <div class="max_value_style"><h6>[max, 42]</h6></div>
   </div>
 </div>
 <div class="col-md-12 hygiene_div_waste">
@@ -53,10 +56,10 @@
 						<div id="hygiene-detailse" class="tab-pane fade in active details-tab-base-content">
 							<img alt="" class="loading_image" ng-show="hygieneLoading" src="images/25.gif">
 							<ul class="nav nav-tabs" id="hygiene-tab"> 
-								<li ng-repeat="hygiene in hygieneData" ng-class="{'active':$index==tabIndex}"><a data-toggle="tab" href="#" data-target="#hygiene__{{$index}}" ng-click="selectTab($index)">{{hygiene.assetName}}</a></li>
+								<li ng-repeat="hygiene in wasteData" ng-class="{'active':$index==tabIndex}"><a data-toggle="tab" href="#" data-target="#hygiene__{{$index}}" ng-click="selectTab($index, oilValues, sValues, dValues)">{{hygiene.assetName}}</a></li>
 							</ul>
 							<div id="hygiene-tab-content" ng-show="!hygieneLoading" class="tab-content details-tab-base-content-inner-waste">
-						       <div ng-repeat="hygiene in hygieneData" id="hygiene_{{$index}}" ng-class="{'active':$index==tabIndex}" class="tab-pane fade in">
+						       <div ng-repeat="hygiene in wasteData" id="hygiene_{{$index}}" ng-class="{'active':$index==tabIndex}" class="tab-pane fade in">
 						         <div id="container_{{$index}}" class="hygiene_details_graph_class hygiene_details_graph_class_machine data-graph"></div>
 							   </div>
 						   </div>

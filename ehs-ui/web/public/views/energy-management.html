@@ -54,10 +54,10 @@
 						<div id="hygiene-detailse" class="tab-pane fade in active details-tab-base-content">
 							<img alt="" class="loading_image" ng-show="hygieneLoading" src="images/25.gif">
 							<ul class="nav nav-tabs" id="hygiene-tab"> 
-								<li ng-repeat="hygiene in hygieneData" ng-class="{'active':$index==tabIndex}"><a data-toggle="tab" href="#" data-target="#hygiene__{{$index}}" ng-click="selectTab($index)">{{hygiene.assetName}}</a></li>
+								<li ng-repeat="hygiene in energyData" ng-class="{'active':$index==tabIndex}"><a data-toggle="tab" href="#" data-target="#hygiene__{{$index}}" ng-click="selectTab($index, smt1Values, smt2Values, pgFloorValues)">{{hygiene.assetName}}</a></li>
 							</ul>
 							<div id="hygiene-tab-content" ng-show="!hygieneLoading" class="tab-content details-tab-base-content-waste">
-						       <div ng-repeat="hygiene in hygieneData" id="hygiene_{{$index}}" ng-class="{'active':$index==tabIndex}" class="tab-pane fade in">
+						       <div ng-repeat="hygiene in energyData" id="hygiene_{{$index}}" ng-class="{'active':$index==tabIndex}" class="tab-pane fade in">
 						         <div id="container_{{$index}}" class="hygiene_details_graph_class hygiene_details_graph_class_machine data-graph"></div>
 							   </div>
 						   </div>

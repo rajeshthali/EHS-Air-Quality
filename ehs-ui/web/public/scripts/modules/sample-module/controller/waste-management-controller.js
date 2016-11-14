@@ -4,14 +4,11 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		/*$('.loaderpg').css('display', 'block');
 		$('.lad_img').css('display', 'block');*/
 		$scope.loading = true;
-		var avgHygiene = null;
-		var floorArray = [];
-		$scope.floordata = [];
-		var maxFloor = 3;
-		var maxOpacity = .99;
-		var interval = 25 * 1000;
-		$scope.hygieneLoading = true;
-		
+	    $scope.floordata = [];
+	    var avgWaste = null;
+	    $scope.hygieneLoading = true;
+	    //$scope.wasteTabList=['detailsGraph', 'guagedata'];
+	    var intervalDynamic = 1000 * 30;
 		if (!$rootScope.floor) {
 			$rootScope.floor = 0;
 		}
@@ -30,8 +27,9 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		
 		
 		//Rohit
-		var hygieneCharts = [];
-		$scope.hygieneData = null;
+		//var hygieneCharts = [];
+		var wasteCharts = [];
+		$scope.wasteData = null;
 		$scope.floor = 0;
 		$scope.tabIndex = 0;
 		var promise = 0;
@@ -65,12 +63,12 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			if (!$scope.aqiMachineLoading && !$scope.aqiMachineLoading && !$scope.hygieneLoading) {
 				$scope.loading = true;
 				$scope.floor = floor;
-				hygieneCharts = [];
+				wasteCharts = [];
 				$rootScope.floor = floor;
 				/*$scope.floor = floor;*/
 				$scope.tabIndex = 0;
 				$scope.hygieneLoading = false;
-				$scope.hygieneData = null;
+				$scope.wasteData = null;
 				$scope.stop();
 				
 				loadData($rootScope.floor);
@@ -91,7 +89,8 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			 $scope.hygnareaName = null;
 				$scope.hygieneLoading = true;
 				AuthService.getTocken(function(token) {
-					loadHygiene($rootScope.floor);
+					loadGuage($rootScope.floor);
+					loadWaste($rootScope.floor);
 				});
 			};
 			loadData();
@@ -103,38 +102,44 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				
 				console.log('running startDynamiUpdate..');
 				promise = $interval(function() {
-					loadHygiene($rootScope.floor);
-				}, 20000);
+					loadGuage($rootScope.floor);
+					loadWaste($rootScope.floor);
+					}, 20000);
 			};
 			//Rohit
-			var loadHygiene = function(floor) {
+			var loadWaste = function(floor) {
 				var interval = 1000 * 60 * 2;
 				var intervalDynamic = 1000 * 30;
-				if (!$scope.hygieneData) {
-					DashBoardService.getHygieneValues(floor, interval, function(res) {
+				if (!$scope.wasteData) {
+					WasteManagementService.getWasteConsumptionValues(floor, interval, function(res) {
 						
-                           if(res.length == 0){
-                        	   $scope.selectTab($scope.tabIndex, $rootScope.floor);
-                        	   console.log("select tab: "+$rootScope.floor);
+						console.log("floor data: " +JSON.stringify(res));
+						   if(res.length == 0){
+							  $scope.wasteData = res[0].assets;
+							  $scope.selectTab($scope.tabIndex, '', '', '');
+                        	  console.log("select tab: "+floor);
                            }
                            else{
-                        	   $scope.hygieneData = res[0].assets;
-                        	   for (var i = 0; i < $scope.hygieneData.length; i++) {
-       							var asset = $scope.hygieneData[i];
-       							$scope.hygieneData[i].temperature = [];
-       							$scope.hygieneData[i].humidity = [];
-       							$scope.hygieneData[i].noise = [];
-       							$scope.hygieneData[i].timestamp = [];
+                        	   $scope.wasteData = res[0].assets;
+                        	   
+                        	   console.log("waste data" +$scope.wasteData);
+                        	   for (var i = 0; i < $scope.wasteData.length; i++) {
+       							var asset = $scope.wasteData[i];
+       							$scope.wasteData[i].usedOilValue = [];
+       							$scope.wasteData[i].discardedContainersValue = [];
+       							$scope.wasteData[i].solderDrossValue = [];
+       							$scope.wasteData[i].timestamp = [];
        							for (var j = 0; j < asset.data.length; j++) {
-       								$scope.hygieneData[i].timestamp.push(asset.data[j].timestamp);
-       								$scope.hygieneData[i].humidity.push(asset.data[j].humidity);
-       								$scope.hygieneData[i].noise.push(asset.data[j].noise);
-       								$scope.hygieneData[i].temperature.push(asset.data[j].temperature);
+       								$scope.wasteData[i].timestamp.push(asset.data[j].timestamp);
+       								$scope.wasteData[i].usedOilValue.push(asset.data[j].usedOilValue);
+       								$scope.wasteData[i].discardedContainersValue.push(asset.data[j].discardedContainersValue);
+       								$scope.wasteData[i].solderDrossValue.push(asset.data[j].solderDrossValue);
        							}
 
        						}
        						$scope.hygieneLoading = false;
-       						$scope.selectTab($scope.tabIndex, $rootScope.floor);
+       						$scope.selectTab($scope.tabIndex, '', '', '');
+       						//console.log("detailsgraph data" +$scope.wasteTabList[0]);
                            }
 						
 						// console.log($scope.hygieneData);
@@ -147,36 +152,36 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						
 					   startDynamiUpdate();
 					});
-				} else {
-					DashBoardService.getHygieneValues(floor, intervalDynamic, function(res) {
+				}else {
+					WasteManagementService.getWasteConsumptionValues(floor, intervalDynamic, function(res) {
 
 						//$scope.data = res[0].assets;
 						var data = res[0].assets;
 						// console.log($scope.hygieneData);
 						for (var i = 0; i < data.length; i++) {
 							var asset = data[i];
-							data.temperature = [];
-							data.humidity = [];
-							data.noise = [];
+							data.usedOilValue = [];
+							data.discardedContainersValue = [];
+							data.solderDrossValue = [];
 							data.timestamp = [];
 							for (var j = 0; j < asset.data.length; j++) {
 								data.timestamp.push(asset.data[j].timestamp);
-								data.humidity.push(asset.data[j].humidity);
-								data.noise.push(asset.data[j].noise);
-								data.temperature.push(asset.data[j].temperature);
+								data.usedOilValue.push(asset.data[j].usedOilValue);
+								data.discardedContainersValue.push(asset.data[j].discardedContainersValue);
+								data.solderDrossValue.push(asset.data[j].solderDrossValue);
 							}
 						   var maxIndex = getMaxIndex(data);
-   						   var series = getSeries($scope.tabIndex, data)
-							var timestamps = DashBoardService.prettyMs([ data.timestamp[maxIndex] ])[0];
-							if (i < hygieneCharts[$scope.tabIndex].series.length - 1) {
-								var l = hygieneCharts[$scope.tabIndex].series[0].data.length;
+   						   var series = getSeries($scope.tabIndex, data);
+						   var timestamps = WasteManagementService.prettyMs([ data.timestamp[maxIndex] ])[0];
+							if (i < wasteCharts[$scope.tabIndex].series.length - 1) {
+								var l = wasteCharts[$scope.tabIndex].series[0].data.length;
 								if (l > 0) {
-									var lastTimeStamp = hygieneCharts[$scope.tabIndex].series[i].data[l - 1]['name'];
+									var lastTimeStamp = wasteCharts[$scope.tabIndex].series[i].data[l - 1]['name'];
 									if (!lastTimeStamp) {
-										lastTimeStamp = hygieneCharts[$scope.tabIndex].series[i].data[l - 1]['category'];
+										lastTimeStamp = wasteCharts[$scope.tabIndex].series[i].data[l - 1]['category'];
 									}
 									if (lastTimeStamp !== timestamps) {
-										hygieneCharts[$scope.tabIndex].series[i].addPoint([ timestamps, series[i].data[maxIndex] ], false, true);
+										wasteCharts[$scope.tabIndex].series[i].addPoint([ timestamps, series[i].data[maxIndex] ], false, true);
 										//console.log('adde to graph : ' + lastTimeStamp + '  ' + timestamps);
 									} else {
 										//console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
@@ -184,14 +189,14 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 								}
 
 							} else {
-								var l = hygieneCharts[$scope.tabIndex].series[0].data.length;
+								var l = wasteCharts[$scope.tabIndex].series[0].data.length;
 								if (l > 0) {
-									var lastTimeStamp = hygieneCharts[$scope.tabIndex].series[i].data[l - 1]['name'];
+									var lastTimeStamp = wasteCharts[$scope.tabIndex].series[i].data[l - 1]['name'];
 									if (!lastTimeStamp) {
-										lastTimeStamp = hygieneCharts[$scope.tabIndex].series[i].data[l - 1]['category'];
+										lastTimeStamp = wasteCharts[$scope.tabIndex].series[i].data[l - 1]['category'];
 									}
 									if (lastTimeStamp !== timestamps) {
-										hygieneCharts[$scope.tabIndex].series[i].addPoint([ timestamps, series[i].data[maxIndex] ], true, true);
+										wasteCharts[$scope.tabIndex].series[i].addPoint([ timestamps, series[i].data[maxIndex] ], true, true);
 										//console.log('adde to graph : ' + lastTimeStamp + '  ' + timestamps);
 									} else {
 										//console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
@@ -205,7 +210,55 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					});
 				}
 			};
-
+			
+			var loadGuage = function(floor){
+				WasteManagementService.getWasteConsumptionValues(floor, intervalDynamic, function(res) {
+				 if (res.length > 0) {
+						$scope.wasteName = res[0].assets;
+						console.log("avergay data" +$scope.wasteName);
+						$scope.asslen = $scope.wasteName.length;
+						console.log("avg asset length: " +$scope.asslen);
+						}
+				   else{
+					   console.log("no data found");
+				   }
+				   for (var i = 0; i < $scope.asslen; i++) {
+				    
+						avgWaste = wasteAvg(res[0].assets[i].data);
+						$scope.floordata.push(avgWaste);
+						console.log("pushed floor data" +JSON.stringify($scope.floordata));
+				    }
+				   $scope.floorLen = $scope.floordata.length;
+				   console.log("floor length" +$scope.floorLen);
+				   for(var i = 0; i < 1; i++ ){
+					   $scope.oilValues = $scope.floordata[i].usedOilValue;
+					   $scope.sValues = $scope.floordata[i+1].discardedContainersValue;
+					   $scope.dValues = $scope.floordata[i+2].solderDrossValue;
+				   }
+				   console.log("used oalues" + $scope.oilValues);
+				   console.log("used salues" +$scope.sValues);
+				   console.log("used dalues" +$scope.dValues);
+				   $scope.selectTab($scope.tabIndex,  $scope.oilValues, $scope.sValues, $scope.dValues);
+			});
+		};
+			var wasteAvg = function(data) {
+	        	var resObject = {
+					usedOilValue : 0.0,
+					discardedContainersValue : 0.0,
+					solderDrossValue : 0.0
+				};
+				for (var i = 0; i < data.length; i++) {
+					resObject.usedOilValue += data[i].usedOilValue;
+					resObject.discardedContainersValue += data[i].discardedContainersValue;
+					resObject.solderDrossValue += data[i].solderDrossValue;
+				}
+				resObject.usedOilValue = Number((resObject.usedOilValue / data.length).toFixed(2));
+				resObject.discardedContainersValue = Number((resObject.discardedContainersValue / data.length).toFixed(2));
+				resObject.solderDrossValue = Number((resObject.solderDrossValue / data.length).toFixed(2));
+				return resObject;
+				
+			};
+		
 			var getMaxIndex = function(data) {
 				var big = 0;
 				var index = 0;
@@ -217,45 +270,36 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				}
 				return index;
 			};
-			$scope.selectTab = function(index, floor) {
-				$scope.tabIndex = index;
-			    console.log("select tab index is: " +$scope.tabIndex)
-				setTimeout(function() {
-				    $scope.options = loadGraph(index);
-				    $scope.chartfunc2($scope.options, index);
-				   
-				    
-				    console.log("guage value is: " +$scope.value);
-				    if(floor == 0){
-				    	$scope.value = 50 ;
-						$scope.value1 = 8 ;
-						$scope.value2 =30 ;
-				    	loadGaugeChart('#waste_gauge_chart_0' , $scope.value);
-					    loadGaugeChart('#waste_gauge_chart_1' , $scope.value1);
-					    loadGaugeChart('#waste_gauge_chart_2' , $scope.value2);
-				    }
-				    else if (floor == 1) {
-				    	$scope.value = 80 ;
-						$scope.value1 = 5 ;
-						$scope.value2 =40 ;
-				    	loadGaugeChart('#waste_gauge_chart_0' , $scope.value);
-					    loadGaugeChart('#waste_gauge_chart_1' , $scope.value1);
-					    loadGaugeChart('#waste_gauge_chart_2' , $scope.value2);
-					} else {
-						$scope.value = 40;
-						$scope.value1 = 2 ;
-						$scope.value2 = 15 ;
-				    	loadGaugeChart('#waste_gauge_chart_0' , $scope.value);
-					    loadGaugeChart('#waste_gauge_chart_1' , $scope.value1);
-					    loadGaugeChart('#waste_gauge_chart_2' , $scope.value2);
-					}
-				    
-				 }, 300);
-		     };
+			$scope.selectTab = function(index, oilValues, sValues, dValues) {
+				  // console.log("select tab data" +JSON.stringify(res));
+				  console.log("oil values" +oilValues);
+				  console.log("solder values" +sValues);
+				  console.log("discarded containers" +dValues);
+				  
+				   $scope.tabIndex = index;
+				   console.log("select tab index is: " +$scope.tabIndex);
+				   setTimeout(function() {
+						   console.log("used oalues" + $scope.oilValues);
+						   console.log("used salues" +$scope.sValues);
+						   console.log("used dalues" +$scope.dValues);
+					 
+					   
+							//for the details graph
+					   		$scope.options = loadGraph(index);
+							$scope.chartfunc2($scope.options, index); 
+							
+							//for the guage ahrt
+							loadGaugeChart('#waste_gauge_chart_0' , oilValues);
+						    loadGaugeChart('#waste_gauge_chart_1' , sValues);
+						    loadGaugeChart('#waste_gauge_chart_2' , dValues);
+				}, 300);
+			  };
 
 		
 		     //waste_mgmnt_Rohit
 		     var loadGaugeChart = function(id, value) {
+		    	 $scope.gValues = value;
+		    	 console.log("welcome to guage" + $scope.gValues);
 					loadChart(id, 0, 200, value);
 				};
 		     var loadChart = function(selector, min, max, val) {
@@ -334,18 +378,18 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					}
 				} ];
 		     
-var getSeries = function(tabId, dataArg) {
+				var getSeries = function(tabId, dataArg) {
 				var colors = [ '#8769FF', '#27A9E3', '#28B779', '#ff9000', '#8bd6f6', '#8669ff', '#28b779' ];
 				var series = [];
 				var data = null;
 				if (dataArg) {
 					data = dataArg;
 				} else {
-					data = $scope.hygieneData[tabId];
+					data = $scope.wasteData[tabId];
 				}
 				series.push({
 					name : 'Solder Dross',
-					data : data.noise,
+					data : data.solderDrossValue,
 					color : colors[1],
 					fillColor : {
 		                    linearGradient : {
@@ -366,7 +410,7 @@ var getSeries = function(tabId, dataArg) {
 				});
 				series.push({
 					name : 'Used Oils',
-					data : data.humidity,
+					data : data.usedOilValue,
 					color : colors[0],
 				    fillColor : {
 		                    linearGradient : {
@@ -387,7 +431,7 @@ var getSeries = function(tabId, dataArg) {
 				});
                 series.push({
 					name : 'Discarded Containers',
-					data : data.temperature,
+					data : data.discardedContainersValue,
 					color : colors[2],
 					fillColor : {
 	                    linearGradient : {
@@ -443,7 +487,7 @@ var getSeries = function(tabId, dataArg) {
 						title : {
 							text : 'Time'
 						},
-						categories : DashBoardService.prettyMs($scope.hygieneData[index].timestamp),
+						categories : WasteManagementService.prettyMs($scope.wasteData[index].timestamp),
 						crosshair: true
 					},
 				    
@@ -451,7 +495,7 @@ var getSeries = function(tabId, dataArg) {
 
 				            title: {
 				                margin: 10,
-				                text: 'Hygiene Values'
+				                text: 'Waste Values'
 				            },      
 				    },
 				    
@@ -499,11 +543,9 @@ var getSeries = function(tabId, dataArg) {
 			  $scope.options.chart.renderTo = 'container_'+ tabIndex;
 			  $scope.options.chart.type = 'areaspline';
 			  var chart1 = new Highcharts.Chart($scope.options);
-			  
-			 };
-			
-		 $scope.chartfunc2 = function(options , index){
-			 $(".charticon").addClass("active_chart");
+			};
+		   $scope.chartfunc2 = function(options , index){
+			  $(".charticon").addClass("active_chart");
 			  $(".charticon1").removeClass("active_chart");
 			  
 			  console.log("tab index: " +$scope.options);

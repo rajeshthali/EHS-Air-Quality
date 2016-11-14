@@ -11,6 +11,8 @@ define([ './services-module',
          './predix-view-service', 
 		 './auth-service',
 		 './newHygn-service',
-		 './sensor-data-service'
+		 './sensor-data-service',
+		 './waste-management-service',
+		 './energy-management-service'
 		 ], function() {
 });
