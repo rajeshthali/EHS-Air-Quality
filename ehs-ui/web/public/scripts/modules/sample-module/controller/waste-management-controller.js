@@ -1,6 +1,6 @@
 define([ 'angular', './controllers-module'], function(angular, controllers) {
 	'use strict';
-	controllers.controller('WasteManagementController', [ '$scope', '$http', '$state','NewhygnService', 'DashBoardService', 'AuthService', '$rootScope','$interval', function($scope, $http, $state,NewhygnService, DashBoardService, AuthService, $rootScope,$interval) {
+	controllers.controller('WasteManagementController', [ '$scope', '$http', '$state','NewhygnService', 'DashBoardService', 'WasteManagementService', 'AuthService', '$rootScope','$interval', function($scope, $http, $state,NewhygnService, DashBoardService, WasteManagementService, AuthService, $rootScope,$interval) {
 		/*$('.loaderpg').css('display', 'block');
 		$('.lad_img').css('display', 'block');*/
 		$scope.loading = true;
