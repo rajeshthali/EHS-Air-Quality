@@ -1,17 +1,17 @@
 ---
 applications:
-  - name: ehs-rmd-datasource-rajesh
+  - name: ehs-rmd-datasource-soumya11
     buildpack: java_buildpack
     path: target/ehs-datasource-floor_amlesh-0.1.jar
     timeout : 180
     services:
-      - Test_Time_New
-      - Test_UAA
+      - Soumya_Timeseries
+      - Soumya_UAA
 env:
    SPRING_PROFILES_ACTIVE : cloud  
    JAVA_DOCS_URL : http://predixdev.github.io/predix-microservice-cf-spring
-   predix_timeseries_name: Test_Time
-   predix_oauth_restHost: 123rajesh.predix-uaa.run.aws-usw02-pr.ice.predix.io
-   predix_oauth_clientId: Test_Rajesh:123rajesh
+   predix_timeseries_name: Soumya_Timeseries
+   predix_oauth_restHost: 2ff4bca0-3515-465f-9ffe-9f7e984e1a0f.predix-uaa.run.aws-usw02-pr.ice.predix.io
+   predix_oauth_clientId: test:test
    predixWebSocketURI: wss://gateway-predix-data-services.run.aws-usw02-pr.ice.predix.io/v1/stream/messages
    predix_timeseries_ws_retry_attempt: 1
