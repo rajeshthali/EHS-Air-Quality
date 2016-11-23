@@ -1,5 +1,5 @@
 node_modules
-public/polymer-loader.vulcanized.html
+public/bower_components
 test-target
 main.min.css
 dist/public
