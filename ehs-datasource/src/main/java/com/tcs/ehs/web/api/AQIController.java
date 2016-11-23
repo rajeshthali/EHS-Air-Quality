@@ -61,6 +61,20 @@ public class AQIController {
 		else
 			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
+	//soumya
+	@RequestMapping(value = "/machine/avgValues/{floor}", method = RequestMethod.GET)
+	public ResponseEntity<Object> aqiQueryMahineAvgValues(@RequestHeader("Authorization") String authorization,
+			@RequestParam Long interval,@PathVariable String floor) throws JsonProcessingException {
+		Value value = TimeUtils.calculateInterval(interval);
+		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Machine,
+				floor,authorization, value.getStartTime(), value.getEndTime());
+		Collection<Floor> floors = aqiCalculations.calculateAqiFloorAvgValues(datapointsResponse, value.getStartTime(),
+				value.getEndTime());
+		if (floors.size() > 0)
+			return new ResponseEntity<Object>(floors, HttpStatus.OK);
+		else
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+	}
 
 	@RequestMapping(value = "/machine/{floor}", method = RequestMethod.GET)
 	public ResponseEntity<Object> aqiQueryMahineFloor(@RequestHeader("Authorization") String authorization,
@@ -133,7 +147,20 @@ public class AQIController {
 		else
 			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
-
+	@RequestMapping(value = "/areaAvg/{floor}", method = RequestMethod.GET)
+	public ResponseEntity<Object> aqiQueryAreaAvgFloor(@RequestHeader("Authorization") String authorization,
+			@RequestParam Long interval, @PathVariable String floor) throws JsonProcessingException {
+		log.info("Area floor :: interval ---- "+interval);
+		Value value = TimeUtils.calculateInterval(interval);
+		DatapointsResponse datapointsResponse = timeseriesRequester.requestForAQI(Constants.QueryTagsAQI.AQI_Area,
+				floor, authorization, value.getStartTime(), value.getEndTime());
+		Collection<Floor> floors = aqiCalculations.calculateAqiAreaAvgFloor(datapointsResponse, value.getStartTime(),
+				value.getEndTime());
+		if (floors.size() > 0)
+			return new ResponseEntity<Object>(floors, HttpStatus.OK);
+		else
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+	}
 	@RequestMapping(value = "/areaWithStartTimeEndTime/{floor}", method = RequestMethod.GET)
 	public ResponseEntity<Object> aqiQueryAreaFloorWithStartTimeEndTime(
 			@RequestHeader("Authorization") String authorization, @RequestParam Long startTime,

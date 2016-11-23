@@ -9,18 +9,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ge.predix.entity.timeseries.datapoints.queryresponse.DatapointsResponse;
 import com.tcs.ehs.utils.TimeSeriesAqiParser.ResponseObject;
+import com.tcs.ehs.web.api.AQIController;
 
 @Component
 public class AqiCalculations {
 
 	@Autowired
 	TimeSeriesAqiParser timeSeriesAqiParser;
+	
+	private Logger log = Logger.getLogger(AqiCalculations.class);
 
 	public Collection<Floor> calculateAqiFloor(DatapointsResponse datapointsResponse, Long startTime, Long endTime) {
 		Collection<CommonResponseObjectCollections> responseObjectCollectionsList  = timeSeriesAqiParser.parseTimeSeriesResponse(datapointsResponse);
@@ -28,6 +32,28 @@ public class AqiCalculations {
 		for (Floor floor : floors) {
 			for (FloorAsset floorAsset : floor.getAssets()) {
 				floorAsset.setData(calculateAqi(floorAsset.getResponseObjectList(), startTime, endTime));
+			}
+		}
+		return floors;
+	}
+	//soumya
+	public Collection<Floor> calculateAqiAreaAvgFloor(DatapointsResponse datapointsResponse, Long startTime, Long endTime) {
+		Collection<CommonResponseObjectCollections> responseObjectCollectionsList  = timeSeriesAqiParser.parseTimeSeriesResponse(datapointsResponse);
+		Collection<Floor> floors = timeSeriesAqiParser.convertToAqiData(responseObjectCollectionsList);
+		for (Floor floor : floors) {
+			for (FloorAsset floorAsset : floor.getAssets()) {
+				floorAsset.setData(calculateAqiAvgValue(floorAsset.getResponseObjectList(), startTime, endTime));
+			}
+		}
+		return floors;
+	}
+	//soumya
+	public Collection<Floor> calculateAqiFloorAvgValues(DatapointsResponse datapointsResponse, Long startTime, Long endTime) {
+		Collection<CommonResponseObjectCollections> responseObjectCollectionsList  = timeSeriesAqiParser.parseTimeSeriesResponse(datapointsResponse);
+		Collection<Floor> floors = timeSeriesAqiParser.convertToAqiData(responseObjectCollectionsList);
+		for (Floor floor : floors) {
+			for (FloorAsset floorAsset : floor.getAssets()) {
+				floorAsset.setData(calculateAqiAvgValue(floorAsset.getResponseObjectList(), startTime, endTime));
 			}
 		}
 		return floors;
@@ -215,6 +241,193 @@ public class AqiCalculations {
 
 		return overallAqiResponse;
 	}
+	
+	//soumya
+	public OverallAqiResponse calculateAqiAvgValue(List<ResponseObject> list, Long startTime, Long endTime) {
+		OverallAqiResponse overallAqiResponse = new OverallAqiResponse();
+		overallAqiResponse.setStartTime(startTime);
+		overallAqiResponse.setEndTime(endTime);
+		List<AQI> maxAqiValues = new ArrayList<>();
+		List<AQI> minAqiValues = new ArrayList<>();
+
+		ArrayList<AQI> NO2 = new ArrayList<>();
+		ArrayList<AQI> SO2 = new ArrayList<>();
+		ArrayList<AQI> PM2_5 = new ArrayList<>();
+
+		ArrayList<AQI> O3 = new ArrayList<>();
+		ArrayList<AQI> NH3 = new ArrayList<>();
+		ArrayList<AQI> PB = new ArrayList<>();
+		ArrayList<AQI> CO2 = new ArrayList<>();
+		ArrayList<AQI> PM10 = new ArrayList<>();
+
+		boolean isNO2Available = true;
+		boolean isSO2Available = true;
+		boolean isPM2_5Available = true;
+		boolean isO3Available = true;
+		boolean isNH3Available = true;
+		boolean isPBAvailable = true;
+		boolean isCO2Available = true;
+		boolean isPM10Available = true;
+
+		List<Long> timestamps = new ArrayList<>();
+		for (int i = 0; i < list.size(); i++) {
+			ResponseObject responseObject = list.get(i);
+			ArrayList<AQI> values = new ArrayList<>();
+
+			if (responseObject.getNO2() != null) {
+				AQI aqiValue = getAQIAvgValue(getAQIValueObject(responseObject.getNO2(), Constants.Parameter.NO2));
+				NO2.add(aqiValue);
+				values.add(aqiValue);
+			} else {
+				isNO2Available = false;
+			}
+			if (responseObject.getSO2() != null) {
+				AQI aqiValue = getAQIAvgValue(getAQIValueObject(responseObject.getSO2(), Constants.Parameter.SO2));
+				SO2.add(aqiValue);
+				values.add(aqiValue);
+			} else {
+				isSO2Available = false;
+			}
+
+			if (responseObject.getPM2_5() != null) {
+				AQI aqiValue = getAQIAvgValue(getAQIValueObject(responseObject.getPM2_5(), Constants.Parameter.PM2_5));
+				PM2_5.add(aqiValue);
+				values.add(aqiValue);
+			} else {
+				isPM2_5Available = false;
+			}
+
+			if (responseObject.getO3() != null) {
+				AQI aqiValue = getAQIAvgValue(getAQIValueObject(responseObject.getO3(), Constants.Parameter.O3));
+				O3.add(aqiValue);
+				values.add(aqiValue);
+			} else {
+				isO3Available = false;
+			}
+
+			if (responseObject.getNH3() != null) {
+				AQI aqiValue = getAQIAvgValue(getAQIValueObject(responseObject.getNH3(), Constants.Parameter.NH3));
+				NH3.add(aqiValue);
+				values.add(aqiValue);
+			} else {
+				isNH3Available = false;
+			}
+
+			if (responseObject.getPB() != null) {
+				AQI aqiValue = getAQIAvgValue(getAQIValueObject(responseObject.getPB(), Constants.Parameter.PB));
+				PB.add(aqiValue);
+				values.add(aqiValue);
+			} else {
+				isPBAvailable = false;
+			}
+
+			if (responseObject.getCO2() != null) {
+				AQI aqiValue = getAQIAvgValue(getAQIValueObject(responseObject.getCO2(), Constants.Parameter.CO2));
+				CO2.add(aqiValue);
+				values.add(aqiValue);
+			} else {
+				isCO2Available = false;
+			}
+
+			if (responseObject.getPM10() != null) {
+				AQI aqiValue = getAQIAvgValue(getAQIValueObject(responseObject.getPM10(), Constants.Parameter.PM10));
+				PM10.add(aqiValue);
+				values.add(aqiValue);
+			} else {
+				isPM10Available = false;
+			}
+			try {
+				AQI maxAqi = Collections.max(values, new AQIComparator());
+				maxAqiValues.add(maxAqi);
+			} catch (Exception e) {
+
+			}
+
+			try {
+				AQI minAqi = Collections.min(values, new AQIComparator());
+				minAqiValues.add(minAqi);
+			} catch (Exception e) {
+
+			}
+
+			timestamps.add(responseObject.getTimestamp());
+		}
+
+		overallAqiResponse.setTimestamps(timestamps);
+
+		GraphValues gv = null;
+		if (isNO2Available) {
+			gv = new GraphValues();
+			gv.setName(Constants.Parameter.NO2);
+			gv.setValues(getGraphValueList(NO2));
+			overallAqiResponse.getSeperatedResult().add(gv);
+		}
+		if (isSO2Available) {
+			gv = new GraphValues();
+			gv.setName(Constants.Parameter.SO2);
+			gv.setValues(getGraphValueList(SO2));
+			overallAqiResponse.getSeperatedResult().add(gv);
+		}
+		if (isPM2_5Available) {
+			gv = new GraphValues();
+			gv.setName(Constants.Parameter.PM2_5);
+			gv.setValues(getGraphValueList(PM2_5));
+			overallAqiResponse.getSeperatedResult().add(gv);
+		}
+
+		if (isO3Available) {
+			gv = new GraphValues();
+			gv.setName(Constants.Parameter.O3);
+			gv.setValues(getGraphValueList(O3));
+			overallAqiResponse.getSeperatedResult().add(gv);
+		}
+		if (isNH3Available) {
+			gv = new GraphValues();
+			gv.setName(Constants.Parameter.NH3);
+			gv.setValues(getGraphValueList(NH3));
+			overallAqiResponse.getSeperatedResult().add(gv);
+		}
+
+		if (isPBAvailable) {
+			gv = new GraphValues();
+			gv.setName(Constants.Parameter.PB);
+			gv.setValues(getGraphValueList(PB));
+			overallAqiResponse.getSeperatedResult().add(gv);
+		}
+
+		if (isCO2Available) {
+			gv = new GraphValues();
+			gv.setName(Constants.Parameter.CO2);
+			gv.setValues(getGraphValueList(CO2));
+			overallAqiResponse.getSeperatedResult().add(gv);
+		}
+
+		if (isPM10Available) {
+			gv = new GraphValues();
+			gv.setName(Constants.Parameter.PM10);
+			gv.setValues(getGraphValueList(PM10));
+			overallAqiResponse.getSeperatedResult().add(gv);
+		}
+
+		try {
+			AQI maxAqiGlobal = Collections.max(maxAqiValues, new AQIComparator());
+			overallAqiResponse.setMaxAqi(maxAqiGlobal);
+		} catch (Exception e) {
+		}
+
+		try {
+			AQI minAqiGlobal = Collections.min(minAqiValues, new AQIComparator());
+			overallAqiResponse.setMinAqi(minAqiGlobal);
+		} catch (Exception e) {
+		}
+
+		overallAqiResponse.setValue(getGraphValueList(maxAqiValues));
+
+		return overallAqiResponse;
+	}
+	
+	
+	
 
 	private List<Float> getGraphValueList(List<AQI> aqiList) {
 		List<Float> graphPoints = new ArrayList<>();
@@ -423,6 +636,23 @@ public class AqiCalculations {
 		Float Lp = (((IHI - ILO) / (BHI - BLO)) * (Cp - BLO)) + ILO;
 		DecimalFormat df = new DecimalFormat("#.00");
 		aqi.setAqiValue(Float.valueOf(df.format(Lp)));
+		aqi.setName(p.getName());
+System.out.println(p.getName()+" --------> "+Float.valueOf(df.format(Lp)));
+		return aqi;
+	}
+	//soumya
+	public AQI getAQIAvgValue(AQIValue p) {
+
+		AQI aqi = new AQI();
+		/*Float IHI = p.I_HI;
+		Float ILO = p.I_LO;
+		Float BHI = p.B_HI;
+		Float BLO = p.B_LO;*/
+		Float Cp = p.value;
+		// Ip= [{(IHI - ILO)/ (BHI -BLO)} * (Cp-BLO)] + ILO
+		/*Float Lp = (((IHI - ILO) / (BHI - BLO)) * (Cp - BLO)) + ILO;
+		DecimalFormat df = new DecimalFormat("#.00");*/
+		aqi.setAqiValue(Cp);
 		aqi.setName(p.getName());
 
 		return aqi;
@@ -747,13 +977,13 @@ public class AqiCalculations {
 				aqiValue.I_LO = 401f;
 				aqiValue.I_HI = 500f;
 			}
-			// console.log(aqiValue);
+			
 			break;
 
 		default:
 			break;
 		}
-
+System.out.println(avg+" <------ "+name);
 		return aqiValue;
 	}
 }
