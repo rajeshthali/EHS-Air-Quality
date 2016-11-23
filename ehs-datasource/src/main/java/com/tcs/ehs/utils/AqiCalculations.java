@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +23,7 @@ public class AqiCalculations {
 	@Autowired
 	TimeSeriesAqiParser timeSeriesAqiParser;
 	
-	private Logger log = Logger.getLogger(AqiCalculations.class);
+	
 
 	public Collection<Floor> calculateAqiFloor(DatapointsResponse datapointsResponse, Long startTime, Long endTime) {
 		Collection<CommonResponseObjectCollections> responseObjectCollectionsList  = timeSeriesAqiParser.parseTimeSeriesResponse(datapointsResponse);
@@ -977,13 +976,13 @@ System.out.println(p.getName()+" --------> "+Float.valueOf(df.format(Lp)));
 				aqiValue.I_LO = 401f;
 				aqiValue.I_HI = 500f;
 			}
-			
+			// console.log(aqiValue);
 			break;
 
 		default:
 			break;
 		}
-System.out.println(avg+" <------ "+name);
+
 		return aqiValue;
 	}
 }

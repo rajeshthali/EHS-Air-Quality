@@ -67,6 +67,9 @@ public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
 					else if("OIL_GREASE".equalsIgnoreCase(commonResponseObject.getProperyName())) {
 						WaterResponseObject.setOilGrease(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
 					}
+					else if("KLD".equalsIgnoreCase(commonResponseObject.getProperyName())) {
+						WaterResponseObject.setKld(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+					}
 				}
 				for(WaterResponseObject obj : waterMap.values()) {
 					waterList.add(obj);
@@ -102,8 +105,17 @@ public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
 		private Float suspendedSolids;
 		private Float bod;
 		private Float cod;
-		private Float oilGrease;		
+		private Float oilGrease;
+		private Float kld;
 		private Long timestamp;
+		
+		public Float getKld() {
+			return kld;
+		}
+
+		public void setKld(Float kld) {
+			this.kld = kld;
+		}
 
 		public Float getSuspendedSolids() {
 			return suspendedSolids;

@@ -26,7 +26,7 @@ public class Constants {
 	
 	//amlesh
 	public static enum Water {
-		PH_VALUE, SUSPENDED_SOLIDS, BOD, COD, OIL_GREASE
+		PH_VALUE, SUSPENDED_SOLIDS, BOD, COD, OIL_GREASE,KLD
 	};
 	
 	public static enum Waste {

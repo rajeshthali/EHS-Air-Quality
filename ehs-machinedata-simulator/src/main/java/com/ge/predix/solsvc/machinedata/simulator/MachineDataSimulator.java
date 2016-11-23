@@ -34,15 +34,22 @@ import com.ge.predix.entity.timeseries.datapoints.ingestionrequest.Body;
 import com.ge.predix.entity.timeseries.datapoints.ingestionrequest.DatapointsIngestion;
 import com.ge.predix.solsvc.machinedata.simulator.config.Constants;
 import com.ge.predix.solsvc.machinedata.simulator.config.Constants.AQI;
+import com.ge.predix.solsvc.machinedata.simulator.config.Constants.Water;
 import com.ge.predix.solsvc.machinedata.simulator.vo.AQIAttributesVO;
 import com.ge.predix.solsvc.machinedata.simulator.vo.AQIBody;
 import com.ge.predix.solsvc.machinedata.simulator.vo.AQIObjectVO;
+import com.ge.predix.solsvc.machinedata.simulator.vo.EnergyAtrributesVO;
+import com.ge.predix.solsvc.machinedata.simulator.vo.EnergyBody;
+import com.ge.predix.solsvc.machinedata.simulator.vo.EnergyObjectVO;
 import com.ge.predix.solsvc.machinedata.simulator.vo.FloorAttributesVO;
 import com.ge.predix.solsvc.machinedata.simulator.vo.FloorBodyVO;
 import com.ge.predix.solsvc.machinedata.simulator.vo.FloorObjectVO;
 import com.ge.predix.solsvc.machinedata.simulator.vo.HygeineAtrributesVO;
 import com.ge.predix.solsvc.machinedata.simulator.vo.HygeineBody;
 import com.ge.predix.solsvc.machinedata.simulator.vo.HygeineObjectVO;
+import com.ge.predix.solsvc.machinedata.simulator.vo.WasteAtrributesVO;
+import com.ge.predix.solsvc.machinedata.simulator.vo.WasteBody;
+import com.ge.predix.solsvc.machinedata.simulator.vo.WasteObjectVO;
 import com.ge.predix.solsvc.machinedata.simulator.vo.WaterAtrributesVO;
 import com.ge.predix.solsvc.machinedata.simulator.vo.WaterBody;
 import com.ge.predix.solsvc.machinedata.simulator.vo.WaterObjectVO;
@@ -55,8 +62,8 @@ import com.ge.predix.solsvc.restclient.impl.RestClient;
 @Component
 public class MachineDataSimulator {
 	/**
-     * 
-     */
+	 * 
+	 */
 	static final Logger log = LoggerFactory
 			.getLogger(MachineDataSimulator.class);
 	private ObjectMapper mapper = new ObjectMapper();
@@ -69,8 +76,8 @@ public class MachineDataSimulator {
 	}
 
 	/**
-     * 
-     */
+	 * 
+	 */
 	@Autowired
 	ApplicationProperties applicationProperties;
 
@@ -93,10 +100,13 @@ public class MachineDataSimulator {
 			generateAndPushRandomMachineData();
 
 			generateAndPushRandomHygieneData();
-			
+
 			//amlesh
 			generateAndPushRandomWaterData();
-			
+
+			generateAndPushRandomWasteData();
+
+			generateAndPushRandomEnergyData();
 
 			//generateAndPushRandomEHSFloorData();
 
@@ -105,7 +115,7 @@ public class MachineDataSimulator {
 		}
 	}
 
-/*	private String generateAndPushRandomEHSFloorData()
+	/*	private String generateAndPushRandomEHSFloorData()
 			throws IOException {
 		FloorObjectVO floorObj = new FloorObjectVO();
 		floorObj.setMessageId(System.currentTimeMillis());
@@ -133,7 +143,7 @@ public class MachineDataSimulator {
 		return postData(writer.toString());
 
 	}
-	*/
+	 */
 	/*@SuppressWarnings("unchecked")
 	private DatapointsIngestion createAllFloorDataIngestionRequest(
 			FloorObjectVO floorObj) throws JsonGenerationException,
@@ -170,9 +180,9 @@ public class MachineDataSimulator {
 				floorDataWriter.toString());
 
 		 String allFloorJSON = new String(floordataBuff.array(), "UTF-8");
-		 
+
 		 System.out.println("FLOOR JSON ::::: "+allFloorJSON);
-		 
+
 		com.ge.predix.entity.util.map.Map map = new com.ge.predix.entity.util.map.Map();
 		map.put("allfloorData", floordataBuff);
 
@@ -220,28 +230,28 @@ public class MachineDataSimulator {
 			com.ge.predix.entity.util.map.Map map = new com.ge.predix.entity.util.map.Map();
 			StringWriter areaWriter = new StringWriter();
 			mapper.writeValue(areaWriter, floorAttr.getAreaDataList());
-			
+
 			StringWriter machineWriter = new StringWriter();
 			mapper.writeValue(machineWriter, floorAttr.getMachineDataList());
-			
+
 			StringWriter hygieneWriter = new StringWriter();
 			mapper.writeValue(hygieneWriter, floorAttr.getHygieneDataList());
-			
+
 			//
-		
+
 			//
-			
+
 			ByteBuffer areaBuff = Charset.forName("UTF-8").encode(areaWriter.toString());
 			System.out.println("AREA BUFFER:::::"+areaBuff);
-			
+
 			ByteBuffer machineBuff = Charset.forName("UTF-8").encode(machineWriter.toString());
-			
+
 			ByteBuffer hygBuff = Charset.forName("UTF-8").encode(hygieneWriter.toString());
-			
+
 			String areaJSON = new String(areaBuff.array(), "UTF-8");
-			
+
 			System.out.println("AREA JSON:::::"+areaJSON);
-			
+
 			map.put("areaData", areaBuff);
 			map.put("machineData", machineBuff);
 			map.put("hygieneData", hygBuff);
@@ -280,7 +290,7 @@ public class MachineDataSimulator {
 		firstFloorBody.setAttributes(firstFloorAttributes);
 		floorBodyList.add(firstFloorBody);
 	}
-*/
+	 */
 	/*
 	 * private void generateAndPushDataIngestionHygieneData() {
 	 * DatapointsIngestion dataPtIng = new DatapointsIngestion();
@@ -333,7 +343,7 @@ public class MachineDataSimulator {
 	private AQIBody generateAreaData(int floorNo, String areaAssetName, Constants.AQI name) {
 
 		Long currentTimeMillis = System.currentTimeMillis();
-		
+
 		AQIBody aqiAreaBody = getRandomAQIDataVO(currentTimeMillis, "AQI-Area", true, areaAssetName, floorNo, name);
 
 		return aqiAreaBody;
@@ -345,7 +355,7 @@ public class MachineDataSimulator {
 
 		AQIObjectVO aqiObjVO = new AQIObjectVO();
 		List<AQIBody> aqiBodyList = new ArrayList<>();
-		
+
 		for (Constants.AQI name : Constants.AQI.values()) {
 			createFloorwiseMachineBody(aqiBodyList, Constants.MCHN_ASSET_FLR_0, Constants.GRND_FLOOR,name);
 			createFloorwiseMachineBody(aqiBodyList, Constants.MCHN_ASSET_FLR_1, Constants.FIRST_FLOOR,name);
@@ -364,18 +374,18 @@ public class MachineDataSimulator {
 				+ writer.toString());
 		return postData(writer.toString());
 		// return writer.toString();
-		
+
 
 	}
 
 	private AQIBody generateMachineData(int floorNo, String machineAssetName, Constants.AQI name) {
 
 		Long currentTimeMillis = System.currentTimeMillis();
-		
+
 		AQIBody aqiAreaBody = getRandomAQIDataVO(currentTimeMillis, "AQI-Machine", false, machineAssetName, floorNo, name);
 
 		return aqiAreaBody;
-	
+
 	}
 
 	private String generateAndPushRandomHygieneData()
@@ -388,13 +398,13 @@ public class MachineDataSimulator {
 			createFloorwiseHygieneBody(hygBodyList, Constants.HYG_ASSET_FLR_1, Constants.FIRST_FLOOR,name);
 			createFloorwiseHygieneBody(hygBodyList, Constants.HYG_ASSET_FLR_2, Constants.SECOND_FLOOR,name);
 		}
-		
+
 		/*for (Constants.Water name : Constants.Water.values()) {
 			createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.GRND_FLOOR, name);
 			createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.FIRST_FLOOR, name);
 			createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.SECOND_FLOOR, name);
 		}*/
-		
+
 		HygeineObjectVO hygObjVO = new HygeineObjectVO();
 		hygObjVO.setBody(hygBodyList);
 		hygObjVO.setMessageId(currentTimeMillis);
@@ -406,65 +416,91 @@ public class MachineDataSimulator {
 		System.out.println("Final Hygiene JSON sending to saveTimeSeries >> "
 				+ writer.toString());
 		return postData(writer.toString());
-		
+
 		// return writer.toString();
 
 	}
-	
+
 	//amlesh
 	private String generateAndPushRandomWaterData()
 			throws JsonGenerationException, JsonMappingException, IOException {
 
 		Long currentTimeMillis = System.currentTimeMillis();
 		List<WaterBody> watBodyList = new ArrayList<>();
-		
+
 		for (Constants.Water name : Constants.Water.values()) {
 			createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.GRND_FLOOR, name);
 			createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.FIRST_FLOOR, name);
 			createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.SECOND_FLOOR, name);
 		}
-		
-		/*createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.GRND_FLOOR, Constants.Water.PH_VALUE);
-		createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.FIRST_FLOOR, Constants.Water.PH_VALUE);
-		createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.SECOND_FLOOR, Constants.Water.PH_VALUE);
-		
-		createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.GRND_FLOOR, Constants.Water.SUSPENDED_SOLIDS);
-		createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.FIRST_FLOOR, Constants.Water.SUSPENDED_SOLIDS);
-		createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.SECOND_FLOOR, Constants.Water.SUSPENDED_SOLIDS);
-		
-		createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.GRND_FLOOR, Constants.Water.BOD);
-		createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.FIRST_FLOOR, Constants.Water.BOD);
-		createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.SECOND_FLOOR, Constants.Water.BOD);
-		
-		createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.GRND_FLOOR, Constants.Water.COD);
-		createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.FIRST_FLOOR, Constants.Water.COD);
-		createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.SECOND_FLOOR, Constants.Water.COD);
-		
-		createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.GRND_FLOOR, Constants.Water.OIL_GREASE);
-		createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.FIRST_FLOOR, Constants.Water.OIL_GREASE);
-		createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.SECOND_FLOOR, Constants.Water.OIL_GREASE);*/
-		
-		//PH_VALUE, SUSPENDED_SOLIDS, BOD, COD, OIL_GREASE
-		//createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.FIRST_FLOOR);
-		//createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.SECOND_FLOOR);
-		//createFloorwiseWaterBody(hygBodyList, Constants.INDUSTRIAL_WATER, Constants.FIRST_FLOOR);
-		//createFloorwiseWaterBody(hygBodyList, Constants.HYG_ASSET_FLR_2, Constants.SECOND_FLOOR);
-		
-		//List<WaterObjectVO> listHygObjVO = new ArrayList<>();
-		WaterObjectVO hygObjVO=new WaterObjectVO();
-		hygObjVO.setBody(watBodyList);
-		hygObjVO.setMessageId(currentTimeMillis);
-		//listHygObjVO.add(hygObjVO);
-		
-		DatapointsIngestion dataPtIngest = createWaterDataIngestionRequest(hygObjVO);
+
+		WaterObjectVO waterObjVO=new WaterObjectVO();
+		waterObjVO.setBody(watBodyList);
+		waterObjVO.setMessageId(currentTimeMillis);
+
+
+		DatapointsIngestion dataPtIngest = createWaterDataIngestionRequest(waterObjVO);
 		StringWriter writer = new StringWriter();
 
 		mapper.writeValue(writer, dataPtIngest);
 		System.out.println("Final Hygiene JSON sending to saveTimeSeries >> "
 				+ writer.toString());
 		return postData(writer.toString());
-		
-		// return writer.toString();
+
+	}
+
+
+	private String generateAndPushRandomWasteData()
+			throws JsonGenerationException, JsonMappingException, IOException {
+
+		Long currentTimeMillis = System.currentTimeMillis();
+		List<WasteBody> wasteBodyList = new ArrayList<>();
+
+		for (Constants.Waste name : Constants.Waste.values()) {
+			createFloorwiseWasteBody(wasteBodyList, Constants.GRND_FLOOR, name);
+			createFloorwiseWasteBody(wasteBodyList, Constants.FIRST_FLOOR, name);
+			createFloorwiseWasteBody(wasteBodyList, Constants.SECOND_FLOOR, name);
+
+		}		
+
+		WasteObjectVO wasteObjVO=new WasteObjectVO();
+		wasteObjVO.setBody(wasteBodyList);
+		wasteObjVO.setMessageId(currentTimeMillis);
+
+		DatapointsIngestion dataPtIngest = createWasteDataIngestionRequest(wasteObjVO);
+		StringWriter writer = new StringWriter();
+
+		mapper.writeValue(writer, dataPtIngest);
+		System.out.println("Final Waste JSON sending to saveTimeSeries >> "
+				+ writer.toString());
+		return postData(writer.toString());
+
+	}
+
+	private String generateAndPushRandomEnergyData()
+			throws JsonGenerationException, JsonMappingException, IOException {
+
+		Long currentTimeMillis = System.currentTimeMillis();
+		List<EnergyBody> energyBodyList = new ArrayList<>();
+
+		for (Constants.Energy name : Constants.Energy.values()) {
+			createFloorwiseEnergyBody(energyBodyList,Constants.GRND_FLOOR, name);
+			createFloorwiseEnergyBody(energyBodyList,Constants.FIRST_FLOOR, name);
+			createFloorwiseEnergyBody(energyBodyList,Constants.SECOND_FLOOR, name);
+		}		
+
+		EnergyObjectVO energyObjVO=new EnergyObjectVO();
+		energyObjVO.setBody(energyBodyList);
+		energyObjVO.setMessageId(currentTimeMillis);
+
+		DatapointsIngestion dataPtIngest = createEnergyDataIngestionRequest(energyObjVO);
+		StringWriter writer = new StringWriter();
+
+		mapper.writeValue(writer, dataPtIngest);
+		System.out.println("Final Hygiene JSON sending to saveTimeSeries >> "
+				+ writer.toString());
+		return postData(writer.toString());
+
 	}
 
 	private void createFloorwiseHygieneBody(List<HygeineBody> hygBodyList, String[] assetArray, int floorNo,  Constants.Hygiene name) {
@@ -473,7 +509,7 @@ public class MachineDataSimulator {
 			hygBodyList.add(hygBody);
 		}
 	}
-	
+
 	//amlesh
 	private void createFloorwiseWaterBody(List<WaterBody> watBodyList, String[] assetArray, int floorNo, Constants.Water name) {
 		for(int i=0; i < assetArray.length; i++){
@@ -481,15 +517,29 @@ public class MachineDataSimulator {
 			watBodyList.add(watBody);
 		}
 	}
-	
-	
+
+
+	private void createFloorwiseWasteBody(List<WasteBody> wasteBodyList, int floorNo, Constants.Waste name) {
+		//for(int i=0; i < assetArray.length; i++){
+		WasteBody wasteBody = generateWasteData(floorNo, name);
+		wasteBodyList.add(wasteBody);
+		//}
+	}
+
+	private void createFloorwiseEnergyBody(List<EnergyBody> energyBodyList, int floorNo, Constants.Energy name) {
+		//for(int i=0; i < assetArray.length; i++){
+		EnergyBody energyBody = generateEnergyData(floorNo, name);
+		energyBodyList.add(energyBody);
+		//}
+	}
+
 	private void createFloorwiseAreaBody(List<AQIBody> aqiBodyList, String[] assetArray, int floorNo, Constants.AQI name) {
 		for(int i=0; i < assetArray.length; i++){
 			AQIBody aqiBody = generateAreaData(floorNo, assetArray[i], name);
 			aqiBodyList.add(aqiBody);
 		}
 	}
-	
+
 	private void createFloorwiseMachineBody(List<AQIBody> aqiBodyList, String[] assetArray, int floorNo, Constants.AQI name) {
 		for(int i=0; i < assetArray.length; i++){
 			AQIBody machineBody = generateMachineData(floorNo, assetArray[i],name);
@@ -499,19 +549,35 @@ public class MachineDataSimulator {
 
 	private HygeineBody generateHygieneData(int floorNo, String hygAssetName, Constants.Hygiene name) {
 		Long currentTimeMillis = System.currentTimeMillis();
-		
+
 		HygeineBody hygBodyVo = createHygieneBodyVO(floorNo,currentTimeMillis, "Hygiene",hygAssetName, name);
-		
+
 		return hygBodyVo;
 	}
-	
+
 	//amlesh
 	private WaterBody generateWaterData(int floorNo, String watAssetName, Constants.Water name) {
 		Long currentTimeMillis = System.currentTimeMillis();
-		
+
 		WaterBody watBodyVo = createWaterBodyVO(floorNo,currentTimeMillis, "Water",watAssetName, name);
-		
+
 		return watBodyVo;
+	}
+
+	private WasteBody generateWasteData(int floorNo, Constants.Waste name) {
+		Long currentTimeMillis = System.currentTimeMillis();
+
+		WasteBody wasteBodyVo = createWasteBodyVO(floorNo,currentTimeMillis, "Waste",name);
+
+		return wasteBodyVo;
+	}
+
+	private EnergyBody generateEnergyData(int floorNo, Constants.Energy name) {
+		Long currentTimeMillis = System.currentTimeMillis();
+
+		EnergyBody energyBodyVo = createEnergyBodyVO(floorNo,currentTimeMillis, "Energy", name);
+
+		return energyBodyVo;
 	}
 
 	private HygeineBody createHygieneBodyVO(int floorNo,Long currentTimeMillis,
@@ -540,19 +606,19 @@ public class MachineDataSimulator {
 		hygBodyVo.setAttributes(hygAttVO);
 		return hygBodyVo;
 	}
-	
+
 	//amlesh
 	private WaterBody createWaterBodyVO(int floorNo,Long currentTimeMillis,
 			String bodyName, String watAssetName, Constants.Water name) {
 		WaterBody watBodyVo = new WaterBody();
-		
+
 		watBodyVo.setName(bodyName);
 
 		ArrayList<Long> datapoint = new ArrayList<Long>();
 		datapoint.add(currentTimeMillis);
-		
+
 		datapoint.add(getHWaterValues(name));
-				
+
 		datapoint.add(1l);
 
 		ArrayList<ArrayList<Long>> datapoints = new ArrayList<>();
@@ -563,21 +629,68 @@ public class MachineDataSimulator {
 
 		watAttVO.setFloor(floorNo);
 		watAttVO.setAssetName(watAssetName);
-		
+
 		watAttVO.setName(name);
-		//hygAttVO.setName("BOD");
-		//hygAttVO.setName("COD");
-		//hygAttVO.setName("SUSPENDED_SOLIDS");
-		//hygAttVO.setName("OIL_GREASE");
-		//hygAttVO.setHumidity(getHygeineValues(Constants.Hygiene.HUMIDITY));
-		//hygAttVO.setNoise(getHygeineValues(Constants.Hygiene.NOISE));
-		//hygAttVO.setTemperature(getHygeineValues(Constants.Hygiene.TEMPERATURE));
 
 		watBodyVo.setAttributes(watAttVO);
 		return watBodyVo;
 	}
-	
-	
+
+
+	private WasteBody createWasteBodyVO(int floorNo,Long currentTimeMillis,
+			String bodyName, Constants.Waste name) {
+		WasteBody wasteBodyVo = new WasteBody();
+
+		wasteBodyVo.setName(bodyName);
+
+		ArrayList<Long> datapoint = new ArrayList<Long>();
+		datapoint.add(currentTimeMillis);
+
+		datapoint.add(getWasteValues(name));
+
+		datapoint.add(1l);
+
+		ArrayList<ArrayList<Long>> datapoints = new ArrayList<>();
+		datapoints.add(datapoint);
+		wasteBodyVo.setDatapoints(datapoints);
+
+		WasteAtrributesVO wasteAttVO = new WasteAtrributesVO();
+
+		wasteAttVO.setFloor(floorNo);
+
+		wasteAttVO.setName(name);
+
+		wasteBodyVo.setAttributes(wasteAttVO);
+		return wasteBodyVo;
+	}
+
+	private EnergyBody createEnergyBodyVO(int floorNo,Long currentTimeMillis,
+			String bodyName,Constants.Energy name) {
+		EnergyBody energyBodyVo = new EnergyBody();
+
+		energyBodyVo.setName(bodyName);
+
+		ArrayList<Long> datapoint = new ArrayList<Long>();
+		datapoint.add(currentTimeMillis);
+
+		datapoint.add(getEnergyValues(name));
+
+		datapoint.add(1l);
+
+		ArrayList<ArrayList<Long>> datapoints = new ArrayList<>();
+		datapoints.add(datapoint);
+		energyBodyVo.setDatapoints(datapoints);
+
+		EnergyAtrributesVO energyAttVO = new EnergyAtrributesVO();
+
+		energyAttVO.setFloor(floorNo);
+
+		energyAttVO.setName(name);
+
+		energyBodyVo.setAttributes(energyAttVO);
+		return energyBodyVo;
+	}
+
 
 	private Long getHygeineValues(Constants.Hygiene hygiene) {
 		Long values = new Long(0);
@@ -605,17 +718,18 @@ public class MachineDataSimulator {
 		values = (long) ((long) result / 1000L);
 		return values;
 	}
-	
+
 	//amlesh
 	private Long getHWaterValues(Constants.Water name) {
 		Long values = new Long(0);
 		Random r = new Random();
 		int minLimit = 0;
 		int maxLimit = 0;
+		int result;
 		switch (name) {
 		case PH_VALUE:
 			minLimit = 0;
-			maxLimit = 14;
+			maxLimit = 28;
 			break;
 		case BOD:
 			minLimit = 0;
@@ -633,7 +747,37 @@ public class MachineDataSimulator {
 			minLimit = 0;
 			maxLimit = 100;
 			break;
+		case KLD:
+			minLimit = 0;
+			maxLimit = 16;
+			break;
+		default:
+			break;
+		}
+		result = r.nextInt(maxLimit - minLimit) + minLimit;		
+		values = (long) ((long) result / 2);		
+		return values;
+	}
 
+
+	private Long getWasteValues(Constants.Waste name) {
+		Long values = new Long(0);
+		Random r = new Random();
+		int minLimit = 0;
+		int maxLimit = 0;
+		switch (name) {
+		case SOLDER_DROSS:
+			minLimit = 10;
+			maxLimit = 100;
+			break;
+		case USED_OIL:
+			minLimit = 50;
+			maxLimit = 1000;
+			break;
+		case DISCARDED_CONTAINERS:
+			minLimit = 40;
+			maxLimit = 500;
+			break;
 		default:
 			break;
 		}
@@ -641,7 +785,34 @@ public class MachineDataSimulator {
 		values = (long) ((long) result / 10);
 		return values;
 	}
-	
+
+
+	private Long getEnergyValues(Constants.Energy name) {
+		Long values = new Long(0);
+		Random r = new Random();
+		int minLimit = 0;
+		int maxLimit = 0;
+		switch (name) {
+		case SMTLine1:
+			minLimit = 0;
+			maxLimit = 200;
+			break;
+		case SMTLine2:
+			minLimit = 0;
+			maxLimit = 400;
+			break;
+		case ProductionGroundFloor:
+			minLimit = 0;
+			maxLimit = 600;
+			break;
+		default:
+			break;
+		}
+		int result = r.nextInt(maxLimit - minLimit) + minLimit;
+		values = (long) ((long) result / 10);
+		return values;
+	}
+
 
 	/**
 	 * @return String Response string
@@ -684,8 +855,8 @@ public class MachineDataSimulator {
 	@SuppressWarnings("unchecked")
 	private DatapointsIngestion createAQIDataIngestionRequest(
 			AQIObjectVO inputObj)
-			throws com.fasterxml.jackson.core.JsonParseException,
-			com.fasterxml.jackson.databind.JsonMappingException, IOException {
+					throws com.fasterxml.jackson.core.JsonParseException,
+					com.fasterxml.jackson.databind.JsonMappingException, IOException {
 
 		DatapointsIngestion dpIngestion = new DatapointsIngestion();
 		// dpIngestion.setMessageId(String.valueOf(System.currentTimeMillis()));
@@ -722,12 +893,12 @@ public class MachineDataSimulator {
 			}
 
 			map.put("floorNo", String.valueOf(aqiAttributes.getFloor()));
-			
+
 			if(aqiAttributes.getName() != null){
 				map.put("name", String.valueOf(aqiAttributes.getName()));
 			}
-			
-			
+
+
 			/*if (aqiAttributes.getCO() != null) {
 				map.put("CO", String.valueOf(aqiAttributes.getCO()));
 			}
@@ -767,8 +938,8 @@ public class MachineDataSimulator {
 	@SuppressWarnings("unchecked")
 	private DatapointsIngestion createHygieneDataIngestionRequest(
 			HygeineObjectVO inputObj)
-			throws com.fasterxml.jackson.core.JsonParseException,
-			com.fasterxml.jackson.databind.JsonMappingException, IOException {
+					throws com.fasterxml.jackson.core.JsonParseException,
+					com.fasterxml.jackson.databind.JsonMappingException, IOException {
 
 		DatapointsIngestion dpIngestion = new DatapointsIngestion();
 		// dpIngestion.setMessageId(String.valueOf(System.currentTimeMillis()));
@@ -800,15 +971,15 @@ public class MachineDataSimulator {
 
 			com.ge.predix.entity.util.map.Map map = new com.ge.predix.entity.util.map.Map();
 			if(hygAttributes.getAssetName() != null){
-			map.put("assetname", String.valueOf(hygAttributes.getAssetName()));
+				map.put("assetname", String.valueOf(hygAttributes.getAssetName()));
 			}
-			
+
 			map.put("floorNo", String.valueOf(hygAttributes.getFloor()));
-			
+
 			if(hygAttributes.getName() != null){
 				map.put("name", String.valueOf(hygAttributes.getName()));
 			}
-			
+
 			/*if(hygAttributes.getHumidity() != null){
 			map.put("humidity", String.valueOf(hygAttributes.getHumidity()));
 			}
@@ -821,7 +992,7 @@ public class MachineDataSimulator {
 
 			//
 			//com.ge.predix.entity.util.map.Map floorMap = new com.ge.predix.entity.util.map.Map();
-		
+
 			//com.ge.predix.entity.util.map.Map firstFloorMap = new com.ge.predix.entity.util.map.Map();
 			/*List<com.ge.predix.entity.util.map.Map> areaDataList = new ArrayList<>();
 			com.ge.predix.entity.util.map.Map smtAreaMap = new com.ge.predix.entity.util.map.Map();
@@ -841,7 +1012,7 @@ public class MachineDataSimulator {
 			//floorMap.put("firstFloorData", groundFloorMap);
 			//floorMap.put("firstFloorData", firstFloorMap);
 			//floorMap.put("thirdFloorData", secondFloorMap);
-			
+
 
 			//
 
@@ -856,65 +1027,49 @@ public class MachineDataSimulator {
 		return dpIngestion;
 
 	}
-	
+
 	//amlesh
-	
+
 	@SuppressWarnings("unchecked")
 	private DatapointsIngestion createWaterDataIngestionRequest(
 			WaterObjectVO inputObj)
-			throws com.fasterxml.jackson.core.JsonParseException,
-			com.fasterxml.jackson.databind.JsonMappingException, IOException {
+					throws com.fasterxml.jackson.core.JsonParseException,
+					com.fasterxml.jackson.databind.JsonMappingException, IOException {
 
 		DatapointsIngestion dpIngestion = new DatapointsIngestion();
-		// dpIngestion.setMessageId(String.valueOf(System.currentTimeMillis()));
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
 		dpIngestion.setMessageId(String.valueOf(calendar.getTimeInMillis()));
 		List<Body> bodies = new ArrayList<Body>();
 
-		//
-		List<WaterBody> hygBodies = inputObj.getBody();
-		for (WaterBody hygBody : hygBodies) {
-			WaterAtrributesVO hygAttributes = hygBody.getAttributes();
-			ArrayList<ArrayList<Long>> aqiDatapoints = hygBody.getDatapoints();
-			String aqiBodyName = hygBody.getName();
-
-			// Create DataIngestion Object
+		List<WaterBody> waterBodies = inputObj.getBody();
+		for (WaterBody waterBody : waterBodies) {
+			WaterAtrributesVO waterAttributes = waterBody.getAttributes();
+			ArrayList<ArrayList<Long>> waterDatapoints = waterBody.getDatapoints();
+			String waterBodyName = waterBody.getName();
 			Body body = new Body();
-			body.setName(aqiBodyName);
+			body.setName(waterBodyName);
 
 			List<Object> datapoints = new ArrayList<Object>();
 			List<Object> assetDatapoint = new ArrayList<Object>();
 			assetDatapoint.add(String.valueOf(calendar.getTimeInMillis()));
-			assetDatapoint.add(aqiDatapoints.get(0).get(1));
-			assetDatapoint.add(aqiDatapoints.get(0).get(2));
+			assetDatapoint.add(waterDatapoints.get(0).get(1));
+			assetDatapoint.add(waterDatapoints.get(0).get(2));
 
 			datapoints.add(assetDatapoint);
 
 			body.setDatapoints(datapoints);
 
 			com.ge.predix.entity.util.map.Map map = new com.ge.predix.entity.util.map.Map();
-			if(hygAttributes.getAssetName() != null){
-			map.put("assetname", String.valueOf(hygAttributes.getAssetName()));
+			if(waterAttributes.getAssetName() != null){
+				map.put("assetname", String.valueOf(waterAttributes.getAssetName()));
 			}
-			
-			map.put("floorNo", String.valueOf(hygAttributes.getFloor()));
-			
-			if(hygAttributes.getName() != null){
-				map.put("name", String.valueOf(hygAttributes.getName()));
-			}
-			
-			/*if(hygAttributes.getHumidity() != null){
-			map.put("humidity", String.valueOf(hygAttributes.getHumidity()));
-			}
-			if(hygAttributes.getNoise() != null){
-			map.put("noise", String.valueOf(hygAttributes.getNoise()));
-			}
-			if(hygAttributes.getTemperature() != null){
-				map.put("temperature", String.valueOf(hygAttributes.getTemperature()));
-			}*/
+			map.put("floorNo", String.valueOf(waterAttributes.getFloor()));
 
-			
+			if(waterAttributes.getName() != null){
+				map.put("name", String.valueOf(waterAttributes.getName()));
+			}
+
 			body.setAttributes(map);
 			bodies.add(body);
 
@@ -925,8 +1080,117 @@ public class MachineDataSimulator {
 		return dpIngestion;
 
 	}
-	
-	
+
+
+	//waste
+	@SuppressWarnings("unchecked")
+	private DatapointsIngestion createWasteDataIngestionRequest(
+			WasteObjectVO inputObj)
+					throws com.fasterxml.jackson.core.JsonParseException,
+					com.fasterxml.jackson.databind.JsonMappingException, IOException {
+
+		DatapointsIngestion dpIngestion = new DatapointsIngestion();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		dpIngestion.setMessageId(String.valueOf(calendar.getTimeInMillis()));
+		List<Body> bodies = new ArrayList<Body>();
+
+		List<WasteBody> wasteBodies = inputObj.getBody();
+		for (WasteBody wasteBody : wasteBodies) {
+			WasteAtrributesVO wasteAttributes = wasteBody.getAttributes();
+			ArrayList<ArrayList<Long>> wasteDatapoints = wasteBody.getDatapoints();
+			String wasteBodyName = wasteBody.getName();
+			Body body = new Body();
+			body.setName(wasteBodyName);
+
+			List<Object> datapoints = new ArrayList<Object>();
+			List<Object> assetDatapoint = new ArrayList<Object>();
+			assetDatapoint.add(String.valueOf(calendar.getTimeInMillis()));
+			assetDatapoint.add(wasteDatapoints.get(0).get(1));
+			assetDatapoint.add(wasteDatapoints.get(0).get(2));
+
+			datapoints.add(assetDatapoint);
+
+			body.setDatapoints(datapoints);
+
+			com.ge.predix.entity.util.map.Map map = new com.ge.predix.entity.util.map.Map();
+			if(wasteAttributes.getAssetName() != null){
+				map.put("assetname", String.valueOf(wasteAttributes.getAssetName()));
+			}
+
+			map.put("floorNo", String.valueOf(wasteAttributes.getFloor()));
+
+			if(wasteAttributes.getName() != null){
+				map.put("name", String.valueOf(wasteAttributes.getName()));
+			}
+
+			body.setAttributes(map);
+			bodies.add(body);
+
+		}
+
+		dpIngestion.setBody(bodies);
+
+		return dpIngestion;
+
+	}
+
+
+	//Energy
+	@SuppressWarnings("unchecked")
+	private DatapointsIngestion createEnergyDataIngestionRequest(
+			EnergyObjectVO inputObj)
+					throws com.fasterxml.jackson.core.JsonParseException,
+					com.fasterxml.jackson.databind.JsonMappingException, IOException {
+
+		DatapointsIngestion dpIngestion = new DatapointsIngestion();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		dpIngestion.setMessageId(String.valueOf(calendar.getTimeInMillis()));
+		List<Body> bodies = new ArrayList<Body>();
+
+		//
+		List<EnergyBody> energyBodies = inputObj.getBody();
+		for (EnergyBody energyBody : energyBodies) {
+			EnergyAtrributesVO energyAttributes = energyBody.getAttributes();
+			ArrayList<ArrayList<Long>> energyDatapoints = energyBody.getDatapoints();
+			String energyBodyName = energyBody.getName();
+			Body body = new Body();
+			body.setName(energyBodyName);
+
+			List<Object> datapoints = new ArrayList<Object>();
+			List<Object> assetDatapoint = new ArrayList<Object>();
+			assetDatapoint.add(String.valueOf(calendar.getTimeInMillis()));
+			assetDatapoint.add(energyDatapoints.get(0).get(1));
+			assetDatapoint.add(energyDatapoints.get(0).get(2));
+
+			datapoints.add(assetDatapoint);
+
+			body.setDatapoints(datapoints);
+
+			com.ge.predix.entity.util.map.Map map = new com.ge.predix.entity.util.map.Map();
+			if(energyAttributes.getAssetName() != null){
+				map.put("assetname", String.valueOf(energyAttributes.getAssetName()));
+			}
+
+			map.put("floorNo", String.valueOf(energyAttributes.getFloor()));
+
+			if(energyAttributes.getName() != null){
+				map.put("name", String.valueOf(energyAttributes.getName()));
+			}
+
+			body.setAttributes(map);
+			bodies.add(body);
+
+		}
+
+		dpIngestion.setBody(bodies);
+
+		return dpIngestion;
+
+	}
+
+
 
 	private AQIBody getRandomAQIDataVO(Long currentTimeMillis, String bodyName,
 			boolean areaRequest,String areaAssetName, int floorNo, Constants.AQI name){
@@ -958,299 +1222,299 @@ public class MachineDataSimulator {
 		aqiAttVO.setNO2(getValues(Constants.AQI.NO2));
 		aqiAttVO.setPM2_5(getValues(Constants.AQI.PM2_5));
 		aqiAttVO.setSO2(getValues(Constants.AQI.SO2));*/
-		
+
 
 		aqiBodyVo.setAttributes(aqiAttVO);
 
 		return aqiBodyVo;
 	}
 
-	 public Long getValues(Constants.AQI aqiField) {
-		    Long values = new Long(0);
-			Random r = new Random();
-			int minLimit = 0;
-			int maxLimit = 50;
-			long time=System.currentTimeMillis();
-			int result=0;
-			switch (aqiField) {
-			case O3:
-				minLimit = 10;
-				maxLimit = 50;
-
-				if(time%10==5)
-					 result=get_O3('m');
-				else if(time%10==4)
-					 result=get_O3('p');
-				else if(time%10==1)
-					 result=get_O3('s');
-				else if(time%10==2)
-					 result=get_O3('S');
-				else if(time%10==7)
-					 result=get_O3('g');
-				else if(time%10==3)
-					 result=get_O3('g');
-				else
-					 result = r.nextInt(maxLimit - minLimit) + minLimit;
-				
-				break;
-			case NH3:
-				minLimit = 10;
-				maxLimit = 50;
-				
-				
-				if(time%10==2)
-					 result=get_NH3('m');
-				else if(time%10==7)
-					 result=get_NH3('p');
-				else if(time%10==9)
-					 result=get_NH3('s');
-				else if(time%10==0)
-					 result=get_NH3('S');
-				else if(time%10==1)
-					 result=get_NH3('g');
-				else if(time%10==3)
-					 result=get_NH3('g');
-				else
-					 result = r.nextInt(maxLimit - minLimit) + minLimit;
-				
-				
-				break;
-			case NO2:
-				minLimit = 10;
-				maxLimit = 50;
-				if(time%10==1)
-					 result=get_NO2('m');
-				else if(time%10==3)
-					 result=get_NO2('p');
-				else if(time%10==5)
-					 result=get_NO2('s');
-				else if(time%10==9)
-					 result=get_NO2('S');
-				else if(time%10==6)
-					 result=get_NO2('g');
-				else if(time%10==3)
-					 result=get_NO2('g');
-				else
-					 result = r.nextInt(maxLimit - minLimit) + minLimit;
-				break;
-			
-			
-			case SO2:
-				minLimit = 10;
-				maxLimit = 50;
-				
-				if(time%10==2)
-					 result=get_SO2('m');
-				else if(time%10==5)
-					 result=get_SO2('p');
-				else if(time%10==7)
-					 result=get_SO2('s');
-				else if(time%10==1)
-					 result=get_SO2('S');
-				else if(time%10==4)
-					 result=get_NO2('g');
-				else if(time%10==3)
-					 result=get_SO2('g');
-				else
-					 result = r.nextInt(maxLimit - minLimit) + minLimit;
-				break;
-			case PM2_5:
-				minLimit = 10;
-				maxLimit = 30;
-				
-				if(time%10==2)
-					 result=get_PM2_5('m');
-				else if(time%10==0)
-					 result=get_PM2_5('p');
-				else if(time%10==3)
-					 result=get_PM2_5('s');
-				else if(time%10==7)
-					 result=get_PM2_5('S');
-				else if(time%10==5)
-					 result=get_PM2_5('g');
-				else if(time%10==3)
-					 result=get_PM2_5('g');
-				else
-					 result = r.nextInt(maxLimit - minLimit) + minLimit;
-				
-				break;
-			case PM10:
-				minLimit = 10;
-				maxLimit = 20;
-				
-				if(time%10==7)
-					 result=get_PM10('m');
-				else if(time%10==5)
-					 result=get_PM10('p');
-				else if(time%10==1)
-					 result=get_PM10('s');
-				else if(time%10==4)
-					 result=get_PM10('S');
-				else if(time%10==8)
-					 result=get_PM10('g');
-				else if(time%10==3)
-					 result=get_PM10('g');
-				else
-					 result = r.nextInt(maxLimit - minLimit) + minLimit;
-				
-				break;
-			case CO:
-				minLimit = 1;
-				maxLimit = 2;
-				result = r.nextInt(maxLimit - minLimit) + minLimit;
-				if(time%10==5)
-					result = r.nextInt(3 - 1)+1;
-				else if (time%10==3)
-					result=r.nextInt(2);
-				break;
-			case PB:
-				minLimit = 1;
-				maxLimit = 2;
-				result = r.nextInt(maxLimit - minLimit);
-				if(time%10==5)
-					result = r.nextInt(2 - 1)+1;
-				else if (time%10==6)
-					result=r.nextInt(3);
-				else if (time%10==7||time%10==7)
-					result=r.nextInt(3);
-				break;
-
-
-			default:
-				break;
-			}
-		values=(long) result;
-
-			
-
-			return values;
-		} 
-
-	public int get_NO2(char ch) {
-		int result = 0;
-		Random r = new Random();
-		if (ch == 'm')
-			result = r.nextInt(180 - 81) + 101;
-		else if (ch == 's')
-			result = r.nextInt(80 - 41) + 71;
-		else if (ch == 'g')
-
-			result = r.nextInt(90);
-
-		else if (ch == 'p')
-			result = r.nextInt(280 - 181) + 181;
-		else if (ch == 'v')
-			result = r.nextInt(400 - 280) + 280;
-		else if (ch == 'S')
-			result = r.nextInt(800 - 401) + 401;
-
-		// System.out.println("========result==="+result);
-		return result;
-	}
-
-	public static int get_PM10(char ch) {
-
-		int result = 0;
-		Random r = new Random();
-		if (ch == 'm')
-			result = r.nextInt(250 - 101) + 10;
-		else if (ch == 's')
-			result = r.nextInt(100 - 51) + 71;
-		else if (ch == 'g')
-			result = r.nextInt(50);
-		else if (ch == 'p')
-			result = r.nextInt(280 - 181) + 181;
-		else if (ch == 'S')
-			result = r.nextInt(800 - 431) + 131;
-		else if (ch == 'v')
-			result = r.nextInt(430 - 351) + 351;
-		return result;
-	}
-
-	public static int get_PM2_5(char ch) {
-
-		int result = 0;
-		Random r = new Random();
-		if (ch == 'm')
-
-			result = r.nextInt(130 - 61) + 41;
-
-		else if (ch == 's')
-
-			result = r.nextInt(60 - 31) + 31;
-
-		else if (ch == 'g')
-			result = r.nextInt(70);
-		else if (ch == 'p')
-			result = r.nextInt(120 - 91) + 91;
-		else if (ch == 'v')
-			result = r.nextInt(250 - 121) + 121;
-		else if (ch == 'S')
-			result = r.nextInt(800 - 431);
 	
-		return result;
-	}
-
-	public static int get_O3(char ch) {
-
-		int result = 0;
+	public Long getValues(Constants.AQI aqiField) {
+	    Long values = new Long(0);
 		Random r = new Random();
-		if (ch == 'm')
-			result = r.nextInt(168 - 101) + 101;
-		else if (ch == 's')
-			result = r.nextInt(100 - 51) + 51;
-		else if (ch == 'g')
-			result = r.nextInt(50);
-		else if (ch == 'p')
-			result = r.nextInt(208 - 169) + 169;
-		else if (ch == 'v')
-			result = r.nextInt(748 - 209) + 209;
-		else if (ch == 'S')
-			result = r.nextInt(800);
-		return result;
-	}
+		int minLimit = 0;
+		int maxLimit = 50;
+		long time=System.currentTimeMillis();
+		int result=0;
+		switch (aqiField) {
+		case O3:
+			minLimit = 10;
+			maxLimit = 50;
 
-	public static int get_SO2(char ch) {
+			if(time%10==5)
+				 result=get_O3('m');
+			else if(time%10==4)
+				 result=get_O3('p');
+			else if(time%10==1)
+				 result=get_O3('s');
+			else if(time%10==2)
+				 result=get_O3('S');
+			else if(time%10==7)
+				 result=get_O3('g');
+			else if(time%10==3)
+				 result=get_O3('g');
+			else
+				 result = r.nextInt(maxLimit - minLimit) + minLimit;
+			
+			break;
+		case NH3:
+			minLimit = 10;
+			maxLimit = 50;
+			
+			
+			if(time%10==2)
+				 result=get_NH3('m');
+			else if(time%10==7)
+				 result=get_NH3('p');
+			else if(time%10==9)
+				 result=get_NH3('s');
+			else if(time%10==0)
+				 result=get_NH3('S');
+			else if(time%10==1)
+				 result=get_NH3('g');
+			else if(time%10==3)
+				 result=get_NH3('g');
+			else
+				 result = r.nextInt(maxLimit - minLimit) + minLimit;
+			
+			
+			break;
+		case NO2:
+			minLimit = 10;
+			maxLimit = 50;
+			if(time%10==1)
+				 result=get_NO2('m');
+			else if(time%10==3)
+				 result=get_NO2('p');
+			else if(time%10==5)
+				 result=get_NO2('s');
+			else if(time%10==9)
+				 result=get_NO2('S');
+			else if(time%10==6)
+				 result=get_NO2('g');
+			else if(time%10==3)
+				 result=get_NO2('g');
+			else
+				 result = r.nextInt(maxLimit - minLimit) + minLimit;
+			break;
+		
+		
+		case SO2:
+			minLimit = 10;
+			maxLimit = 50;
+			
+			if(time%10==2)
+				 result=get_SO2('m');
+			else if(time%10==5)
+				 result=get_SO2('p');
+			else if(time%10==7)
+				 result=get_SO2('s');
+			else if(time%10==1)
+				 result=get_SO2('S');
+			else if(time%10==4)
+				 result=get_NO2('g');
+			else if(time%10==3)
+				 result=get_SO2('g');
+			else
+				 result = r.nextInt(maxLimit - minLimit) + minLimit;
+			break;
+		case PM2_5:
+			minLimit = 10;
+			maxLimit = 30;
+			
+			if(time%10==2)
+				 result=get_PM2_5('m');
+			else if(time%10==0)
+				 result=get_PM2_5('p');
+			else if(time%10==3)
+				 result=get_PM2_5('s');
+			else if(time%10==7)
+				 result=get_PM2_5('S');
+			else if(time%10==5)
+				 result=get_PM2_5('g');
+			else if(time%10==3)
+				 result=get_PM2_5('g');
+			else
+				 result = r.nextInt(maxLimit - minLimit) + minLimit;
+			
+			break;
+		case PM10:
+			minLimit = 10;
+			maxLimit = 20;
+			
+			if(time%10==7)
+				 result=get_PM10('m');
+			else if(time%10==5)
+				 result=get_PM10('p');
+			else if(time%10==1)
+				 result=get_PM10('s');
+			else if(time%10==4)
+				 result=get_PM10('S');
+			else if(time%10==8)
+				 result=get_PM10('g');
+			else if(time%10==3)
+				 result=get_PM10('g');
+			else
+				 result = r.nextInt(maxLimit - minLimit) + minLimit;
+			
+			break;
+		case CO:
+			minLimit = 1;
+			maxLimit = 2;
+			result = r.nextInt(maxLimit - minLimit) + minLimit;
+			if(time%10==5)
+				result = r.nextInt(3 - 1)+1;
+			else if (time%10==3)
+				result=r.nextInt(2);
+			break;
+		case PB:
+			minLimit = 1;
+			maxLimit = 2;
+			result = r.nextInt(maxLimit - minLimit);
+			if(time%10==5)
+				result = r.nextInt(2 - 1)+1;
+			else if (time%10==6)
+				result=r.nextInt(3);
+			else if (time%10==7||time%10==7)
+				result=r.nextInt(3);
+			break;
 
-		int result = 0;
-		Random r = new Random();
-		if (ch == 'm')
-			result = r.nextInt(380 - 81) + 81;
-		else if (ch == 's')
-			result = r.nextInt(80 - 41) + 41;
-		else if (ch == 'g')
-			result = r.nextInt(40);
-		else if (ch == 'p')
-			result = r.nextInt(800 - 381) + 381;
-		else if (ch == 'v')
-			result = r.nextInt(1600 - 801) + 801;
-		else if (ch == 'S')
-			result = r.nextInt(2000);
 
-		return result;
-	}
+		default:
+			break;
+		}
+	values=(long) result;
 
-	public static int get_NH3(char ch) {
+		
 
-		int result = 0;
-		Random r = new Random();
-		if (ch == 'm')
-			result = r.nextInt(800 - 401) + 401;
-		else if (ch == 's')
-			result = r.nextInt(400 - 201) + 201;
-		else if (ch == 'g')
-			result = r.nextInt(60 - 10)+140;
-		else if (ch == 'p')
-			result = r.nextInt(1200 - 801) + 801;
-		else if (ch == 'v')
-			result = r.nextInt(1800 - 1201) + 1201;
-		else if (ch == 'S')
-			result = r.nextInt(1801);
-		return result;
-	}
-	 
-	 
-	 
+		return values;
+	} 
+
+public int get_NO2(char ch) {
+	int result = 0;
+	Random r = new Random();
+	if (ch == 'm')
+		result = r.nextInt(180 - 81) + 101;
+	else if (ch == 's')
+		result = r.nextInt(80 - 41) + 71;
+	else if (ch == 'g')
+
+		result = r.nextInt(90);
+
+	else if (ch == 'p')
+		result = r.nextInt(280 - 181) + 181;
+	else if (ch == 'v')
+		result = r.nextInt(400 - 280) + 280;
+	else if (ch == 'S')
+		result = r.nextInt(800 - 401) + 401;
+
+	// System.out.println("========result==="+result);
+	return result;
+}
+
+public static int get_PM10(char ch) {
+
+	int result = 0;
+	Random r = new Random();
+	if (ch == 'm')
+		result = r.nextInt(250 - 101) + 10;
+	else if (ch == 's')
+		result = r.nextInt(100 - 51) + 71;
+	else if (ch == 'g')
+		result = r.nextInt(50);
+	else if (ch == 'p')
+		result = r.nextInt(280 - 181) + 181;
+	else if (ch == 'S')
+		result = r.nextInt(800 - 431) + 131;
+	else if (ch == 'v')
+		result = r.nextInt(430 - 351) + 351;
+	return result;
+}
+
+public static int get_PM2_5(char ch) {
+
+	int result = 0;
+	Random r = new Random();
+	if (ch == 'm')
+
+		result = r.nextInt(130 - 61) + 41;
+
+	else if (ch == 's')
+
+		result = r.nextInt(60 - 31) + 31;
+
+	else if (ch == 'g')
+		result = r.nextInt(70);
+	else if (ch == 'p')
+		result = r.nextInt(120 - 91) + 91;
+	else if (ch == 'v')
+		result = r.nextInt(250 - 121) + 121;
+	else if (ch == 'S')
+		result = r.nextInt(800 - 431);
+
+	return result;
+}
+
+public static int get_O3(char ch) {
+
+	int result = 0;
+	Random r = new Random();
+	if (ch == 'm')
+		result = r.nextInt(168 - 101) + 101;
+	else if (ch == 's')
+		result = r.nextInt(100 - 51) + 51;
+	else if (ch == 'g')
+		result = r.nextInt(50);
+	else if (ch == 'p')
+		result = r.nextInt(208 - 169) + 169;
+	else if (ch == 'v')
+		result = r.nextInt(748 - 209) + 209;
+	else if (ch == 'S')
+		result = r.nextInt(800);
+	return result;
+}
+
+public static int get_SO2(char ch) {
+
+	int result = 0;
+	Random r = new Random();
+	if (ch == 'm')
+		result = r.nextInt(380 - 81) + 81;
+	else if (ch == 's')
+		result = r.nextInt(80 - 41) + 41;
+	else if (ch == 'g')
+		result = r.nextInt(40);
+	else if (ch == 'p')
+		result = r.nextInt(800 - 381) + 381;
+	else if (ch == 'v')
+		result = r.nextInt(1600 - 801) + 801;
+	else if (ch == 'S')
+		result = r.nextInt(2000);
+
+	return result;
+}
+
+public static int get_NH3(char ch) {
+
+	int result = 0;
+	Random r = new Random();
+	if (ch == 'm')
+		result = r.nextInt(800 - 401) + 401;
+	else if (ch == 's')
+		result = r.nextInt(400 - 201) + 201;
+	else if (ch == 'g')
+		result = r.nextInt(60 - 10)+140;
+	else if (ch == 'p')
+		result = r.nextInt(1200 - 801) + 801;
+	else if (ch == 'v')
+		result = r.nextInt(1800 - 1201) + 1201;
+	else if (ch == 'S')
+		result = r.nextInt(1801);
+	return result;
+}
+	
+	
 	/*
 	 * public String readEHSDataAndGenerateRandomJSON(String jsonFileName)
 	 * throws Exception { // TODO: Read data from Sensor by passing current
