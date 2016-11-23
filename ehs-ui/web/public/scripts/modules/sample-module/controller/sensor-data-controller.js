@@ -13,7 +13,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			intervalPromiseSensor = $interval(function() {
 				realSensorDataReload(7*20000);
 			}, 12000);
-		};
+		}; 
 		$scope.$on('$destroy', function() {
 			$scope.stop();
 		});
