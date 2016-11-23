@@ -259,9 +259,19 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 							'type' : type,
 							'assetName' : assetName
 						})
-					} else {
-
 					}
+					else
+						{
+						//alert(floor);
+						document.querySelector('px-app-nav').markSelected('/industrial-hygiene'); 
+						$state.go('industrial-hygiene', {
+							'floor' : floor,
+							'type' : type,
+							'assetName' : assetName
+						})
+						}
+
+					
 				};
 				var avgArrayValue = function(data) {
 					var avg = 0.0;

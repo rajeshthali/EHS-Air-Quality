@@ -10,10 +10,13 @@ background-color: #ffffff;
 <img src='/images/25.gif' class="lad_img-in">
 <div class="col-md-12 floor_list_base">
 	<ul>
-		<li ng-repeat="f in floors" ng-class="{'active':$index===floor,'disabled':hygieneLoading }" ng-click="changeFloor(f.id)">{{f.name}}</li>
+		<li ng-repeat="f in floors" ng-class="{'active':$index==floor,'disabled': (aqiMachineLoading || hygieneLoading)}" ng-click="changeFloor(f.id)">{{f.name}}</li>
 	  </ul>
 						
 </div>
+
+
+
 <div>
  <img src='/images/25.gif' class="lad_img_hygn" ng-show="loading == true">
 	<div class="col-md-3 hygn_background">

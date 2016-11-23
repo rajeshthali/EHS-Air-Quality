@@ -1877,6 +1877,12 @@ CSS for dash board air quality monitoring start  */
 	height: 242px;
 }
 
+.water-graph
+{
+	height: 366px;
+}
+
+
 .mach-font
 {
 	font-size: 30px;
@@ -1905,11 +1911,16 @@ CSS for dash board air quality monitoring start  */
 }
 .water-data-graph
 {
-	min-height: 373px; 
+	height: 375px; 
 	min-width: 980px;
 }
 
-
+.details-tab-base-inner-water {
+	border: 1px solid #3694F8;
+	padding: 10px;
+	background-color: #fff;
+	min-height: 460px;
+}
 
 /*Rohit*/
 /*Energy Maanagement*/
@@ -1923,6 +1934,51 @@ CSS for dash board air quality monitoring start  */
 	background-color: white;
 	
 }
+
+.max_value_style{
+	text-align: center;
+} 
+
+.mod_sta{
+    color: #FF9000;
+    margin-top: 0px;
+    font-size: 23px;
+}
+
+.machine_sat_green{
+    background-color: #8bbe3d;
+}
+.machine_mod_orange{
+    background-color: #ff9000;
+}
+.machine_warn_red{
+    background-color: #ff0000;
+}
+
+.mahine_down_arrow_mod{
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    top: 22px;
+    text-align: center;
+    line-height: 45px;
+    border-radius: 50%;
+    right: 10px;
+    background: #ffa530;
+    
+}
+.mahine_down_arrow_warn{
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    top: 22px;
+    text-align: center;
+    line-height: 45px;
+    border-radius: 50%;
+    right: 10px;
+    background: #d90000;
+    
+}
 /* end */
 
 /* @media only screen and (min-device-width : 320px) and (max-device-width: 480px) { */
@@ -1933,8 +1989,3 @@ CSS for dash board air quality monitoring start  */
 /* 		display: none; */
 /* 	} */
 /* } */
-
-/* Rohit */
-.max_value_style{
-	text-align: center;
-}

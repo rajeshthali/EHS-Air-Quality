@@ -24,6 +24,29 @@ define([ 'angular', './services-module' ], function(angular, sampleModule) {
 						cb(response);
 				});
 			},
+			getAvgMachineValues : function(floor, interval, cb) {
+				var thisObject = this;
+				if (!$rootScope.token) {
+					AuthService.getTocken(function(token) {
+						thisObject.getAqiMachine($rootScope.token, floor, interval, cb);
+					});
+				} else {
+					thisObject.getAvgMachine($rootScope.token, floor, interval, cb);
+				}
+			},
+			getAvgMachine : function(token, floor, interval, cb) {
+				$http({
+					method : 'GET',
+					url : Config.baseUrl + '/api/aqi/machine/avgValues/' + floor + '?interval=' + interval,
+					headers : {
+						'Authorization' : token
+					}
+				}).success(function(response) {
+					//console.log(response);
+					if (cb)
+						cb(response);
+				});
+			},
 			getAqiAreaValues : function(floor, interval, cb) {
 				var thisObject = this;
 				if (!$rootScope.token) {
@@ -42,6 +65,29 @@ define([ 'angular', './services-module' ], function(angular, sampleModule) {
 						'Authorization' : token
 					}
 				}).success(function(response) {
+					if (cb)
+						cb(response);
+				});
+			},
+			getAqiAvgAreaValues : function(floor, interval, cb) {
+				var thisObject = this;
+				if (!$rootScope.token) {
+					AuthService.getTocken(function(token) {
+						thisObject.getAqiArea($rootScope.token, floor, interval, cb);
+					});
+				} else {
+					thisObject.getAqiAvgArea($rootScope.token, floor, interval, cb);
+				}
+			},
+			getAqiAvgArea : function(token, floor, interval, cb) {
+				$http({
+					method : 'GET',
+					url : Config.baseUrl + '/api/aqi/areaAvg/' + floor + '?interval=' + interval,
+					headers : {
+						'Authorization' : token
+					}
+				}).success(function(response) {
+				
 					if (cb)
 						cb(response);
 				});

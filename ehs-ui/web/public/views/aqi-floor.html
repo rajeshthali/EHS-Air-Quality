@@ -20,7 +20,7 @@
 						<div id="aqi-area" class="tab-pane fade in active tab-base-content">
 							<img alt="" class="loading_image" ng-show="aqiAreaLoading" src="images/25.gif">
 							<ul class="nav nav-tabs" id="aqi-area-tab">
-								<li ng-repeat="area in aqiAreaData" ng-class="{'active':$index==tabIndexArea}"><a data-toggle="tab" href="#" data-target="#aqi_area_{{$index}}" ng-click="selectTab($index,'area')">{{area.assetName}}</a></li>
+									<li ng-repeat="area in aqiAreaData" ng-class="{'active':$index==tabIndexArea}"><a data-toggle="tab" href="#" data-target="#aqi_area_{{$index}}" ng-click="selectTab($index,'area')">{{area.assetName}}</a></li>
 							</ul>
 							<div id="aqi-area-tab-content" class="tab-content tab-base-content-inner highcharts-button">
 								<div ng-repeat="area in aqiAreaData" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea}" class="tab-pane fade in">
@@ -53,7 +53,7 @@
 									ng-click="selectTab($index,'comparison')">{{area.assetName}}</a></li>
 							</ul>
 							<div id="aqi-area-comparison-tab-content" class="tab-content tab-base-content-inner">
-								<div ng-repeat="area in aqiAreaComparison" id="aqi_area_comparison_{{$index}}" ng-class="{'active':$index==tabIndexMachineComparison}" class="tab-pane fade in">
+								<div ng-repeat="area in aqiAreaComparison" id="aqi_area_comparison_{{$index}}" ng-class="{'active':$index==tabIndexArea}" class="tab-pane fade in">
 									<div class="row">
 
 										<div class="col-md-12 col-xs-12">
@@ -91,11 +91,12 @@
 				<div class="col-md-12 tab-base">
 					<img alt="" class="loading_image" ng-show="aqiMachineLoading" src="images/25.gif">
 					<ul class="nav nav-tabs">
-						<li class="active"><a data-toggle="tab" href="" data-target="#p-s-e">Process Stack Emission</a></li>
+						<li class="active"><a data-toggle="tab" href="" data-target="#p-s-e">Machine Gas Emission</a></li>
+						<li ><a data-toggle="tab" href="" data-target="#a-e">Area Gas Emission</a></li>
 					</ul>
 
 					<div class="tab-content  tab-base-inner">
-						<div id="aqi-machine" class="tab-pane fade in active tab-base-content">
+						<div id="p-s-e" class="tab-pane fade in active tab-base-content">
 							<ul class="nav nav-tabs" id="aqi-machine-tab">
 								<li ng-repeat="machine in aqiMachineData" ng-class="{'active':$index==tabIndexMachine}"><a data-toggle="tab" href="#" data-target="#aqi_machine_{{$index}}"
 									ng-click="selectTab($index,'machine')">{{machine.assetName}}</a></li>
@@ -107,32 +108,83 @@
 									<div class="row">
 										<div class="col-md-12">
 											<div class="col-md-6 machine_values">
-												<div class="col-md-12 machine_data" sty ng-class="{'machine_down_green': machine.data.components.SO2 <= maxValue, 'machine_up_orange':machine.data.components.SO2 > maxValue}">
+												<div class="col-md-12 machine_data" ng-class="getColorClass(machine.data.SO2status)">
 													<h4 class="h">SO2</h4>
 													<h3 class="d">{{machine.data.components.SO2}}</h3>
 													<h4 class="s">ppb</h4>
-													<div ng-class="{ 'mahine_up_arrow': machine.data.components.SO2<= maxValue, 'mahine_down_arrow': machine.data.components.SO2 > maxValue}">
-														<i class="fa" ng-class="{'fa-arrow-down': machine.data.components.SO2 <= maxValue, 'fa-arrow-up': machine.data.components.SO2 > maxValue}"></i>
+													<div ng-class="getArrowClass(machine.data.SO2status)">
+														<i class="fa" ng-class="getFaArrowClass(machine.data.SO2status)"></i>
 													</div>
 												</div>
 											</div>
 											<div class="col-md-6 machine_values">
-												<div class="col-md-12 machine_data " ng-class="{'machine_down_green': machine.data.components.NO2 <= maxValue, 'machine_up_orange':machine.data.components.NO2 > maxValue}">
+												<div class="col-md-12 machine_data " ng-class="getColorClass(machine.data.NO2status)">
 													<h4 class="h">NO2</h4>
 													<h3 class="d">{{machine.data.components.NO2}}</h3>
 													<h4 class="s">ppb</h4>
-													<div ng-class="{ 'mahine_up_arrow': machine.data.components.NO2<= maxValue, 'mahine_down_arrow': machine.data.components.NO2 > maxValue}">
-														<i class="fa" ng-class="{'fa-arrow-down': machine.data.components.NO2 <= maxValue, 'fa-arrow-up': machine.data.components.NO2 > maxValue}"></i>
+													<div ng-class="getArrowClass(machine.data.NO2status)">
+														<i class="fa" ng-class="getFaArrowClass(machine.data.NO2status)"></i>
 													</div>
 												</div>
 											</div>
 											<div class="col-md-6 machine_values">
-												<div class="col-md-12 machine_data " ng-class="{'machine_down_green': machine.data.components.PM2_5 <= maxValue, 'machine_up_orange':machine.data.components.PM2_5 > maxValue}">
+												<div class="col-md-12 machine_data " ng-class="getColorClass(machine.data.PM2_5status)">
 													<h4 class="h">PM 2.5</h4>
 													<h3 class="d">{{machine.data.components.PM2_5}}</h3>
 													<h4 class="s">ug/m3</h4>
-													<div ng-class="{'mahine_up_arrow': machine.data.components.PM2_5 <= maxValue, 'mahine_down_arrow': machine.data.components.PM2_5> maxValue}">
-														<i class="fa" ng-class="{'fa-arrow-down': machine.data.components.PM2_5 <= maxValue, 'fa-arrow-up': machine.data.components.PM2_5 > maxValue}"></i>
+													<div ng-class="getArrowClass(machine.data.PM2_5status)">
+														<i class="fa" ng-class="getFaArrowClass(machine.data.PM2_5status)"></i>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6 machine_values">
+												<div class="col-md-12 machine_data " ng-class="getColorClass(machine.data.O3status)">
+													<h4 class="h">O3</h4>
+													<h3 class="d">{{machine.data.components.O3}}</h3>
+													<h4 class="s">ug/m3</h4>
+													<div ng-class="getArrowClass(machine.data.O3status)">
+														<i class="fa" ng-class="getFaArrowClass(machine.data.O3status)"></i>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6 machine_values">
+												<div class="col-md-12 machine_data " ng-class="getColorClass(machine.data.CO2status)">
+													<h4 class="h">CO</h4>
+														<h3 class="d">{{machine.data.components.CO2}}</h3>
+													<h4 class="s">mg/m3</h4>
+													<div ng-class="getArrowClass(machine.data.CO2status)">
+														<i class="fa" ng-class="getFaArrowClass(machine.data.CO2status)"></i>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6 machine_values">
+												<div class="col-md-12 machine_data " ng-class="getColorClass(machine.data.PBstatus)">
+													<h4 class="h">PB</h4>
+														<h3 class="d">{{machine.data.components.PB}}</h3>
+													<h4 class="s">ug/m3</h4>
+													<div ng-class="getArrowClass(machine.data.PBstatus)">
+														<i class="fa" ng-class="getFaArrowClass(machine.data.PBstatus)"></i>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6 machine_values">
+												<div class="col-md-12 machine_data " ng-class="getColorClass(machine.data.PM10status)">
+													<h4 class="h">PM10</h4>
+														<h3 class="d">{{machine.data.components.PM10}}</h3>
+													<h4 class="s">ug/m3</h4>
+													<div ng-class="getArrowClass(machine.data.PM10status)">
+														<i class="fa" ng-class="getFaArrowClass(machine.data.PM10status)"></i>
+													</div>
+												</div>
+											</div>
+												<div class="col-md-6 machine_values">
+												<div class="col-md-12 machine_data " ng-class="getColorClass(machine.data.NH3status)">
+													<h4 class="h">NH3</h4>
+														<h3 class="d">{{machine.data.components.NH3}}</h3>
+													<h4 class="s">ug/m3</h4>
+				
+													<div ng-class="getArrowClass(machine.data.NH3status)">
+														<i class="fa" ng-class="getFaArrowClass(machine.data.NH3status)"></i>
 													</div>
 												</div>
 											</div>
@@ -145,14 +197,102 @@
 										</div>
 										<div class="col-md-6 col-xs-12">
 											<h4 class="status_txt">Status</h4>
-											<h1 class="mach-font" ng-class="{'warn_sta': machine.data.maxAqi.aqiValue>=maxValue , 'stis_sta': machine.data.maxAqi.aqiValue<maxValue}">
-												<span ng-if="machine.data.maxAqi.aqiValue<=maxValue">Satisfactory</span> <span ng-if="machine.data.maxAqi.aqiValue>maxValue">Warning</span>
+											<h1 class="mach-font" ng-class="{'warn_sta': machine.data.status == 'Very Poor' || machine.data.status == 'Poor' || machine.data.status == 'Severe' , 'mod_sta': machine.data.status == 'Moderate'  , 'stis_sta': machine.data.status == 'Satisfactory' || machine.data.status == 'Good'}">
+												<span ng-if="machine.data.status == 'Satisfactory' || machine.data.status == 'Good'">Satisfactory</span> 
+												<span ng-if="machine.data.status == 'Moderate'">Moderate</span>
+												<span ng-if="machine.data.status == 'Very Poor' || machine.data.status == 'Poor' || machine.data.status == 'Severe'">Warning</span>
 											</h1>
 										</div>
 									</div>
 
 								</div>
 							</div>
+							
+						</div>
+						<div id="a-e" class="tab-pane fade tab-base-content">
+								<ul class="nav nav-tabs" id="aqi-area-tab2">
+								<li ng-repeat="area2 in aqiAreaData2" ng-class="{'active':$index==tabIndexArea2}"><a data-toggle="tab" href="#" data-target="#aqi_area_{{$index}}"
+									ng-click="selectTab($index,'area2')">{{area2.assetName}}</a></li>
+							</ul>
+							<div id="aqi-area-tab-content2" class="tab-content tab-base-content-inner highcharts-button">
+								<div ng-repeat="area2 in aqiAreaData2" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea2}" class="tab-pane fade in">
+
+									<div class="row">
+										<div class="col-md-12">
+											
+											<div class="col-md-6 machine_values">
+												<div class="col-md-12 machine_data" ng-class="getColorClass(area2.data.O3status)">
+													<h4 class="h">O3</h4>
+													<h3 class="d">{{area2.data.components.O3}}</h3>
+													<h4 class="s">ug/m3</h4>
+													<div ng-class="getArrowClass(area2.data.O3status)">
+														<i class="fa" ng-class="getFaArrowClass(area2.data.O3status)"></i>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6 machine_values">
+												<div class="col-md-12 machine_data" ng-class="getColorClass(area2.data.CO2status)">
+													<h4 class="h">CO</h4>
+														<h3 class="d">{{area2.data.components.CO2}}</h3>
+													<h4 class="s">mg/m3</h4>
+													<div ng-class="getArrowClass(area2.data.CO2status)">
+														<i class="fa" ng-class="getFaArrowClass(area2.data.CO2status)"></i>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6 machine_values">
+												<div class="col-md-12 machine_data " ng-class="getColorClass(area2.data.PBstatus)">
+													<h4 class="h">PB</h4>
+														<h3 class="d">{{area2.data.components.PB}}</h3>
+													<h4 class="s">ug/m3</h4>
+													<div ng-class="getArrowClass(area2.data.PBstatus)">
+														<i class="fa" ng-class="getFaArrowClass(area2.data.PBstatus)"></i>
+													</div>
+												</div>
+											</div>
+												<div class="col-md-6 machine_values">
+												<div class="col-md-12 machine_data" ng-class="getColorClass(area2.data.NH3status)">
+													<h4 class="h">NH3</h4>
+														<h3 class="d">{{area2.data.components.NH3}}</h3>
+													<h4 class="s">ug/m3</h4>
+				
+													<div ng-class="getArrowClass(area2.data.NH3status)">
+														<i class="fa" ng-class="getFaArrowClass(area2.data.NH3status)"></i>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6 machine_values">
+												<div class="col-md-12 machine_data" ng-class="getColorClass(area2.data.PM10status)">
+													<h4 class="h">PM10</h4>
+														<h3 class="d">{{area2.data.components.PM10}}</h3>
+													<h4 class="s">ug/m3</h4>
+													<div ng-class="getArrowClass(area2.data.PM10status)">
+														<i class="fa" ng-class="getFaArrowClass(area2.data.PM10status)"></i>
+													</div>
+												</div>
+											</div>
+												
+										</div>
+									</div>
+									
+
+									<div class="row mach-margin">
+										<div class="col-md-5 col-xs-12 mach-height">
+											<img alt="" class="center_img" ng-src="{{area.data.imageUrl}}">
+										</div>
+										<div class="col-md-6 col-xs-12">
+											<h4 class="status_txt">Status</h4>
+											<h1 class="mach-font" ng-class="{'warn_sta': area2.data.status == 'Very Poor' || area2.data.status == 'Poor' || area2.data.status == 'Severe' , 'mod_sta': area2.data.status == 'Moderate'  , 'stis_sta': area2.data.status == 'Satisfactory' || area2.data.status == 'Good'}">
+												<span ng-if="area2.data.status == 'Satisfactory' || area2.data.status == 'Good'">Satisfactory</span> 
+												<span ng-if="area2.data.status == 'Moderate'">Moderate</span>
+												<span ng-if="area2.data.status == 'Very Poor' || area2.data.status == 'Poor' || area2.data.status == 'Severe'">Warning</span>
+											</h1>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						
 						</div>
 					</div>
 				</div>

@@ -23,7 +23,7 @@ define([ 'angular', './services-module' ], function(angular, sampleModule) {
 					if (cb)
 						cb(response);
 				});
-			},
+			}/*,
 			
 			
 			getWaterAreaValues : function(floor, interval, cb) {
@@ -39,7 +39,7 @@ define([ 'angular', './services-module' ], function(angular, sampleModule) {
 			getWaterArea : function(token, floor, interval, cb) {
 				$http({
 					method : 'GET',
-					url : Config.baseUrl + '/api/water/' + floor + '?interval=' + interval,
+					url : Config.baseUrl + '/api/waste/' + floor + '?interval=' + interval,
 					headers : {
 						'Authorization' : token
 					}
@@ -101,7 +101,7 @@ define([ 'angular', './services-module' ], function(angular, sampleModule) {
 					if (cb)
 						cb(response);
 				});
-			},
+			}*/,
 			prettyMs : function(timestamp) {
 				var dates = [];
 				for (var i = 0; i < timestamp.length; i++) {

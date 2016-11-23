@@ -1,6 +1,6 @@
 define([ 'angular', './controllers-module'], function(angular, controllers) {
 	'use strict';
-	controllers.controller('industrialHygiene', [ '$scope', '$http', '$state','NewhygnService', 'DashBoardService', 'AuthService', '$rootScope','$interval', function($scope, $http, $state,NewhygnService, DashBoardService, AuthService, $rootScope,$interval) {
+	controllers.controller('industrialHygiene', [ '$scope', '$http', '$state','NewhygnService', 'DashBoardService', 'AuthService', '$rootScope','$interval', '$stateParams', function($scope, $http, $state,NewhygnService, DashBoardService, AuthService, $rootScope,$interval,$stateParams) {
 		/*$('.loaderpg').css('display', 'block');
 		$('.lad_img').css('display', 'block');*/
 		$scope.loading = true;
@@ -12,9 +12,9 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		var interval = 25 * 1000;
 		$scope.hygieneLoading = true;
 		
-		if (!$rootScope.floor) {
-			$rootScope.floor = 0;
-		}
+//		if (!$rootScope.floor) {
+//			$rootScope.floor = 0;
+//		}
 		
 		$scope.floors = [ {
 			name : 'F1',
@@ -31,7 +31,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		//Rohit
 		var hygieneCharts = [];
 		$scope.hygieneData = null;
-		$scope.floor = 0;
+//		$scope.floor = 0;
 		$scope.tabIndex = 0;
 		var promise = 0;
 		$scope.hygieneLoading = false;
@@ -39,6 +39,16 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		var interval = 1000 * 60 * 2;
 		var intervalDynamic = 1000 * 30;
 		
+		$scope.floor =  $stateParams.floor;
+		console.log("!!!! "+$stateParams.floor);
+        if($stateParams.floor == null){
+		   $scope.floor = 0;
+		 console.log("undefined floor")
+		}
+		else{
+		 $scope.floor =  $stateParams.floor;
+	    console.log("changed floor in load data" +$scope.floor)
+		}
 		//Rohit
 		$scope.changeFloor = function(floor) {
 			if (!$scope.aqiMachineLoading && !$scope.aqiMachineLoading && !$scope.hygieneLoading) {
@@ -46,7 +56,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				$scope.floor = floor;
 				hygieneCharts = [];
 				$rootScope.floor = floor;
-				/*$scope.floor = floor;*/
+				$scope.floor = floor;
 				$scope.tabIndex = 0;
 				$scope.hygieneLoading = false;
 				$scope.hygieneData = null;
@@ -70,6 +80,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			 $scope.hygnareaName = null;
 				$scope.hygieneLoading = true;
 				AuthService.getTocken(function(token) {
+					
 					loadHygiene($rootScope.floor);
 					loadhygndata($rootScope.floor);
 					
@@ -86,7 +97,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				var interval = 1000 * 60 * 2;
 				var intervalDynamic = 1000 * 30;
 				
-				console.log('running startDynamiUpdate..');
+				console.log('running startDynamicUpdate..');
 				promise = $interval(function() {
 					loadHygiene($rootScope.floor);
 				}, 20000);

@@ -35,6 +35,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				
 			   //Rohit
 				$scope.floor =  $stateParams.floor;
+				console.log("undefined floor"+$stateParams.floor);
                 if($stateParams.floor == null){
 				   $scope.floor = 0;
 				// console.log("undefined floor")
@@ -155,10 +156,8 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 												console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
 											}
 										}
-
 									}
 								}
-
 							}
 						});
 					}

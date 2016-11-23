@@ -76,6 +76,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					//loadguage($rootScope.floor);
 					loadGuage($rootScope.floor);
 					loadEnergy($rootScope.floor);
+					loadG();
 				});
 			};
 			loadData();
@@ -101,7 +102,8 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						console.log("floor data: " +JSON.stringify(res));
 						   if(res.length == 0){
 							  $scope.energyData = res[0].assets;
-							   $scope.selectTab($scope.tabIndex, '', '', '');
+							   $scope.selectTab($scope.tabIndex, $scope.smt1Values, $scope.smt2Values, $scope.pgFloorValues);
+							  // loadG($scope.smt1Values, $scope.smt2Values, $scope.pgFloorValues);
                         	  // console.log("detailsgraph data" +$scope.wasteTabList[0]);
 
                         	   console.log("select tab: "+floor);
@@ -125,8 +127,8 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 
        						}
        						$scope.hygieneLoading = false;
-       						$scope.selectTab($scope.tabIndex, '', '', '');
-       						
+       						$scope.selectTab($scope.tabIndex,$scope.smt1Values, $scope.smt2Values, $scope.pgFloorValues);
+       						//loadG($scope.smt1Values, $scope.smt2Values, $scope.pgFloorValues);
                            }
 					   startDynamiUpdate();
 					});
@@ -198,49 +200,87 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						console.log("avg asset length: " +$scope.asslen);
 						}
 				   else{
-					   console.log("no data found");
-				   }
-				   for (var i = 0; i < $scope.asslen; i++) {
-				    
-						avgEnergy = energyAvg(res[0].assets[i].data);
-						$scope.floordata.push(avgEnergy);
-						
+					   console.log("no data found");   
+					 }
+				 var resObject = {
+						 pgFloorValues : 0.0,
+						 smt1Values : 0.0,
+						 smt2Values : 0.0
+						};
+				 
+				 for (var i = 0; i < 1; i++) {
+					    
+					   resObject.pgFloorValues = pgFloorValuesAvg(res[0].assets[i].data);
+					   resObject.smt1Values = smt1ValuesAvg(res[0].assets[i+1].data);
+					   resObject.smt2Values = smt2ValuesAvg(res[0].assets[i+2].data);
+					   
+					    
+						$scope.floordata=[];
+						$scope.floordata.push(resObject);
+						console.log("pushed floor data" +JSON.stringify($scope.floordata));
 				    }
-				   console.log("pushed floor data" +JSON.stringify($scope.floordata));
-				   $scope.floorLen = $scope.floordata.length;
-				   console.log("floor length" +$scope.floorLen);
-				   for(var i = 0; i < 1; i++ ){
-					  /* for(var j= 0;  j <= 1; j++){*/
-					              
-					   		    $scope.pgFloorValues = $scope.floordata[i+3].productionGroundFloorEnergyValue;
-					            $scope.smt1Values = $scope.floordata[i+1].smtLine1EnergyValue;
-					            $scope.smt2Values = $scope.floordata[i+2].smtLine2EnergyValue;
-					         /*  }*/
-					     console.log("smt1 values" +$scope.smt1Values);
-					     console.log("smt2 values" +$scope.smt2Values);
-					     console.log("production ground floor values" +$scope.pgFloorValues);
-					   }
+				 
+				 $scope.floorLen = $scope.floordata.length;
+				
+				 for(var i = 0; i <  $scope.floorLen; i++ ){
+					   
+					   $scope.pgFloorValues = $scope.floordata[i].pgFloorValues;
+					   console.log("used oalues" + $scope.pgFloorValues);
+					   
+					   $scope.smt1Values = $scope.floordata[i].smt1Values;
+					   console.log("used salues" +$scope.smt1Values);
+					   
+					   $scope.smt2Values = $scope.floordata[i].smt2Values;
+					   console.log("used dalues" +$scope.smt2Values);
+				   }
+				 
+		 
 				   $scope.selectTab($scope.tabIndex, $scope.smt1Values, $scope.smt2Values, $scope.pgFloorValues);
 			});
 		};
-			var energyAvg = function(data) {
+			var smt1ValuesAvg = function(data) {
 	        	var resObject = {
 	        		smtLine1EnergyValue : 0.0,
-	        		smtLine2EnergyValue : 0.0,
-	        		productionGroundFloorEnergyValue : 0.0
+	        	
 				};
 				for (var i = 0; i < data.length; i++) {
 					resObject.smtLine1EnergyValue += data[i].smtLine1EnergyValue;
-					resObject.smtLine2EnergyValue += data[i].smtLine2EnergyValue;
-					resObject.productionGroundFloorEnergyValue += data[i].productionGroundFloorEnergyValue;
+				
 				}
-				resObject.smtLine1EnergyValue = Number((resObject.smtLine1EnergyValue / data.length).toFixed(2));
-				resObject.smtLine2EnergyValue = Number((resObject.smtLine2EnergyValue / data.length).toFixed(2));
-				resObject.productionGroundFloorEnergyValue = Number((resObject.productionGroundFloorEnergyValue / data.length).toFixed(2));
-				return resObject;
+
+				return resObject.smtLine1EnergyValue;
 				
 			};
 		
+			var smt2ValuesAvg = function(data) {
+	        	var resObject = {
+
+	        		smtLine2EnergyValue : 0.0,
+
+				};
+				for (var i = 0; i < data.length; i++) {
+
+					resObject.smtLine2EnergyValue += data[i].smtLine2EnergyValue;
+
+				}
+
+				return resObject.smtLine2EnergyValue;
+				
+			};
+			
+			var pgFloorValuesAvg = function(data) {
+	        	var resObject = {
+	        	
+	        	productionGroundFloorEnergyValue : 0.0
+				};
+				for (var i = 0; i < data.length; i++) {
+					resObject.productionGroundFloorEnergyValue += data[i].productionGroundFloorEnergyValue;
+				}
+
+				return resObject.productionGroundFloorEnergyValue;
+				
+			};
+			
 			var getMaxIndex = function(data) {
 				var big = 0;
 				var index = 0;
@@ -260,6 +300,8 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				  
 				   $scope.tabIndex = index;
 				   console.log("select tab index is: " +$scope.tabIndex);
+				   
+				   
 				   setTimeout(function() {
 						 /*  console.log("smt1 values" + $scope.smt1Values);
 						   console.log("smt2 values" +$scope.smt2Values);
@@ -274,10 +316,16 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 							loadGaugeChart('#waste_gauge_chart_0' , smt1Values);
 						    loadGaugeChart('#waste_gauge_chart_1' , smt2Values);
 						    loadGaugeChart('#waste_gauge_chart_2' , pgFloorValues);
-				}, 300);
+				}, 100);
 			  };
 
 		
+			  $scope.loadG = function(smt1Values, smt2Values, pgFloorValues)
+			  {
+				  loadGaugeChart('#waste_gauge_chart_0' , smt1Values);
+				    loadGaugeChart('#waste_gauge_chart_1' , smt2Values);
+				    loadGaugeChart('#waste_gauge_chart_2' , pgFloorValues);
+			  };
 		     //waste_mgmnt_Rohit
 		     var loadGaugeChart = function(id, value) {
 		    	 $scope.gValues = value;

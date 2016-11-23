@@ -91,6 +91,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				AuthService.getTocken(function(token) {
 					loadGuage($rootScope.floor);
 					loadWaste($rootScope.floor);
+					loadG($scope.oilValues, $scope.sValues, $scope.dValues);
 				});
 			};
 			loadData();
@@ -104,6 +105,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				promise = $interval(function() {
 					loadGuage($rootScope.floor);
 					loadWaste($rootScope.floor);
+					
 					}, 20000);
 			};
 			//Rohit
@@ -116,7 +118,8 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						console.log("floor data: " +JSON.stringify(res));
 						   if(res.length == 0){
 							  $scope.wasteData = res[0].assets;
-							  $scope.selectTab($scope.tabIndex, '', '', '');
+							  $scope.selectTab($scope.tabIndex, $scope.sValues, $scope.dValues);
+							 // loadG($scope.oilValues, $scope.sValues, $scope.dValues);
                         	  console.log("select tab: "+floor);
                            }
                            else{
@@ -138,7 +141,8 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 
        						}
        						$scope.hygieneLoading = false;
-       						$scope.selectTab($scope.tabIndex, '', '', '');
+       						$scope.selectTab($scope.tabIndex, $scope.sValues, $scope.dValues);
+       						//loadG($scope.oilValues, $scope.sValues, $scope.dValues);
        						//console.log("detailsgraph data" +$scope.wasteTabList[0]);
                            }
 						
@@ -213,8 +217,10 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			
 			var loadGuage = function(floor){
 				WasteManagementService.getWasteConsumptionValues(floor, intervalDynamic, function(res) {
+					console.log("floor="+floor);
 				 if (res.length > 0) {
 						$scope.wasteName = res[0].assets;
+						
 						console.log("avergay data" +$scope.wasteName);
 						$scope.asslen = $scope.wasteName.length;
 						console.log("avg asset length: " +$scope.asslen);
@@ -222,42 +228,91 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				   else{
 					   console.log("no data found");
 				   }
-				   for (var i = 0; i < $scope.asslen; i++) {
+				 var resObject = {
+							usedOilValue : 0.0,
+							discardedContainersValue : 0.0,
+							solderDrossValue : 0.0
+						};
+				   for (var i = 0; i < 1; i++) {
 				    
-						avgWaste = wasteAvg(res[0].assets[i].data);
-						$scope.floordata.push(avgWaste);
+					   resObject.usedOilValue = oilWasteAvg(res[0].assets[i].data);
+					   resObject.discardedContainersValue = discardedWasteAvg(res[0].assets[i+1].data);
+					   resObject.solderDrossValue = solderWasteAvg(res[0].assets[i+2].data);
+					   
+					    
+						$scope.floordata=[];
+						$scope.floordata.push(resObject);
 						console.log("pushed floor data" +JSON.stringify($scope.floordata));
 				    }
 				   $scope.floorLen = $scope.floordata.length;
+				   
 				   console.log("floor length" +$scope.floorLen);
-				   for(var i = 0; i < 1; i++ ){
+				
+				   
+				   for(var i = 0; i <  $scope.floorLen; i++ ){
+					   
 					   $scope.oilValues = $scope.floordata[i].usedOilValue;
-					   $scope.sValues = $scope.floordata[i+1].discardedContainersValue;
-					   $scope.dValues = $scope.floordata[i+2].solderDrossValue;
+					   console.log("used oalues" + $scope.oilValues);
+					   
+					   $scope.sValues = $scope.floordata[i].discardedContainersValue;
+					   console.log("used salues" +$scope.sValues);
+					   
+					   $scope.dValues = $scope.floordata[i].solderDrossValue;
+					   console.log("used dalues" +$scope.dValues);
 				   }
-				   console.log("used oalues" + $scope.oilValues);
-				   console.log("used salues" +$scope.sValues);
-				   console.log("used dalues" +$scope.dValues);
+				  //$scope.floordata.removeAll();
 				   $scope.selectTab($scope.tabIndex,  $scope.oilValues, $scope.sValues, $scope.dValues);
 			});
 		};
-			var wasteAvg = function(data) {
+			var oilWasteAvg = function(data) {
 	        	var resObject = {
-					usedOilValue : 0.0,
-					discardedContainersValue : 0.0,
-					solderDrossValue : 0.0
+					usedOilValue : 0.0
+					
 				};
 				for (var i = 0; i < data.length; i++) {
 					resObject.usedOilValue += data[i].usedOilValue;
-					resObject.discardedContainersValue += data[i].discardedContainersValue;
-					resObject.solderDrossValue += data[i].solderDrossValue;
+					
 				}
 				resObject.usedOilValue = Number((resObject.usedOilValue / data.length).toFixed(2));
-				resObject.discardedContainersValue = Number((resObject.discardedContainersValue / data.length).toFixed(2));
-				resObject.solderDrossValue = Number((resObject.solderDrossValue / data.length).toFixed(2));
-				return resObject;
+				 return resObject.usedOilValue;
 				
 			};
+			var discardedWasteAvg = function(data) {
+	        	var resObject = {
+					//usedOilValue : 0.0,
+					discardedContainersValue : 0.0
+					//solderDrossValue : 0.0
+				};
+				for (var i = 0; i < data.length; i++) {
+					//resObject.usedOilValue += data[i].usedOilValue;
+					resObject.discardedContainersValue += data[i].discardedContainersValue;
+					//resObject.solderDrossValue += data[i].solderDrossValue;
+				}
+				//resObject.usedOilValue = Number((resObject.usedOilValue / data.length).toFixed(2));
+				resObject.discardedContainersValue = Number((resObject.discardedContainersValue / data.length).toFixed(2));
+				//resObject.solderDrossValue = Number((resObject.solderDrossValue / data.length).toFixed(2));
+				return resObject.discardedContainersValue;
+				
+			};
+			var solderWasteAvg = function(data) {
+	        	var resObject = {
+					/*usedOilValue : 0.0,
+					discardedContainersValue : 0.0,*/
+					solderDrossValue : 0.0
+				};
+				for (var i = 0; i < data.length; i++) {
+					/*resObject.usedOilValue += data[i].usedOilValue;
+					resObject.discardedContainersValue += data[i].discardedContainersValue;*/
+					resObject.solderDrossValue += data[i].solderDrossValue;
+				}
+				/*resObject.usedOilValue = Number((resObject.usedOilValue / data.length).toFixed(2));
+				resObject.discardedContainersValue = Number((resObject.discardedContainersValue / data.length).toFixed(2));
+				*/resObject.solderDrossValue = Number((resObject.solderDrossValue / data.length).toFixed(2));
+				return resObject.solderDrossValue;
+				
+			};
+		
+		
 		
 			var getMaxIndex = function(data) {
 				var big = 0;
@@ -292,9 +347,15 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 							loadGaugeChart('#waste_gauge_chart_0' , oilValues);
 						    loadGaugeChart('#waste_gauge_chart_1' , sValues);
 						    loadGaugeChart('#waste_gauge_chart_2' , dValues);
-				}, 300);
+				}, 100);
 			  };
-
+        
+			  $scope.loadG = function(oilValues, sValues, dValues)
+			  {
+					loadGaugeChart('#waste_gauge_chart_0' , oilValues);
+				    loadGaugeChart('#waste_gauge_chart_1' , sValues);
+				    loadGaugeChart('#waste_gauge_chart_2' , dValues);
+			  };
 		
 		     //waste_mgmnt_Rohit
 		     var loadGaugeChart = function(id, value) {

@@ -13,6 +13,7 @@ define([ './services-module',
 		 './newHygn-service',
 		 './sensor-data-service',
 		 './waste-management-service',
-		 './energy-management-service'
+		 './energy-management-service',
+		 './water-consumption-service'
 		 ], function() {
 });
