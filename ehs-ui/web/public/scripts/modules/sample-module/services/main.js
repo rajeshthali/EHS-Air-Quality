@@ -14,6 +14,6 @@ define([ './services-module',
 		 './sensor-data-service',
 		 './waste-management-service',
 		 './energy-management-service',
-		 './water-consumption-service'
+		 './water-consumption-service'   
 		 ], function() {
 });

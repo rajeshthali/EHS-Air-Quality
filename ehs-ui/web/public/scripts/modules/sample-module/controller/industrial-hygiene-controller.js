@@ -162,6 +162,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
                            if(res.length == 0){
                         	   $scope.selectTab($scope.tabIndex);
                         	   console.log("select tab: "+$scope.tabIndex);
+                        	   startDynamiUpdate();
                            }
                            else{
                         	   $scope.hygieneData = res[0].assets;

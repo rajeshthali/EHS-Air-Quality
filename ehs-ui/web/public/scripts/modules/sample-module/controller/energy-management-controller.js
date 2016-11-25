@@ -9,7 +9,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 	    $scope.hygieneLoading = true;
 	    //$scope.wasteTabList=['detailsGraph', 'guagedata'];
 	    
-	    var intervalDynamic = 1000 * 30;
+	    //var intervalDynamic = 1000 * 30;
 		
 	    
 	    
@@ -28,7 +28,9 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			id : 2
 		} ];
 		
-		
+		var interval = 30 * 1000;
+		var refreshInterval = 20 * 1000;
+		var intervalDynamic = 1000 * 30;
 		
 		//Rohit
 		//var hygieneCharts = [];
@@ -41,6 +43,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		var hygieneInterval = null;
 		var interval = 1000 * 60 * 2;
 		var intervalDynamic = 1000 * 30;
+		var dynamicUpdateGraphStarted = false;
 		
 		$scope.changeFloor = function(floor) {
 			if (!$scope.aqiMachineLoading && !$scope.aqiMachineLoading && !$scope.hygieneLoading) {
@@ -76,12 +79,15 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					//loadguage($rootScope.floor);
 					loadGuage($rootScope.floor);
 					loadEnergy($rootScope.floor);
-					loadG();
+					startDynamiUpdateArea();
+					//loadG();
 				});
+				
 			};
 			loadData();
+			
 			//Rohit
-			var startDynamiUpdate = function() {
+			/*var startDynamiUpdate = function() {
 				//Rohit
 				var interval = 1000 * 60 * 2;
 				var intervalDynamic = 1000 * 30;
@@ -89,14 +95,30 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				console.log('running startDynamiUpdate..');
 				promise = $interval(function() {
 					loadGuage($rootScope.floor);
-					loadEnergy($rootScope.floor);
+					//loadEnergy($rootScope.floor);
 					}, 20000);
+			};*/
+			
+			
+			
+			var startDynamiUpdateArea = function() {
+				
+				promise = $interval(function() {
+					 console.log('intervalPromiseArea');
+					 loadEnergy($rootScope.floor);
+					 loadGuage($rootScope.floor);
+				}, 20000);
 			};
+			/*var startDynamicUpdateArea2 = function() {
+				
+				intervalPromiseArea = $interval(function() {
+					console.log('intervalPromiseArea');
+					loadAqiArea($scope.floor);
+				}, 20000);
+			};*/
 			//Rohit
 			var loadEnergy = function(floor) {
-				var interval = 1000 * 60 * 2;
-				var intervalDynamic = 1000 * 30;
-				if (!$scope.energyData) {
+				//if (!$scope.energyData) {
 					EnergyManagementService.getEnergyConsumptionValues(floor, interval, function(res) {
 						
 						console.log("floor data: " +JSON.stringify(res));
@@ -105,6 +127,10 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 							   $scope.selectTab($scope.tabIndex, $scope.smt1Values, $scope.smt2Values, $scope.pgFloorValues);
 							  // loadG($scope.smt1Values, $scope.smt2Values, $scope.pgFloorValues);
                         	  // console.log("detailsgraph data" +$scope.wasteTabList[0]);
+							  /* if(!dynamicUpdateGraphStarted){
+								   startDynamiUpdateArea();
+								   dynamicUpdateGraphStarted=true; 
+									  }*/
 
                         	   console.log("select tab: "+floor);
                            }
@@ -124,71 +150,50 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
        								$scope.energyData[i].smtLine2EnergyValue.push(asset.data[j].smtLine2EnergyValue);
        								$scope.energyData[i].productionGroundFloorEnergyValue.push(asset.data[j].productionGroundFloorEnergyValue);
        							}
+       						 
 
        						}
+                        	   
        						$scope.hygieneLoading = false;
        						$scope.selectTab($scope.tabIndex,$scope.smt1Values, $scope.smt2Values, $scope.pgFloorValues);
        						//loadG($scope.smt1Values, $scope.smt2Values, $scope.pgFloorValues);
                            }
-					   startDynamiUpdate();
+						   
 					});
-				}else {
-					EnergyManagementService.getEnergyConsumptionValues(floor, intervalDynamic, function(res) {
+				/*}else {
+					
+					console.log("floor data: " +JSON.stringify(res));
+					   if(res.length > 0){
+						  $scope.energyData = res[0].assets;
+						   $scope.selectTab($scope.tabIndex, $scope.smt1Values, $scope.smt2Values, $scope.pgFloorValues);
+						 	   console.log("select tab: "+floor);
+                       }
+                       else{
+                    	   $scope.energyData = res[0].assets;
+                    	   
+                    	   console.log("energy data" +$scope.energyData);
+                    	   for (var i = 0; i < $scope.energyData.length; i++) {
+   							var asset = $scope.energyData[i];
+   							$scope.energyData[i].smtLine1EnergyValue = [];
+   							$scope.energyData[i].smtLine2EnergyValue = [];
+   							$scope.energyData[i].productionGroundFloorEnergyValue = [];
+   							$scope.energyData[i].timestamp = [];
+   							for (var j = 0; j < asset.data.length; j++) {
+   								$scope.energyData[i].timestamp.push(asset.data[j].timestamp);
+   								$scope.energyData[i].smtLine1EnergyValue.push(asset.data[j].smtLine1EnergyValue);
+   								$scope.energyData[i].smtLine2EnergyValue.push(asset.data[j].smtLine2EnergyValue);
+   								$scope.energyData[i].productionGroundFloorEnergyValue.push(asset.data[j].productionGroundFloorEnergyValue);
+   							}
+   						 
 
-						//$scope.data = res[0].assets;
-						var data = res[0].assets;
-						// console.log($scope.energyData);
-						for (var i = 0; i < data.length; i++) {
-							var asset = data[i];
-							data.smtLine1EnergyValue = [];
-							data.smtLine2EnergyValue = [];
-							data.productionGroundFloorEnergyValue = [];
-							data.timestamp = [];
-							for (var j = 0; j < asset.data.length; j++) {
-								data.timestamp.push(asset.data[j].timestamp);
-								data.smtLine1EnergyValue.push(asset.data[j].smtLine1EnergyValue);
-								data.smtLine2EnergyValue.push(asset.data[j].smtLine2EnergyValue);
-								data.productionGroundFloorEnergyValue.push(asset.data[j].productionGroundFloorEnergyValue);
-							}
-						   var maxIndex = getMaxIndex(data);
-   						   var series = getSeries($scope.tabIndex, data);
-						   var timestamps = EnergyManagementService.prettyMs([ data.timestamp[maxIndex] ])[0];
-							if (i < energyCharts[$scope.tabIndex].series.length - 1) {
-								var l = energyCharts[$scope.tabIndex].series[0].data.length;
-								if (l > 0) {
-									var lastTimeStamp = energyCharts[$scope.tabIndex].series[i].data[l - 1]['name'];
-									if (!lastTimeStamp) {
-										lastTimeStamp = energyCharts[$scope.tabIndex].series[i].data[l - 1]['category'];
-									}
-									if (lastTimeStamp !== timestamps) {
-										energyCharts[$scope.tabIndex].series[i].addPoint([ timestamps, series[i].data[maxIndex] ], false, true);
-										//console.log('adde to graph : ' + lastTimeStamp + '  ' + timestamps);
-									} else {
-										//console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
-									}
-								}
-
-							} else {
-								var l = energyCharts[$scope.tabIndex].series[0].data.length;
-								if (l > 0) {
-									var lastTimeStamp = energyCharts[$scope.tabIndex].series[i].data[l - 1]['name'];
-									if (!lastTimeStamp) {
-										lastTimeStamp = energyCharts[$scope.tabIndex].series[i].data[l - 1]['category'];
-									}
-									if (lastTimeStamp !== timestamps) {
-										energyCharts[$scope.tabIndex].series[i].addPoint([ timestamps, series[i].data[maxIndex] ], true, true);
-										//console.log('adde to graph : ' + lastTimeStamp + '  ' + timestamps);
-									} else {
-										//console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
-									}
-								}
-
-							}
-
-						}
-
-					});
-				}
+   						}
+                    	   
+   						$scope.hygieneLoading = false;
+   						$scope.selectTab($scope.tabIndex,$scope.smt1Values, $scope.smt2Values, $scope.pgFloorValues);
+   						//loadG($scope.smt1Values, $scope.smt2Values, $scope.pgFloorValues);
+                       }
+					   //startDynamiUpdateArea();   
+				}*/
 			};
 			
 			var loadGuage = function(floor){
@@ -237,6 +242,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		 
 				   $scope.selectTab($scope.tabIndex, $scope.smt1Values, $scope.smt2Values, $scope.pgFloorValues);
 			});
+				 //startDynamiUpdateArea();
 		};
 			var smt1ValuesAvg = function(data) {
 	        	var resObject = {
@@ -571,7 +577,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			  $(".charticon").removeClass("active_chart");
 		      var column = document.getElementById('areaspline');
 			  console.log("column is called");
-			  $scope.options.chart.renderTo = 'container_'+ tabIndex;
+			  $scope.options.chart.renderTo = 'containerE_'+ tabIndex;
 			  $scope.options.chart.type = 'areaspline';
 			  var chart1 = new Highcharts.Chart($scope.options);
 			};
@@ -581,7 +587,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			  console.log("tab index: " +$scope.options);
 			  var bar = document.getElementById('column');
 			  console.log("bar is called");
-			  $scope.options.chart.renderTo = 'container_'+ index;
+			  $scope.options.chart.renderTo = 'containerE_'+ index;
 			  $scope.options.chart.type = 'column';
 		      var chart1 = new Highcharts.Chart($scope.options);
 	        };

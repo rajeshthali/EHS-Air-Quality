@@ -13,7 +13,7 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 		 * Router paths This is where the name of the route is matched to the
 		 * controller and view template.
 		 */
-		$stateProvider/*.state('secure', {
+		$stateProvider.state('secure', {
 			template : '<ui-view/>',
 			abstract : true,
 			resolve : {
@@ -29,8 +29,8 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 					return deferred.promise;
 				} ]
 			}
-		})*/.state('dashboards', {
-			//parent : 'secure',
+		}).state('dashboards', {
+			parent : 'secure',
 			url : '/dashboards',
 			templateUrl : 'views/dashboards-floor.html',
 			controller : 'DashboardsCtrlFloor'
@@ -51,6 +51,7 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 			params : {
 				'smtare' : null
 			}
+		  
 		 
 		}).state('detail_parameter', {
 			url : '/detail_parameter',
@@ -85,7 +86,6 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 			url : '/industrial-hygiene',
 			templateUrl : 'views/industrial-hygiene.html',
 			controller : 'industrialHygiene',
-		
 			params : {
 				'floor' : null,
 				'type' : null,
@@ -95,7 +95,24 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 			url : '/industrial-hygiene-details',
 			templateUrl : 'views/industrial-hygiene-details.html',
 			controller : 'industrialHygieneDetails'
+		}).state('water-discharge', {
+			url : '/water-discharge',
+			templateUrl : 'views/water-consumption.html',
+			controller : 'WaterConsumptionController'
+		}).state('Energy-Management', {
+			url : '/Energy-Management',
+			templateUrl : 'views/Energy-Management.html',
+			controller : 'EnergyManagementController'
+		}).state('Waste-Management', {
+			url : '/Waste-Management',
+			templateUrl : 'views/Waste-Management.html',
+			controller : 'WasteManagementController'
+		}).state('Sensor-Data', {
+			url : '/Sensor-Data',
+			templateUrl : 'views/sensor-data.html',
+			controller : 'SensorDataController'
 		})
+
 
 		$urlRouterProvider.otherwise(function($injector) {
 			var $state = $injector.get('$state');

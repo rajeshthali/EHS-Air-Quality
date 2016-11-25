@@ -123,14 +123,14 @@
             <img alt="" class="loading_image" ng-show="waterLoading" src="images/25.gif">
             <div id = "industrial" class="col-md-12 title_bar" ng-show="!waterLoading">
                <div class= "col-md-6 title_inside">
-                  <h4>Pollutants</h4>
+                  <h4>Industrial Pollutants</h4>
                </div>
                <div class= "col-md-6 pull-right charti_ar">
-                  <a class= " charticon active_chart " href= "#"><i class="fa fa-bar-chart bar-area-icon" aria-hidden="true" name="mychart"  id= "column" value="column" ng-click= "chartfunc2(tabIndex)"></i></a>
-                  <a  class= " charticon1  "  href= "#"> <i class="fa fa-area-chart bar-area-icon" aria-hidden="true" name="mychart"  id= "bar" value="bar" ng-click= "chartfunc1(tabIndex)"></i></a>
+                  <a class= " charticon active_chart " href= "#"><i class="fa fa-bar-chart bar-area-icon" aria-hidden="true" name="mychart"  id= "column" value="column" ng-click= "chartfunc2('industrial')"></i></a>
+                  <a  class= " charticon1  "  href= "#"> <i class="fa fa-area-chart bar-area-icon" aria-hidden="true" name="mychart"  id= "bar" value="bar" ng-click= "chartfunc1('industrial')"></i></a>
                </div>
                <div class="tab-pane fade in active details-tab-base-content">
-                  <img alt="" class="loading_image" ng-show="!waterLoading" src="images/25.gif">
+                  <img alt="" class="loading_image" ng-show="waterLoading" src="images/25.gif">
                   <ul class="nav nav-tabs" id="waterData">
                      <li ng-repeat="waterTab in waterTabList" ng-class="{'active':$index==tabIndex}"><a data-toggle="tab" href="#" data-target="#water_{{$index}}" ng-click="selectTab1($index)">{{waterTab}}</a></li>
                   </ul>
@@ -143,20 +143,20 @@
             </div>
              <div id = "domestic" class="col-md-12 title_bar" ng-show="!waterLoading">
                <div class= "col-md-6 title_inside">
-                  <h4>Pollutants</h4>
+                  <h4>Domestic Pollutants</h4>
                </div>
                <div class= "col-md-6 pull-right charti_ar">
-                  <a class= " charticon active_chart " href= "#"><i class="fa fa-bar-chart bar-area-icon" aria-hidden="true" name="mychart"  id= "column" value="column" ng-click= "chartfunc2()"></i></a>
-                  <a  class= " charticon1  "  href= "#"> <i class="fa fa-area-chart bar-area-icon" aria-hidden="true" name="mychart"  id= "bar" value="bar" ng-click= "chartfunc1()"></i></a>
+                  <a class= " charticon active_chart " href= "#"><i class="fa fa-bar-chart bar-area-icon" aria-hidden="true" name="mychart"  id= "column" value="column" ng-click= "chartfunc2('domestic')"></i></a>
+                  <a  class= " charticon1  "  href= "#"> <i class="fa fa-area-chart bar-area-icon" aria-hidden="true" name="mychart"  id= "bar" value="bar" ng-click= "chartfunc1('domestic')"></i></a>
                </div>
                <div class="tab-pane fade in active details-tab-base-content">
-                  <img alt="" class="loading_image" ng-show="!waterLoading" src="images/25.gif">
+                  <img alt="" class="loading_image" ng-show="waterLoading" src="images/25.gif">
                   <ul class="nav nav-tabs" id="waterData">
-                     <li ng-repeat="waterTab in waterTabList" ng-class="{'active':$index==tabIndex}"><a data-toggle="tab" href="#" data-target="#water_{{$index}}"ng-click="selectTab1($index))">{{waterTab}}</a></li>
+                     <li ng-repeat="waterTab in waterTabList" ng-class="{'active':$index==tabIndex}"><a data-toggle="tab" href="#" data-target="#water_{{$index}}"ng-click="selectTab2($index)">{{waterTab}}</a></li>
                   </ul>
                   <div id="container" ng-show="!waterLoading" class="tab-content details-tab-base-content-inner water-graph" ng-model="showMe">
                      <div ng-repeat="water in waterTabList" id="water_{{$index}}" ng-class="{'active':$index==tabIndex}" class="tab-pane fade in">
-                        <div id="container_{{$index}}" class="water_details_graph_class water_details_graph_class_machine data-graph"></div>
+                        <div id="container1_{{$index}}" class="water_details_graph_class water_details_graph_class_machine data-graph"></div>
                      </div>
                   </div>
                </div>

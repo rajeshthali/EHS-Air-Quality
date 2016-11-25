@@ -92,6 +92,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					loadGuage($rootScope.floor);
 					loadWaste($rootScope.floor);
 					loadG($scope.oilValues, $scope.sValues, $scope.dValues);
+					startDynamiUpdate();
 				});
 			};
 			loadData();
@@ -112,12 +113,12 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			var loadWaste = function(floor) {
 				var interval = 1000 * 60 * 2;
 				var intervalDynamic = 1000 * 30;
-				if (!$scope.wasteData) {
+				//if (!$scope.wasteData) {
 					WasteManagementService.getWasteConsumptionValues(floor, interval, function(res) {
 						
 						console.log("floor data: " +JSON.stringify(res));
 						   if(res.length == 0){
-							  $scope.wasteData = res[0].assets;
+							 // $scope.wasteData = res[0].assets;
 							  $scope.selectTab($scope.tabIndex, $scope.sValues, $scope.dValues);
 							 // loadG($scope.oilValues, $scope.sValues, $scope.dValues);
                         	  console.log("select tab: "+floor);
@@ -156,7 +157,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						
 					   startDynamiUpdate();
 					});
-				}else {
+				/*}else {
 					WasteManagementService.getWasteConsumptionValues(floor, intervalDynamic, function(res) {
 
 						//$scope.data = res[0].assets;
@@ -212,7 +213,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						}
 
 					});
-				}
+				}*/
 			};
 			
 			var loadGuage = function(floor){
@@ -279,35 +280,23 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			};
 			var discardedWasteAvg = function(data) {
 	        	var resObject = {
-					//usedOilValue : 0.0,
 					discardedContainersValue : 0.0
-					//solderDrossValue : 0.0
 				};
 				for (var i = 0; i < data.length; i++) {
-					//resObject.usedOilValue += data[i].usedOilValue;
 					resObject.discardedContainersValue += data[i].discardedContainersValue;
-					//resObject.solderDrossValue += data[i].solderDrossValue;
 				}
-				//resObject.usedOilValue = Number((resObject.usedOilValue / data.length).toFixed(2));
 				resObject.discardedContainersValue = Number((resObject.discardedContainersValue / data.length).toFixed(2));
-				//resObject.solderDrossValue = Number((resObject.solderDrossValue / data.length).toFixed(2));
 				return resObject.discardedContainersValue;
 				
 			};
 			var solderWasteAvg = function(data) {
 	        	var resObject = {
-					/*usedOilValue : 0.0,
-					discardedContainersValue : 0.0,*/
 					solderDrossValue : 0.0
 				};
 				for (var i = 0; i < data.length; i++) {
-					/*resObject.usedOilValue += data[i].usedOilValue;
-					resObject.discardedContainersValue += data[i].discardedContainersValue;*/
 					resObject.solderDrossValue += data[i].solderDrossValue;
 				}
-				/*resObject.usedOilValue = Number((resObject.usedOilValue / data.length).toFixed(2));
-				resObject.discardedContainersValue = Number((resObject.discardedContainersValue / data.length).toFixed(2));
-				*/resObject.solderDrossValue = Number((resObject.solderDrossValue / data.length).toFixed(2));
+				resObject.solderDrossValue = Number((resObject.solderDrossValue / data.length).toFixed(2));
 				return resObject.solderDrossValue;
 				
 			};
@@ -601,7 +590,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			  $(".charticon").removeClass("active_chart");
 		      var column = document.getElementById('areaspline');
 			  console.log("column is called");
-			  $scope.options.chart.renderTo = 'container_'+ tabIndex;
+			  $scope.options.chart.renderTo = 'containerW_'+ tabIndex;
 			  $scope.options.chart.type = 'areaspline';
 			  var chart1 = new Highcharts.Chart($scope.options);
 			};
@@ -612,7 +601,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			  console.log("tab index: " +$scope.options);
 			  var bar = document.getElementById('column');
 			  console.log("bar is called");
-			  $scope.options.chart.renderTo = 'container_'+ index;
+			  $scope.options.chart.renderTo = 'containerW_'+ index;
 			  $scope.options.chart.type = 'column';
 		      var chart1 = new Highcharts.Chart($scope.options);
 	        };
