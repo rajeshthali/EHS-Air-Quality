@@ -46,11 +46,11 @@ px-app-nav.navbar--collapsed .login {
 /* .paddR0 {
 	padding-right: 0px;
 } */
-/* .tab-content>.active {
+.tab-content>.active {
     display: block;
     float: left;
     width: 100%;
-} */
+} 
 .box_text {
 	font-size: 15px;
 	color: #828181;
@@ -217,10 +217,17 @@ px-app-nav.navbar--collapsed .login {
 } */
 
 .status_txt {
-	margin-top: 30%;
+	margin-top: 80%;
 	color: #676767;
+/* 	text-align: center; */
+	
 }
-
+.status_txt2 {
+	margin-top: 140%;
+	color: #676767;
+/* 	text-align: center; */
+	
+}
 .stis_sta {
 	color: #8BBE3D;
 	margin-top: 0px;
@@ -230,12 +237,25 @@ px-app-nav.navbar--collapsed .login {
 .warn_sta {
 	color: #FF9000;
 	margin-top: 0px;
+/* 	text-align: center; */
 }
 
 .prami_txt {
 	color: #888585;
+	margin-top: 150px;
 }
-
+.prami_txt2 {
+	color: #888585;
+	margin-top: 20px;
+}
+.prami_txt3 {
+	color: #888585;
+	margin-top: 30px;
+}
+.prami_txt4 {
+	color: #888585;
+	margin-top: 20px;
+}
 /* .marL0px {
 	margin-left: 0px !important;
 } */
@@ -743,10 +763,11 @@ px-app-nav.navbar--collapsed .login {
 
 /*css for hygiene monitoring */
 
-/*  .row  {
-     padding-left: 25px;
-     padding-right: 25px;
-     } */
+.row  {
+     padding-left: 5px;
+     padding-right: 5px;
+     
+     } 
 .hygn_background {
 	background: #F0F0F0;
 	margin-top: 60px;
@@ -890,9 +911,11 @@ px-app-nav.navbar--collapsed .login {
 }
 
 CSS for dash board air quality monitoring start  */
-/* main:not([style-scope]):not(.style-scope){
-	background-color:#E8E9EB !important;
-} */
+/*  main:not([style-scope]):not(.style-scope){  */
+/* 	background-color:#E8E9EB !important;  */
+/* 	padding-left: 10px; */
+/* 	padding-right: 10px; */
+/* } */
 /* .paddL0{
 	padding-left:0px;
 }
@@ -1118,7 +1141,7 @@ CSS for dash board air quality monitoring start  */
 }
 
 .nav_button {
-	width: 70px;
+	width: 60px;
 }
 
 .base_map_floor {
@@ -1256,7 +1279,7 @@ CSS for dash board air quality monitoring start  */
 	border: 1px solid #3694F8;
 	padding: 10px;
 	background-color: #fff;
-	min-height: 612px;
+	min-height: 900px;
 }
 
 .tab-base-inner-water {
@@ -1298,18 +1321,30 @@ CSS for dash board air quality monitoring start  */
 	font-size: 12px;
 }
 
-.tab-base-content-inner {
+/* .tab-base-content-inner {
 	border: 1px solid #8BBE3D;
 	padding: 10px;
 	background-color: #fff;
 	min-height: 529px;
-}
+} */
 
 .tab-base-content-inner {
 	border: 1px solid #8BBE3D;
 	padding: 10px;
 	background-color: #fff;
-	min-height: 325px;
+	min-height: 845px;
+}
+.tab-base-content-inner2 {
+    border: 1px solid #8BBE3D;
+    padding: 10px;
+    background-color: #fff;
+    min-height: 450px;
+}
+.tab-base-content-inner3{
+	    border: 1px solid #8BBE3D;
+    padding: 10px;
+    background-color: #fff;
+    min-height: 420px;
 }
 
 .tab-base-content>.nav-tabs>.active>a {
@@ -1350,6 +1385,7 @@ CSS for dash board air quality monitoring start  */
 	padding: 10px;
 	background-color: #fff;
 	min-height: 325px;
+	min-width: 
 }		
 
 .details-tab-base>.nav-tabs>.active>a {
@@ -1405,7 +1441,7 @@ CSS for dash board air quality monitoring start  */
 	border: 1px solid #8BBE3D;
 	padding: 10px;
 	background-color: #fff;
-	height: 270px;
+	height: 325px;
 }
 
 .details-tab-base-content-inner-water {
@@ -1455,7 +1491,12 @@ CSS for dash board air quality monitoring start  */
 	background-color: #fff;
 	min-height: 529px;
 }
-
+.comparison-tab-base-content-inner2 {
+	border: 1px solid #8BBE3D;
+	padding: 10px;
+	background-color: #fff;
+	min-height: 529px;
+}
 .comparison-tab-base-content>.nav-tabs>.active>a {
 	border: 0px !important;
 	background: #8BBE3D !important;
@@ -1551,8 +1592,20 @@ CSS for dash board air quality monitoring start  */
 
 .gauge_graph_class {
 	height: 150px;
+	padding-top: 188px;
 }
-
+/* .gauge_graph_class2
+{
+height: 150px;
+padding-top: 188px;
+margin-top: 120px;	
+}*/
+.gauge_graph_class3
+{
+	height: 0px;
+padding-top: 0px;
+margin-top: 0px;
+}
 /* .c3-chart-arc>.c3-gauge-value {
 	fill: #8bbe3d !important;
 	font-size: 31px !important;
@@ -1711,11 +1764,12 @@ CSS for dash board air quality monitoring start  */
 }  */
 
 /*hygiene Rohit*/
-.details-tab-base-content-waste {
-   /*  border: 1px solid #8BBE3D;  */
-	padding: 10px;
-	background-color: #fff;
-}
+/* .details-tab-base-content-waste { */
+/* /*     border: 1px solid #8BBE3D; */ */
+/* /* 	padding: 10px; */ */
+/* 	background-color: #fff; */
+/* 	height: 400px; */
+/* } */
 
 
 
@@ -1778,6 +1832,7 @@ CSS for dash board air quality monitoring start  */
 }
 .stat{
 	text-align: center;
+	min-height: -300px;
 }
 .stat_col{
 	color: black;
@@ -1794,12 +1849,16 @@ CSS for dash board air quality monitoring start  */
 }
 .details-tab-base-waste {
 	/* Rohit */
-	/* border: 1px solid #3694F8; */
+	border: 1px solid #3694F8;
 	padding: 10px;
 	background-color: #fff;
     height: 510px;
 }
 .waste_gauge_class {
+	height: 150px;
+	text-align: center; 
+	}
+.energy_gauge_class {
 	height: 150px;
 	text-align: center; 
 	}
@@ -1848,13 +1907,16 @@ CSS for dash board air quality monitoring start  */
 
 .container-padd
 {
-	padding: 10px;
+/* 	padding: 10px; */
+	padding-bottom: 10px;
+	padding-left: 1px;
+	padding-right: 1px;
 }
 
 .tab-base-padd
 {
-	padding-left: 5px; 
-	padding-right: 5px;
+	padding-left: 10px; 
+	padding-right: 10px;
 }
 
 .mid-divide
@@ -1869,17 +1931,18 @@ CSS for dash board air quality monitoring start  */
 
 .mach-margin
 {
-	margin-top: 50px;
+	margin-top: 0px;
 }
 
 .mach-height
 {
-	height: 242px;
+	height: 400px;
+	margin-top: 9px;
 }
 
 .water-graph
 {
-	height: 366px;
+	height: 456px;
 }
 
 
@@ -1896,7 +1959,12 @@ CSS for dash board air quality monitoring start  */
 }
 .data-graph
 {
-	min-height: 353px;
+	min-height: 390px;
+	padding-top: 20px;
+	border: 1px solid #8BBE3D;
+/* 	padding: 10px; */
+/* 	background-color: #fff; */
+/* 	height: 400px; */
 }
 .bar-area-icon
 {

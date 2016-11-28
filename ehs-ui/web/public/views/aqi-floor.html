@@ -22,7 +22,7 @@
 							<ul class="nav nav-tabs" id="aqi-area-tab">
 									<li ng-repeat="area in aqiAreaData" ng-class="{'active':$index==tabIndexArea}"><a data-toggle="tab" href="#" data-target="#aqi_area_{{$index}}" ng-click="selectTab($index,'area')">{{area.assetName}}</a></li>
 							</ul>
-							<div id="aqi-area-tab-content" class="tab-content tab-base-content-inner highcharts-button">
+							<div id="aqi-area-tab-content" class="tab-content tab-base-content-inner2 highcharts-button">
 								<div ng-repeat="area in aqiAreaData" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea}" class="tab-pane fade in">
 
 									<div  id="area_chart_{{$index}}" class="graph_class" ng-click= "details(floor)"></div>
@@ -37,9 +37,9 @@
 											</div>
 
 											<div class="col-md-6 col-xs-12 center_class">
-												<h4 class="status_txt">Status</h4>
+												<h4 class="status_txt2">Status</h4>
 												<h1 class="aqi_status">{{area.data.status}}</h1>
-												<h6 class="prami_txt">Prominent Pollutant : {{area.data.maxAqi.name}}</h6>
+												<h6 class="prami_txt2">Prominent Pollutant : {{area.data.maxAqi.name}}</h6>
 											</div>
 										</div>
 									</div>
@@ -58,7 +58,7 @@
 
 										<div class="col-md-12 col-xs-12">
 											<div class="stat">
-												<div id="aqi_area_comparison_chart_{{$index}}" class="gauge_graph_class"></div>
+												<div id="aqi_area_comparison_chart_{{$index}}" class="gauge_graph_class3"></div>
 												<h6 class="prami_txt">AQI</h6>
 												<h6 class="prami_txt">Prominent Pollutant : {{area.data.maxAqi.name}}</h6>
 												<h4 class="stat">Current AQI</h4>
@@ -69,7 +69,7 @@
 
 										<div class="col-md-12 col-xs-12">
 											<div class="stat">
-												<div id="aqi_area_comparison_chart_last_week_{{$index}}" class="gauge_graph_class"></div>
+												<div id="aqi_area_comparison_chart_last_week_{{$index}}" class="gauge_graph_class3"></div>
 												<div ng-if="area.data.maxAqiLastWeek.name">
 													<h6 class="prami_txt">AQI</h6>
 													<h6 class="prami_txt">Prominent Pollutant : {{area.data.maxAqiLastWeek.name}}</h6>
@@ -101,7 +101,7 @@
 								<li ng-repeat="machine in aqiMachineData" ng-class="{'active':$index==tabIndexMachine}"><a data-toggle="tab" href="#" data-target="#aqi_machine_{{$index}}"
 									ng-click="selectTab($index,'machine')">{{machine.assetName}}</a></li>
 							</ul>
-							<div id="aqi-machine-tab-content" class="tab-content tab-base-content-inner highcharts-button">
+							<div id="aqi-machine-tab-content" class="tab-content tab-base-content-inner3 highcharts-button">
 								<div ng-repeat="machine in aqiMachineData" id="aqi_machine_{{$index}}" ng-class="{'active':$index==tabIndexMachine}" class="tab-pane fade in">
 
 
