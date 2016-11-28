@@ -101,11 +101,11 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 			controller : 'WaterConsumptionController'
 		}).state('Energy-Management', {
 			url : '/Energy-Management',
-			templateUrl : 'views/Energy-Management.html',
+			templateUrl : 'views/energy-management.html',
 			controller : 'EnergyManagementController'
 		}).state('Waste-Management', {
 			url : '/Waste-Management',
-			templateUrl : 'views/Waste-Management.html',
+			templateUrl : 'views/waste-management.html',
 			controller : 'WasteManagementController'
 		}).state('Sensor-Data', {
 			url : '/Sensor-Data',
