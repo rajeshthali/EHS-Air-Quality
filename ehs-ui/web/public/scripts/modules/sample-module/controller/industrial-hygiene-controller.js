@@ -36,7 +36,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		var promise = 0;
 		$scope.hygieneLoading = false;
 		var hygieneInterval = null;
-		var interval = 1000 * 60 * 2;
+		var interval = 1000 * 60 * 2*3;
 		var intervalDynamic = 1000 * 30;
 		
 		$scope.floor =  $stateParams.floor;
@@ -85,16 +85,13 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					loadhygndata($rootScope.floor);
 					
 					
-					//Rohit
-					
-					
 				});
 			};
 			loadData();
 			//Rohit
 			var startDynamiUpdate = function() {
 				//Rohit
-				var interval = 1000 * 60 * 2;
+				var interval = 1000 * 60 * 2*4;
 				var intervalDynamic = 1000 * 30;
 				
 				console.log('running startDynamicUpdate..');
@@ -105,8 +102,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			
 			
 			var loadhygndata = function(floor) {
-				
-				//$scope.aqiMachineLoading = true;
 				NewhygnService.getHygieneValues(floor, interval, function(res) {
 					//console.log("res.length" +res.length);
 					$scope.loading = false;
@@ -114,9 +109,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						$scope.hygnareaName = res[0].assets;
 						$scope.asslen = $scope.hygnareaName.length;
 					}
-					
-					
-					
 					for (var i = 0; i < $scope.asslen; i++) {
 						avgHygiene = hygieneAvg(res[0].assets[i].data);
 						$scope.floordata.push(avgHygiene);
@@ -148,21 +140,17 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			};
 		
 		
-			//Rohit
+			//Krishna
 			var loadHygiene = function(floor) {
-				
-				//Rohit
-				//$scope.hygieneLoading = true;
 				
 				var interval = 1000 * 60 * 2;
 				var intervalDynamic = 1000 * 30;
-				if (!$scope.hygieneData) {
-					DashBoardService.getHygieneValues(floor, interval, function(res) {
+				DashBoardService.getHygieneValues(floor, interval, function(res) {
 						
                            if(res.length == 0){
                         	   $scope.selectTab($scope.tabIndex);
                         	   console.log("select tab: "+$scope.tabIndex);
-                        	   startDynamiUpdate();
+                        	   //yahanstartDynamiUpdate();
                            }
                            else{
                         	   $scope.hygieneData = res[0].assets;
@@ -178,74 +166,16 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
        								$scope.hygieneData[i].noise.push(asset.data[j].noise);
        								$scope.hygieneData[i].temperature.push(asset.data[j].temperature);
        							}
-
        						}
-       						
+                        	   
+                        	$scope.hygieneLoading = false;
        						$scope.selectTab($scope.tabIndex);
-       						$scope.hygieneLoading = false;
                            }
 					   startDynamiUpdate();
 					});
-				} else {
-					DashBoardService.getHygieneValues(floor, intervalDynamic, function(res) {
-
-						//$scope.data = res[0].assets;
-						var data = res[0].assets;
-						// console.log($scope.hygieneData);
-						for (var i = 0; i < data.length; i++) {
-							var asset = data[i];
-							data.temperature = [];
-							data.humidity = [];
-							data.noise = [];
-							data.timestamp = [];
-							for (var j = 0; j < asset.data.length; j++) {
-								data.timestamp.push(asset.data[j].timestamp);
-								data.humidity.push(asset.data[j].humidity);
-								data.noise.push(asset.data[j].noise);
-								data.temperature.push(asset.data[j].temperature);
-							}
-						   var maxIndex = getMaxIndex(data);
-   						   var series = getSeries($scope.tabIndex, data);
-							var timestamps = DashBoardService.prettyMs([ data.timestamp[maxIndex] ])[0];
-							if (i < hygieneCharts[$scope.tabIndex].series.length - 1) {
-								var l = hygieneCharts[$scope.tabIndex].series[0].data.length;
-								if (l > 0) {
-									var lastTimeStamp = hygieneCharts[$scope.tabIndex].series[i].data[l - 1]['name'];
-									if (!lastTimeStamp) {
-										lastTimeStamp = hygieneCharts[$scope.tabIndex].series[i].data[l - 1]['category'];
-									}
-									if (lastTimeStamp !== timestamps) {
-										hygieneCharts[$scope.tabIndex].series[i].addPoint([ timestamps, series[i].data[maxIndex] ], false, true);
-										//console.log('adde to graph : ' + lastTimeStamp + '  ' + timestamps);
-									} else {
-										//console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
-									}
-								}
-
-							} else {
-								var l = hygieneCharts[$scope.tabIndex].series[0].data.length;
-								if (l > 0) {
-									var lastTimeStamp = hygieneCharts[$scope.tabIndex].series[i].data[l - 1]['name'];
-									if (!lastTimeStamp) {
-										lastTimeStamp = hygieneCharts[$scope.tabIndex].series[i].data[l - 1]['category'];
-									}
-									if (lastTimeStamp !== timestamps) {
-										hygieneCharts[$scope.tabIndex].series[i].addPoint([ timestamps, series[i].data[maxIndex] ], true, true);
-										//console.log('adde to graph : ' + lastTimeStamp + '  ' + timestamps);
-									} else {
-										//console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
-									}
-								}
-
-							}
-
-						}
-
-					});
-				}
 			};
 
-			var getMaxIndex = function(data) {
+			/*var getMaxIndex = function(data) {
 				var big = 0;
 				var index = 0;
 				for (var i = 0; i < data.timestamp.length; i++) {
@@ -255,19 +185,16 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					}
 				}
 				return index;
-			};
+			};*/
+			
 			$scope.selectTab = function(index) {
 				$scope.tabIndex = index;
 				$('.hygiene_details_graph_class').hide();
 			    console.log("select tab index is: " +$scope.tabIndex)
 			    setTimeout(function() {
 						$('.hygiene_details_graph_class').fadeIn();
-				         /* loadGraph(index);*/
 				          $scope.options = loadGraph(index);
-     					  $scope.chartfunc2($scope.options ,index)
-     					  
-						/*  loadGraph(index);*/
-						  
+     					  $scope.chartfunc2($scope.options ,index)	  
 						  
 				 }, 300);
 		     };
@@ -399,16 +326,16 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				        enabled: true,
 				    },
 				    
-				    plotOptions: {
+				  /*  plotOptions: {
 				        series: {
 				            pointPadding: 0.2,
 				            borderWidth: 0,
 				            dataLabels: {
-				                /*enabled: true*/
+				                enabled: true
 				                enabled: false
 				            }
 				          },
-				    },
+				    },*/
 	         		 series: getSeries(index),
 	         		   
 				
@@ -426,7 +353,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			  $(".charticon").removeClass("active_chart");
 			  var column = document.getElementById('areaspline');
 			  console.log("column is called");
-			  $scope.options.chart.renderTo = 'container_'+ tabIndex;
+			  $scope.options.chart.renderTo = 'containerH_'+ tabIndex;
 			  $scope.options.chart.type = 'areaspline';
 			  var chart1 = new Highcharts.Chart($scope.options);
 			 };
@@ -437,7 +364,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			  console.log("tab index: " +$scope.options);
 			  var bar = document.getElementById('column');
 			  console.log("bar is called");
-			  $scope.options.chart.renderTo = 'container_'+ index;
+			  $scope.options.chart.renderTo = 'containerH_'+ index;
 			  $scope.options.chart.type = 'column';
 		      var chart1 = new Highcharts.Chart($scope.options);
 	          };
