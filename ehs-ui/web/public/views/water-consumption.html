@@ -25,12 +25,12 @@
                         <div ng-repeat="area in waterAssetTabList" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea}" class="tab-pane fade in">
                            <div  id="area_chart_{{$index}}" class="graph_class"></div>
                            <div class="col-md-12">
-                              <div class="col-md-6">
+                              <div class="col-md-7">
                                  <h4 class="pull-left">Current Use:</h4>
-                                 <h2 class="pull-left curr-limit">7</h2>
+                                 <h2 class="pull-left curr-limit">{{kld1}}</h2>
                                  <h4>KLD</h4>
                               </div>
-                              <div class="col-md-6">
+                              <div class="col-md-5">
                                  <h4 class = "pull-right">KLD</h4>
                                  <h2 class = "pull-right curr-limit">8</h2>
                                  <h4 class = "pull-right">Daily Limit:</h4>

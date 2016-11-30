@@ -97,7 +97,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 								   dataYaxis.push(sensorDataValues[j].sensorValue);
 							   }
 							   $scope.dataXaxis = convertTimeStamps(dataXaxisTemp);
-							   loadValuesToGraph('container_'+index,$scope.dataXaxis,dataYaxis,sensorName, index);
+							   loadValuesToGraph('containerS_'+index,$scope.dataXaxis,dataYaxis,sensorName, index);
 							   break;
 						   }
 					   }

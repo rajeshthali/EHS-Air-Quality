@@ -31,23 +31,19 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					name : 'F3',
 					id : 2
 				} ];
-               //  $scope.floor = 0;
 				
 			   //Rohit
 				$scope.floor =  $stateParams.floor;
 				console.log("undefined floor"+$stateParams.floor);
                 if($stateParams.floor == null){
 				   $scope.floor = 0;
-				// console.log("undefined floor")
 				}
 				else{
 				 $scope.floor =  $stateParams.floor;
-			    //console.log("changed floor in load data" +$scope.floor)
 				}
                 
                 
                 $scope.changeFloor = function(floor) {
-                	//console.log("function is called");
 					if (!$scope.aqiAreaLoading && !$scope.aqiMachineLoading) {
 						$scope.floor = floor;
 						$scope.stop();
@@ -62,14 +58,12 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				var intervalPromiseArea = null;
                 var startDynamicUpdateMachine = function() {
 					intervalPromiseMachine = $interval(function() {
-						// console.log('fetching machine details');
 						loadAqiMachine($scope.floor);
 					}, 20000);
 				};
 
 				var startDynamicUpdateArea = function() {
 					intervalPromiseArea = $interval(function() {
-						// console.log('fetching area details');
 						loadAqiArea($scope.floor);
 					}, 20000);
 				};
@@ -83,7 +77,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					$interval.cancel(intervalPromiseArea);
 				};
 
-				// console.log($scope.floor);
 				var loadData = function() {
 					AuthService.getTocken(function(token) {
 						loadAqiMachine($scope.floor);
@@ -99,7 +92,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 							if (res.length > 0) {
 								
 								$scope.floorName = floor;
-								//console.log("update the floor" +$scope.floorName);
 								
 								$scope.aqiAreaData = res[0].assets;
 								$scope.aqiAreaComparison = res[0].assets;
@@ -112,9 +104,8 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					} else {
 						DashBoardService.getAqiAreaValues(floor, interval, function(res) {
 							if (res.length > 0) {
-								// console.log(res[0]);
+
 								$scope.floorName = floor;
-								//console.log("else update the floor" +$scope.floorName);
 								
 								var last = findLastValue(res[0].assets[$scope.tabIndexArea].data.timestamps);
 								var x = res[0].assets[$scope.tabIndexArea].data.timestamps[last];
@@ -131,12 +122,9 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 											if (!lastTimeStamp) {
 												lastTimeStamp = areaCharts[$scope.tabIndexArea].series[i].data[l - 1]['category'];
 											}
-											// console.log(lastTimeStamp);
-											// console.log(timestamps);
 											if (lastTimeStamp !== timestamps) {
 												areaCharts[$scope.tabIndexArea].series[i].addPoint([ timestamps, series[i].data[last] ], false, true);
 											} else {
-												//console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
 											}
 										}
 
@@ -148,8 +136,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 											if (!lastTimeStamp) {
 												lastTimeStamp = areaCharts[$scope.tabIndexArea].series[i].data[l - 1]['category'];
 											}
-											// console.log(lastTimeStamp);
-											// console.log(timestamps);
 											if (lastTimeStamp !== timestamps) {
 												areaCharts[$scope.tabIndexArea].series[i].addPoint([ timestamps, series[i].data[last] ], true, true);
 											} else {
@@ -178,7 +164,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					} else {
 						DashBoardService.getAqiMachineValues(floor, interval, function(res) {
 							if (res.length > 0) {
-								// console.log(res[0]);
 								var last = findLastValue(res[0].assets[$scope.tabIndexMachine].data.timestamps);
 								var x = res[0].assets[$scope.tabIndexMachine].data.timestamps[last];
 								var y = res[0].assets[$scope.tabIndexMachine].data.value[last];
@@ -194,8 +179,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 											if (!lastTimeStamp) {
 												lastTimeStamp = areaCharts[$scope.tabIndexMachine].series[i].data[l - 1]['category'];
 											}
-											// console.log(lastTimeStamp);
-											// console.log(timestamps);
 											if (lastTimeStamp !== timestamps) {
 												machineCharts[$scope.tabIndexMachine].series[i].addPoint([ timestamps, series[i].data[last] ], false, true);
 											} else {
@@ -210,8 +193,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 											if (!lastTimeStamp) {
 												lastTimeStamp = areaCharts[$scope.tabIndexMachine].series[i].data[l - 1]['category'];
 											}
-											// console.log(lastTimeStamp);
-											// console.log(timestamps);
 											if (lastTimeStamp !== timestamps) {
 												machineCharts[$scope.tabIndexMachine].series[i].addPoint([ timestamps, series[i].data[last] ], true, true);
 											} else {
@@ -228,13 +209,10 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 
 				};
 				var getMahineComponets = function(data) {
-					// console.log(data);
 					var components = {};
 					for (var i = 0; i < data.length; i++) {
 						components[data[i].name] = 0.0;
 						for (var j = 0; j < data[i].values.length; j++) {
-							// console.log(components[data[i].name] + ' ' +
-							// data[i].values[j]);
 							if (components[data[i].name] < data[i].values[j]) {
 								components[data[i].name] = data[i].values[j];
 							}
@@ -279,7 +257,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				var loadValuesToGraph = function(id, dataX, dataY, index, type) {
 
 					$(id).each(function() {
-						// console.log('each');
 						var chart = new Highcharts.Chart({
 							type : 'spline',
 							animation : Highcharts.svg,
@@ -352,7 +329,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 
 						});
 					}
-					// console.log(series);
 
 					return series;
 				};

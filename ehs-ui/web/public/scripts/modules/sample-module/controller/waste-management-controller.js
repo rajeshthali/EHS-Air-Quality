@@ -35,7 +35,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		var promise = 0;
 		$scope.hygieneLoading = false;
 		var hygieneInterval = null;
-		var interval = 1000 * 60 * 2;
+		var interval = 1000 * 60 ;
 		var intervalDynamic = 1000 * 30;
 		
 		/*$scope.changeFloor = function(floor) {
@@ -92,7 +92,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					loadGuage($rootScope.floor);
 					loadWaste($rootScope.floor);
 					loadG($scope.oilValues, $scope.sValues, $scope.dValues);
-					startDynamiUpdate();
+					//startDynamiUpdate();
 				});
 			};
 			loadData();
@@ -119,8 +119,8 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						console.log("floor data: " +JSON.stringify(res));
 						   if(res.length == 0){
 							 // $scope.wasteData = res[0].assets;
-							  $scope.selectTab($scope.tabIndex, $scope.sValues, $scope.dValues);
-							 // loadG($scope.oilValues, $scope.sValues, $scope.dValues);
+							   $scope.selectTab($scope.tabIndex, $scope.oilValues, $scope.sValues, $scope.dValues);
+							// loadG($scope.oilValues, $scope.sValues, $scope.dValues);
                         	  console.log("select tab: "+floor);
                            }
                            else{
@@ -142,7 +142,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 
        						}
        						$scope.hygieneLoading = false;
-       						$scope.selectTab($scope.tabIndex, $scope.sValues, $scope.dValues);
+       					 $scope.selectTab($scope.tabIndex, $scope.oilValues, $scope.sValues, $scope.dValues);
        						//loadG($scope.oilValues, $scope.sValues, $scope.dValues);
        						//console.log("detailsgraph data" +$scope.wasteTabList[0]);
                            }
@@ -302,18 +302,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			};
 		
 		
-		
-			var getMaxIndex = function(data) {
-				var big = 0;
-				var index = 0;
-				for (var i = 0; i < data.timestamp.length; i++) {
-					if (big < data.timestamp[i]) {
-						big = data.timestamp[i];
-						index = i;
-					}
-				}
-				return index;
-			};
+
 			$scope.selectTab = function(index, oilValues, sValues, dValues) {
 				  // console.log("select tab data" +JSON.stringify(res));
 				  console.log("oil values" +oilValues);
@@ -609,15 +598,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				$scope.$on('$destroy', function() {
 				$scope.stop();
 			});
-
-			
-			
-			
-	
-
-		/*$scope.gotoDetailsView = function() {
-			$state.go('hygiene-details');
-		};*/
 
 	}]);
 });

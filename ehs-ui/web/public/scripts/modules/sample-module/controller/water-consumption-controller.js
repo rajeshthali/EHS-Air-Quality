@@ -25,6 +25,7 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                 $scope.suspendedSolids = null;
                 $scope.bod = null;
                 $scope.cod = null;
+                $scope.kld=null;
                 $scope.oilGrease = null;
                 $scope.tabIndexMachine = 0;
                 $scope.tabIndexAreaComparison = 0;
@@ -45,11 +46,6 @@ define(['angular', './controllers-module'], function(angular, controllers) {
             }];
 
             var interval = 3 * 50 * 1000;
-            //var refreshInterval = 20 * 1000;
-            //var intervalPromiseMachine = null;
-            //var intervalPromiseArea = null;
-
-
 
             $scope.floor = 0;
             $scope.changeFloor = function(floor) {
@@ -64,13 +60,11 @@ define(['angular', './controllers-module'], function(angular, controllers) {
             		
             };
 
-
             $scope.showMe = false;
             $scope.gotoDetailsView = function() {
 
                 $scope.showMe = true;
             };
-
 
             $scope.$on('$destroy', function() {
                 $scope.stop();
@@ -80,19 +74,23 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                 $interval.cancel(promise);
             };
 
-
             var dynamicUpdateMachineStarted = false;
             var dynamicUpdateAreaStarted = false;
             var startDynamicUpdateMachine = function() {
-                intervalPromiseMachine = $interval(function() {
-                    loadPollutants($scope.floor);
+                intervalPromiseMachine = $interval(function() {                     
+                	loadPollutants($scope.floor);
+                    loadWaterAreaKld($scope.floor);
+                    loadWaterkld($scope.floor);
+                   loadWaterAllComponents($scope.floor);
 
                 }, 20000);
             };
 
             var startDynamicUpdateArea = function() {
                 intervalPromiseArea = $interval(function() {
-                    loadWaterAreaKld($scope.floor);
+                	 loadPollutants($scope.floor);
+                     loadWaterAreaKld($scope.floor);
+                     loadWaterkld($scope.floor);
                     loadWaterAllComponents($scope.floor);
                 }, 20000);
             };
@@ -100,7 +98,10 @@ define(['angular', './controllers-module'], function(angular, controllers) {
             var startDynamiUpdate = function() {
                 console.log('running startDynamiUpdate..');
                 promise = $interval(function() {
-                   loadWaterAllComponents($scope.floor);
+                	loadPollutants($scope.floor);
+                    loadWaterAreaKld($scope.floor);
+                    loadWaterkld($scope.floor);
+                    loadWaterAllComponents($scope.floor);
                     loadWaterAreaAllComponents($scope.floor);
 
                 }, 20000);
@@ -211,6 +212,7 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                 $scope.bod = ($scope.waterMachineData[index].data[index].bod);
                 $scope.cod = ($scope.waterMachineData[index].data[index].cod);
                 $scope.oilGrease = ($scope.waterMachineData[index].data[index].oilGrease);
+                $scope.kld1 = ($scope.waterMachineData[index].data[index].kld);
             };
 
 
@@ -301,6 +303,16 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                         }
 
                         dataXaxis.push(waterDataValues[j].timestamp);
+                        
+                        $scope.pH = waterDataValues[j].pHValue;
+                        $scope.suspendedSolids = waterDataValues[j].suspendedSolids;
+                        $scope.bod = waterDataValues[j].bod;
+                        $scope.cod = waterDataValues[j].cod;
+                        $scope.oilGrease = waterDataValues[j].oilGrease
+                        
+                        $scope.kld1=waterDataValues[j].kld;
+
+                        
 
                     }
                     for (var index = 0; index < $scope.waterAssetTabList.length; index++) {
@@ -337,26 +349,16 @@ define(['angular', './controllers-module'], function(angular, controllers) {
 
                             }
 
-                        } /*else if ($scope.waterAssetTabList[1] == 'Domestic Use') {
-                            if ($scope.waterTabList[index] == 'pH Value') {
-                                dataYaxis.push(waterDataValues[j].pHValue);
-
-                            } else if ($scope.waterTabList[index] == 'Suspended Solids') {
-                                dataYaxis.push(waterDataValues[j].suspendedSolids);
-
-                            } else if ($scope.waterTabList[index] == 'BOD') {
-                                dataYaxis.push(waterDataValues[j].bod);
-
-                            } else if ($scope.waterTabList[index] == 'COD') {
-                                dataYaxis.push(waterDataValues[j].cod);
-
-                            } else if ($scope.waterTabList[index] == 'Oil & Grease') {
-                                dataYaxis.push(waterDataValues[j].oilGrease);
-
-                            }
-                        }*/
-
+                        } 
                         dataXaxis.push(waterDataValues[j].timestamp);
+                        
+                        $scope.pH = waterDataValues[j].pHValue;
+                        $scope.suspendedSolids = waterDataValues[j].suspendedSolids;
+                        $scope.bod = waterDataValues[j].bod;
+                        $scope.cod = waterDataValues[j].cod;
+                        $scope.oilGrease = waterDataValues[j].oilGrease
+                        
+                        $scope.kld1=waterDataValues[j].kld;
 
                     }
                     $scope.time = angular.copy(dataXaxis);
@@ -393,7 +395,13 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                         }
 
                         dataXaxis.push(waterDataValues[j].timestamp);
-
+                        $scope.pH = waterDataValues[j].pHValue;
+                        $scope.suspendedSolids = waterDataValues[j].suspendedSolids;
+                        $scope.bod = waterDataValues[j].bod;
+                        $scope.cod = waterDataValues[j].cod;
+                        $scope.oilGrease = waterDataValues[j].oilGrease
+                        
+                        $scope.kld1=waterDataValues[j].kld;
                     }
                     $scope.time = angular.copy(dataXaxis);
                     $scope.dataY = angular.copy(dataYaxis);
@@ -434,6 +442,7 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                     $scope.bod = ($scope.waterMachineData[index].data[index].bod);
                     $scope.cod = ($scope.waterMachineData[index].data[index].cod);
                     $scope.oilGrease = ($scope.waterMachineData[index].data[index].oilGrease);
+                    $scope.kld1 = ($scope.waterMachineData[index].data[index].kld);
                     setTimeout(function() {
                         $('#industrial').fadeIn();
 
@@ -453,6 +462,7 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                     $scope.bod = ($scope.waterMachineData[index].data[index].bod);
                     $scope.cod = ($scope.waterMachineData[index].data[index].cod);
                     $scope.oilGrease = ($scope.waterMachineData[index].data[index].oilGrease);
+                    $scope.kld1 = ($scope.waterMachineData[index].data[index].kld);
                     setTimeout(function() {
                     	// $('#industrial').fadeIn();
 

@@ -44,7 +44,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 							}
 						}
 						$scope.animateFloor(floor, 'machine');
-						// console.log('machine > ' + floor);
 					});
 				};
 
@@ -58,7 +57,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 							}
 						}
 						$scope.animateFloor(floor, 'area');
-						// console.log('area > ' + floor);
 					});
 				};
 
@@ -72,7 +70,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 							}
 						}
 						$scope.animateFloor(floor, 'hygiene');
-						// console.log('hygiene > ' + floor);
 					});
 				};
 

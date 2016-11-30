@@ -164,15 +164,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 								$scope.aqiAreaData = res[0].assets;
 								
 								$scope.aqiAreaComparison = res[0].assets;
-								console.log("call!!!!!!!!!");
-//								console.log( $scope.aqiAreaComparison[$scope.tabIndexAreaComparison].data.maxAqi.aqiValue);
-//								loadGaugeChart('#aqi_area_comparison_chart_' + $scope.tabIndexAreaComparison, $scope.aqiAreaComparison[$scope.tabIndexAreaComparison].data.maxAqi.aqiValue);
-								
-//								if ($scope.aqiAreaComparisonLastWeek) {
-//									loadGaugeChart('#aqi_area_comparison_chart_last_week_' + $scope.tabIndexAreaComparison, $scope.aqiAreaComparisonLastWeek[$scope.tabIndexAreaComparison].data.maxAqi.aqiValue);
-//									$scope.aqiAreaComparison[$scope.tabIndexAreaComparison].data.maxAqiLastWeek = $scope.aqiAreaComparisonLastWeek[$scope.tabIndexAreaComparison].data.maxAqi;
-//									
-//								}
 
 								$("#aqi-area-tab-content").fadeIn();
 								$scope.selectTab($scope.tabIndexArea, 'area');
@@ -207,7 +198,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					} else {
 						DashBoardService.getAqiAreaValues(floor, interval, function(res) {
 							if (res.length > 0) {
-								// console.log(res[0]);
 								var last = findLastValue(res[0].assets[$scope.tabIndexArea].data.timestamps);
 								var x = res[0].assets[$scope.tabIndexArea].data.timestamps[last];
 								var y = res[0].assets[$scope.tabIndexArea].data.value[last];
@@ -218,7 +208,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 									if (!lastTimeStamp) {
 										lastTimeStamp = areaCharts[$scope.tabIndexArea].series[0].data[l - 1]['category'];
 									}
-									//console.log(lastTimeStamp);
 									 console.log(timestamps);
 									if (lastTimeStamp !== timestamps) {
 										areaCharts[$scope.tabIndexArea].series[0].addPoint([ timestamps, y ], true, true);
@@ -235,8 +224,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				
 				
 				var loadAqiArea2= function(floor) {
-					// console.log(!$scope.aqiMachineData);
-					// console.log($scope.tabIndexMachine);
 					if (!$scope.aqiAreaData2) {
 						$scope.aqiAreaLoading2 = true;
 						DashBoardService.getAqiAvgAreaValues(floor, interval, function(res) {
@@ -255,7 +242,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						DashBoardService.getAqiAvgAreaValues(floor, interval, function(res) {
 							if (res.length > 0) {
 								$scope.aqiAreaData2 = res[0].assets;
-								// console.log($scope.tabIndexArea);
 								$scope.selectTab($scope.tabIndexArea2, 'area2');
 							}
 						});
@@ -264,13 +250,10 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				};
 				
 				var getAreaComponets = function(data) {
-					// console.log(data);
 					var components = {};
 					for (var i = 0; i < data.length; i++) {
 						components[data[i].name] = 0.0;
 						for (var j = 0; j < data[i].values.length; j++) {
-							// console.log(components[data[i].name] + ' ' +
-							// data[i].values[j]);
 							if (components[data[i].name] < data[i].values[j]) {
 								components[data[i].name] = data[i].values[j];
 							}
@@ -314,7 +297,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						$('.area_gauge_chart_base').hide();
 						setTimeout(function() {
 							$('.graph_class').fadeIn();
-							loadValuesToGraph('#area_chart_' + index, DashBoardService.prettyMs($scope.aqiAreaData[index].data.timestamps), $scope.aqiAreaData[index].data.value, index);
+							loadValuesToGraph('#area_chartA_' + index, DashBoardService.prettyMs($scope.aqiAreaData[index].data.timestamps), $scope.aqiAreaData[index].data.value, index);
 							loadGaugeChart('#area_gauge_chart_' + index, $scope.aqiAreaData[index].data.maxAqi.aqiValue);
 							$('.area_gauge_chart_base').fadeIn();
 
@@ -338,12 +321,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					}
 					else if (type === 'machine') {
 						$scope.tabIndexMachine = index;
-						// Hard coded Image Urls
-
-						// images/machine.jpg
-						// images/wave_soldering_machine.png
-						// images/soltech_machine (1).png
-						// images/reflow_oven.png
 						console.log("1111111");
 						switch ($scope.aqiMachineData[index].assetName) {
 						case 'Soltech-Machine':
@@ -364,7 +341,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						}
 						$scope.aqiMachineData[index].data.components = getMahineComponets($scope.aqiMachineData[index].data.seperatedResult);
 						$scope.aqiMachineData[index].data.status = getStatus($scope.aqiMachineData[index].data.maxAqi.name, $scope.aqiMachineData[index].data.maxAqi.aqiValue);
-						//$scope.getStat= function(name,value){$scope.gstatus=getStatus(name,value);};
+						
 						
 						$scope.aqiMachineData[index].data.NH3status = getStatus("NH3", $scope.aqiMachineData[index].data.components.NH3);
 						$scope.aqiMachineData[index].data.PM10status = getStatus("PM10", $scope.aqiMachineData[index].data.components.PM10);
@@ -374,11 +351,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						$scope.aqiMachineData[index].data.SO2status = getStatus("SO2", $scope.aqiMachineData[index].data.components.SO2);
 						$scope.aqiMachineData[index].data.NO2status = getStatus("NO2", $scope.aqiMachineData[index].data.components.NO2);
 						$scope.aqiMachineData[index].data.O3status = getStatus("O3", $scope.aqiMachineData[index].data.components.O3);
-						
-						// console.log($scope.aqiMachineData[index].data);
-						console.log(222222);
-
-						// console.log(">> " + $scope.tabIndexMachine);
 					} 
 
 				};
@@ -394,7 +366,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				
 				var loadValuesToGraph = function(id, dataX, dataY, index) {
 					$(id).each(function() {
-						// console.log('each');
 						var chart = new Highcharts.Chart({
 							type : 'spline',
 							animation : Highcharts.svg,
@@ -466,7 +437,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				};
 
 				var getColorForPercentage = function(pct) {
-					// console.log(pct);
 
 					for (var i = 1; i < percentColors.length - 1; i++) {
 						if (pct < percentColors[i].pct) {
@@ -485,7 +455,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						b : Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
 					};
 					return 'rgb(' + [ color.r, color.g, color.b ].join(',') + ')';
-					// or output as hex if preferred
 				}
 
 				var loadChart = function(selector, min, max, val) {
@@ -561,7 +530,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
                     else if (gasStatus == ("Poor")||gasStatus == ("Very Poor")||gasStatus==("Severe"))
                         return "mahine_down_arrow_warn";
 				};
-				
 					
 					$scope.getColorClass = function (gasStatus) {
 						
@@ -572,11 +540,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 	                    else if (gasStatus == ("Poor")||gasStatus == ("Very Poor")||gasStatus==("Severe"))
 	                        return "machine_warn_red";
 	                };
-	                
-
-					
-				
-				
+	                			
 				var getStatus = function(prominentParameter, max) {
 					var status = '';
 					switch (prominentParameter) {
@@ -662,8 +626,8 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 							status = 'Severe';
 
 						}
-						//console.log(status);
 						break;
+						
 					case 'CO2':
 						if (max >= 0 && max <= 1.0) {
 							status = 'Good';
@@ -781,9 +745,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						status = 'Severe';
 
 					} 
-
-					
-
 					return status;
 
 				};
