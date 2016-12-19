@@ -4,6 +4,13 @@ public class CommonResponseObject {
 	private String properyName;
 	private Integer propertyValue;
 	private Long timestamp;
+	private Integer KLDValue;
+	public Integer getKLDValue() {
+		return KLDValue;
+	}
+	public void setKLDValue(Integer KLDValue) {
+		this.KLDValue = KLDValue;
+	}
 	public String getProperyName() {
 		return properyName;
 	}

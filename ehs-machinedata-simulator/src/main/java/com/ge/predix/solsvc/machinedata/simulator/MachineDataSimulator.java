@@ -86,6 +86,9 @@ public class MachineDataSimulator {
 
 	@Autowired
 	private RestClient restClient;
+	
+	public static float data=(float) 1.0009;
+	
 
 	/**
 	 * -
@@ -429,9 +432,9 @@ public class MachineDataSimulator {
 		List<WaterBody> watBodyList = new ArrayList<>();
 
 		for (Constants.Water name : Constants.Water.values()) {
-			createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.GRND_FLOOR, name);
-			createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.FIRST_FLOOR, name);
-			createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.SECOND_FLOOR, name);
+			createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.GRND_FLOOR, name);//2
+			createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.FIRST_FLOOR, name);//2
+			createFloorwiseWaterBody(watBodyList, Constants.WATER_TYPE, Constants.SECOND_FLOOR, name);//2
 		}
 
 		WaterObjectVO waterObjVO=new WaterObjectVO();
@@ -443,8 +446,8 @@ public class MachineDataSimulator {
 		StringWriter writer = new StringWriter();
 
 		mapper.writeValue(writer, dataPtIngest);
-		System.out.println("Final Hygiene JSON sending to saveTimeSeries >> "
-				+ writer.toString());
+		System.out.println("Final Water JSON sending to saveTimeSeries >> "
+				+ writer.toString()+"----------------->>>>>>");
 		return postData(writer.toString());
 
 	}
@@ -560,7 +563,7 @@ public class MachineDataSimulator {
 		Long currentTimeMillis = System.currentTimeMillis();
 
 		WaterBody watBodyVo = createWaterBodyVO(floorNo,currentTimeMillis, "Water",watAssetName, name);
-
+		System.out.println("+++++++++++++++++"+watBodyVo.getAttributes().getName()+"========================");
 		return watBodyVo;
 	}
 
@@ -613,12 +616,16 @@ public class MachineDataSimulator {
 		WaterBody watBodyVo = new WaterBody();
 
 		watBodyVo.setName(bodyName);
-
+		long values=0;
 		ArrayList<Long> datapoint = new ArrayList<Long>();
+		
 		datapoint.add(currentTimeMillis);
 
-		datapoint.add(getHWaterValues(name));
-
+		values=getHWaterValues(name,currentTimeMillis);
+	
+	
+		datapoint.add(values);
+	
 		datapoint.add(1l);
 
 		ArrayList<ArrayList<Long>> datapoints = new ArrayList<>();
@@ -720,8 +727,10 @@ public class MachineDataSimulator {
 	}
 
 	//amlesh
-	private Long getHWaterValues(Constants.Water name) {
+	private Long getHWaterValues(Constants.Water name,Long currentTimeMillis) {
 		Long values = new Long(0);
+		Long v = new Long(0);
+		int flag=0;
 		Random r = new Random();
 		int minLimit = 0;
 		int maxLimit = 0;
@@ -750,14 +759,163 @@ public class MachineDataSimulator {
 		case KLD:
 			minLimit = 0;
 			maxLimit = 16;
+			System.out.println("Inside KLD");
+			v=getKLDWaterValues(currentTimeMillis);
+			flag=1;
 			break;
 		default:
+			log.info("----------------------kld is missing -------------------------------------------------");
 			break;
 		}
 		result = r.nextInt(maxLimit - minLimit) + minLimit;		
-		values = (long) ((long) result / 2);		
+		values = (long) ((long) result / 2);
+		if(flag==1)
+		{
+			values=v;
+		}
 		return values;
 	}
+//soumya
+private long getKLDWaterValues(Long currentTimeMillis)
+{
+	//System.out.println(System.currentTimeMillis());	
+		//final long timestamp = new Date().getTime();
+
+		// with java.util.Date/Calendar api
+		final Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(currentTimeMillis);
+		// here's how to get the minutes
+		final int d = cal.get(Calendar.DAY_OF_WEEK);
+		final int min = cal.get(Calendar.MINUTE);
+		final int h = cal.get(Calendar.HOUR_OF_DAY);
+		// and here's how to get the String representation
+		
+		//System.out.println(getValuesKLD(d, h, min));
+		return getValuesKLD(d, h, min);
+}
+public static long getValuesKLD(int d, int h, int min) {
+	
+	//String data=testRead();
+	System.out.println(data+" ----");
+	Random r=new Random();
+	long finalkld=0;
+	
+	float kld=data;
+	/*if(h==23 && (min==59||min==58) )
+	{
+		data=(float) 0.02;
+		kld=data;
+		
+	}*/
+	if(kld>=8.9 || data>=8.9)
+	{
+		data=(float) 1.0009;
+		kld=(float) 1.0009;
+		System.out.println("Hello!!!!!!!!!!!!!!!!!!");
+	}
+	if (d == 7 || d == 1) 
+	{
+		
+		int n=r.nextInt(10-0);
+		float result=(float) (n*0.00009);
+		kld=kld+result;
+		finalkld=getfinalkld(kld);
+	} 
+	else 
+	{
+		if(h>6 && h<=18)
+		{
+		int n=r.nextInt(10-0);
+		float result=(float) (n*0.0001);
+		kld=kld+result;
+		finalkld=getfinalkld(kld);
+		}
+		else
+		{
+			int n=r.nextInt(10-0);
+			float result=(float) (n*0.00009);
+			kld=kld+result;
+			finalkld=getfinalkld(kld);
+		}
+	}
+/*String finalData=Float.toString(kld);
+textWrite(finalData);*/
+	data=kld;
+	System.out.println("data is="+data);
+	return finalkld;
+
+}
+public static long getfinalkld(double kld)
+{
+	long finalkld;
+	double fPart;
+	String f;
+	finalkld = (long) kld;
+	fPart =  (kld - finalkld);
+	System.out.println("Integer part = " + finalkld);
+	f=Double.toString(fPart);
+	f=f.substring(f.indexOf(".")+1,7);
+	System.out.println("final fraction part is=  "+f);
+	f=finalkld+f;
+	finalkld=Long.parseLong(f);
+	System.out.println("final long part is=  "+finalkld);
+	return finalkld;
+}
+/*public static void textWrite(String finalData) {
+	try {
+
+		String content = finalData;
+
+		File file = new File("Water.txt");
+
+		// if file doesnt exists, then create it
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		
+		FileWriter fw = new FileWriter(file.getAbsoluteFile());
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.write(content);
+		bw.close();
+
+		System.out.println("Done");
+
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+}
+public static String testRead() {
+
+	BufferedReader br = null;
+	String sCurrentLine=null;
+	try {
+
+		
+
+		br = new BufferedReader(new FileReader("Water.txt"));
+
+		while ((sCurrentLine = br.readLine()) != null) {
+			System.out.println("value inside fuction"+sCurrentLine);
+		}
+		sCurrentLine=br.readLine();
+		System.out.println("just before return "+sCurrentLine);
+		return sCurrentLine;
+	
+	
+	} catch (IOException e) 
+	{
+		e.printStackTrace();
+		return sCurrentLine;
+	} finally 
+	{
+		try {
+			if (br != null)br.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+}*/
 
 
 	private Long getWasteValues(Constants.Waste name) {
@@ -1741,7 +1899,7 @@ public static int get_NH3(char ch) {
 			}
 			log.debug("Response : " + result.toString());
 			if (result.toString().startsWith("You successfully posted")) { //$NON-NLS-1$
-				return "SUCCESS : " + result.toString(); //$NON-NLS-1$
+				return "SUCCESS ::::: " + result.toString(); //$NON-NLS-1$
 			}
 			return "FAILED : " + result.toString(); //$NON-NLS-1$
 
