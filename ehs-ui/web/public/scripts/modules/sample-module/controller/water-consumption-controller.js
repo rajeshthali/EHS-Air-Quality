@@ -2,6 +2,7 @@ define(['angular', './controllers-module'], function(angular, controllers) {
     'use strict';
     controllers.controller('WaterConsumptionController', ['$scope', '$http', '$state' /*, '$log', 'PredixAssetService', 'PredixViewService', 'CalculationOneService', 'CalculationService'*/ , '$interval' /*, 'AqiService'*/ , '$rootScope', 'AuthService' /*, 'HygieneService'*/ , 'WaterConsumptionService',
         function($scope, $http, $state, $interval, $rootScope, AuthService, WaterConsumptionService) {
+    	//TestAmlesh
             var isLoading = false;
             var promise = 0;
             var initVariables = function() {
