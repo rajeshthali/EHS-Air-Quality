@@ -59,13 +59,13 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			}
 		};*/
 		
-		$scope.changeFloor = function(floor) {
+		/*$scope.changeFloor = function(floor) {
 			if (!$scope.aqiMachineLoading && !$scope.aqiMachineLoading && !$scope.hygieneLoading) {
 				$scope.loading = true;
 				$scope.floor = floor;
 				wasteCharts = [];
 				$rootScope.floor = floor;
-				/*$scope.floor = floor;*/
+				$scope.floor = floor;
 				$scope.tabIndex = 0;
 				$scope.hygieneLoading = false;
 				$scope.wasteData = null;
@@ -73,8 +73,9 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				
 				loadData($rootScope.floor);
 			}
-		};
+		};*/
 		
+		//loadData();
 		
 		//Rohit
 		$scope.$on('$destroy', function() {
