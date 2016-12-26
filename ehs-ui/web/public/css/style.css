@@ -733,7 +733,15 @@ px-app-nav.navbar--collapsed .login {
 	background-color: #fff;
 	min-height: 325px;
 	min-width: 
-}		
+}	
+
+.details-tab-base-inner-air {
+	border: 1px solid #3694F8;
+	padding: 10px;
+	background-color: #fff;
+	min-height: 377px;
+	min-width: 
+}			
 
 .details-tab-base>.nav-tabs>.active>a {
 	border: 0px !important;

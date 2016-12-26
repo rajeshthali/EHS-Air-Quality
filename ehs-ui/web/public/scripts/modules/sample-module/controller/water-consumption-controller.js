@@ -47,8 +47,8 @@ define(['angular', './controllers-module'], function(angular, controllers) {
 
             var interval = 3 * 50 * 1000;
 
-            $scope.floor = 0;
-            $scope.changeFloor = function(floor) {
+           // $scope.floor = 0;
+           /* $scope.changeFloor = function(floor) {
             	if (!$scope.waterLoading)
                     $scope.floor = floor;
                     $scope.tabIndex = 0;
@@ -58,8 +58,8 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                     initVariables();
                     loadData();
             		
-            };
-
+            };*/
+            
             $scope.showMe = false;
             $scope.gotoDetailsView = function() {
 
@@ -317,7 +317,7 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                     }
                     for (var index = 0; index < $scope.waterAssetTabList.length; index++) {
 
-                        loadValuesToGraphAreaKld('#area_chart_' + index, convertTimeStamps(dataXaxis), dataYaxis, $scope.waterAssetTabList[index]);
+                        loadValuesToGraphAreaKld('#area_chart_water_' + index, convertTimeStamps(dataXaxis), dataYaxis, $scope.waterAssetTabList[index]);
                     }
 
                 }

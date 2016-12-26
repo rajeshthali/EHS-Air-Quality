@@ -14,7 +14,7 @@
 						<li class="active"><a data-toggle="tab" href="" data-target="#aqi-area" ng-click="aqiTabChange('aqi')">Indoor Air Quality</a></li>
 					</ul>
 
-					<div class="tab-content details-tab-base-inner">
+					<div class="tab-content details-tab-base-inner-air">
 						<div id="aqi-area" class="tab-pane fade in active details-tab-base-content">
 							<img alt="" class="loading_image" ng-show="aqiAreaLoading" src="images/25.gif">
 							<ul class="nav nav-tabs" id="aqi-area-tab">
@@ -38,7 +38,7 @@
 						<li class="active"><a data-toggle="tab" href="" data-target="#p-s-e">Process Stack Emission</a></li>
 					</ul>
 
-					<div class="tab-content details-tab-base-inner">
+					<div class="tab-content details-tab-base-inner-air">
 						<div id="aqi-machine" class="tab-pane fade in active details-tab-base-content">
 							<ul class="nav nav-tabs" id="aqi-machine-tab">
 								<li ng-repeat="machine in aqiMachineData" ng-class="{'active':$index==tabIndexMachine}"><a data-toggle="tab" href="#" data-target="#aqi_machine_{{$index}}"

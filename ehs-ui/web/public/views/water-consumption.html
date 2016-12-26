@@ -1,11 +1,6 @@
 <div class="col-md-12 floor_list_base">
-   <div class="col-md-6">
+   <div class="col-md-12">
       <h4>Water Consumption</h4>
-   </div>
-   <div class="col-md-6">
-      <ul>
-         <li ng-repeat="f in floors" ng-class="{'active':$index===floor,'disabled':(waterLoading || waterLoading)}" ng-click="changeFloor(f.id)">{{f.name}}</li>
-      </ul>
    </div>
 </div>
 <div class="clearfix"></div>
@@ -23,7 +18,7 @@
                      <img alt="" class="loading_image" ng-show="waterLoading" src="images/25.gif">
                      <div id="water-area-tab-content" class="tab-content details-tab-base-content-inner-water highcharts-button">
                         <div ng-repeat="area in waterAssetTabList" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea}" class="tab-pane fade in">
-                           <div  id="area_chart_{{$index}}" class="graph_class"></div>
+                           <div  id="area_chart_water_{{$index}}" class="graph_class"></div>
                            <div class="col-md-12">
                               <div class="col-md-7">
                                  <h4 class="pull-left">Current Use:</h4>
