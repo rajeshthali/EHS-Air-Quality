@@ -9,6 +9,7 @@ public class TimeUtils {
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
+		
 		Long currentTime = calendar.getTimeInMillis();
 		Long startTime = currentTime - interval;
 		Long endTime = currentTime;

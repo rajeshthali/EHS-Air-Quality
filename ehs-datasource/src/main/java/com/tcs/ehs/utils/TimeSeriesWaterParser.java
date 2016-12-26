@@ -1,5 +1,6 @@
 package com.tcs.ehs.utils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -68,7 +69,24 @@ public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
 						WaterResponseObject.setOilGrease(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
 					}
 					else if("KLD".equalsIgnoreCase(commonResponseObject.getProperyName())) {
-						WaterResponseObject.setKld(Float.valueOf(commonResponseObject.getPropertyValue().toString()));
+						
+						Double kld=null;
+						String f=commonResponseObject.getPropertyValue().toString();
+						char i=f.charAt(0);
+						String i1=String.valueOf(i);
+						System.out.println("first charecter==  "+ commonResponseObject.getPropertyValue());
+						String j=f.substring(1);
+						System.out.println("string from second charecter="+j);
+						String Str_Final=i1+"."+j;
+						System.out.println("string from second charecter=========== "+Str_Final);
+						kld=Double.parseDouble(Str_Final)-1.0;
+						kld=round(kld,3);
+						System.out.println("Final result ==  "+kld);
+						WaterResponseObject.setKld(kld);
+						System.out.println("KLD:::::::::::::---------------"+kld+"--------------");
+						System.out.println("KLD:::::::::::::---------------"+(commonResponseObject.getPropertyValue()-1.0f)+"--------------");
+						
+						
 					}
 				}
 				for(WaterResponseObject obj : waterMap.values()) {
@@ -79,6 +97,12 @@ public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
 		}
 		return floorMap.values();
 	}
+	
+	public static double round(double d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Double.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.doubleValue();
+    }
 	public class ResponseObjectCollections {
 		private List<WaterResponseObject> responseObjects = new ArrayList<>();
 		private String name;
@@ -106,14 +130,14 @@ public class TimeSeriesWaterParser extends CommonTimeSeriesParser {
 		private Float bod;
 		private Float cod;
 		private Float oilGrease;
-		private Float kld;
+		private Double kld;
 		private Long timestamp;
 		
-		public Float getKld() {
+		public Double getKld() {
 			return kld;
 		}
 
-		public void setKld(Float kld) {
+		public void setKld(Double kld) {
 			this.kld = kld;
 		}
 
