@@ -2,6 +2,9 @@ define([ 'angular', './services-module'], function(angular, sampleModule) {
 	'use strict';
 	sampleModule.factory('Config', [ '$http', '$rootScope', function($http, $rootScope) {
 		return {
+			
+		
+			/*Test*/
 			 //baseUrl : 'http://localhost:9092' (http://localhost:9092%27) ,
 			/*baseUrl : 'https://ehs-rmd-datasource-rajesh.run.aws-usw02-pr.ice.predix.io' (https://ehs-rmd-datasource-rajesh.run.aws-usw02-pr.ice.predix.io%27) ,			
 			uaa : 'https://123rajesh.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token' (https://123rajesh.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token%27) ,

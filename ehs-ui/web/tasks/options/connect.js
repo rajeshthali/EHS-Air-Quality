@@ -12,10 +12,10 @@ var config = {
 	 * clientId, serverUrl, and base64ClientCredential.
 	 */
 		 uaa: {
-			    clientId: 'Test_Rajesh',
-			    serverUrl: 'https://123rajesh.predix-uaa.run.aws-usw02-pr.ice.predix.io',
+			    clientId: 'ehs_tcs_client',
+			    serverUrl: 'https://tcs-uaa.predix-uaa.run.aws-usw02-pr.ice.predix.io' ,
 			    defaultClientRoute: '/about',
-			    base64ClientCredential: 'VGVzdF9SYWplc2g6MTIzcmFqZXNo'
+			    base64ClientCredential: 'ZWhzX3Rjc19jbGllbnQ6ZWhzX3VhYQ=='
 			  },
 	/**
 	 * --------- ADD YOUR SECURE ROUTES HERE ------------
@@ -27,14 +27,14 @@ var config = {
 	 */
 	// proxy: {
 	// '/api/view-service': {
-	// url: 'https://predix-views.run.aws-usw02-pr.ice.predix.io',
+	// url: 'https://predix-views.run.aws-usw02-pr.ice.predix.io' (https://predix-views.run.aws-usw02-pr.ice.predix.io%27) ,
 	// instanceId: '7c6b551d-ba2f-4818-92d7-46dc36d63909',
 	// pathRewrite: { '^/api/view-service': '/v1'}
 	// }
 			  proxy: {
 				    '/api/view-service': {
-				      url: 'https://predix-views.run.aws-usw02-pr.ice.predix.io/api',
-				      instanceId: '74f18206-0df2-4355-a65d-81b3bddcfbf1',
+				      url: 'https://predix-views.run.aws-usw02-pr.ice.predix.io/api' ,
+				      instanceId: '8cf03e3b-3a80-4e9f-93d3-2c2102cffcb7',
 				      pathRewrite: { '^/api/view-service': '/v1'}
 				    }
 				  }
