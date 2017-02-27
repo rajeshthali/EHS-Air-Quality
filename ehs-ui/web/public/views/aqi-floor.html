@@ -27,7 +27,7 @@
 
 									<div  id="area_chartA_{{$index}}" class="graph_class" ng-click= "details(floor)"></div>
 
-									<div class="col-md-12 area_gauge_chart_base">
+									<div class="col-md-12 cursor">
 										<div class="row">
 											<div class="col-md-6 col-xs-12">
 												<div class="stat">
@@ -46,7 +46,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="aqi-comparison" class="tab-pane fade tab-base-content">
+						<div id="aqi-comparison" class="tab-pane fade tab-base-content cursor">
 							<img alt="" class="loading_image" ng-show="aqiAreaComparisonLoading" src="images/25.gif">
 							<ul class="nav nav-tabs" id="aqi-area-tab">
 								<li ng-repeat="area in aqiAreaComparison" ng-class="{'active':$index==tabIndexArea}"><a data-toggle="tab" href="#" data-target="#aqi_area_comparison_{{$index}}"
@@ -56,7 +56,7 @@
 								<div ng-repeat="area in aqiAreaComparison" id="aqi_area_comparison_{{$index}}" ng-class="{'active':$index==tabIndexArea}" class="tab-pane fade in">
 									<div class="row">
 
-										<div class="col-md-12 col-xs-12">
+										<div class="col-md-12 col-xs-12 cursor">
 											<div class="stat">
 												<div id="aqi_area_comparison_chart_{{$index}}" class="gauge_graph_class3"></div>
 												<h6 class="prami_txt">AQI</h6>
@@ -65,9 +65,9 @@
 											</div>
 										</div>
 									</div>
-									<div class="row poshR"s>
+									<div class="row poshR">
 
-										<div class="col-md-12 col-xs-12">
+										<div class="col-md-12 col-xs-12 cursor">
 											<div class="stat">
 												<div id="aqi_area_comparison_chart_last_week_{{$index}}" class="gauge_graph_class3"></div>
 												<div ng-if="area.data.maxAqiLastWeek.name">
@@ -106,7 +106,7 @@
 
 
 									<div class="row">
-										<div class="col-md-12">
+										<div class="col-md-12 cursor">
 											<div class="col-md-6 machine_values">
 												<div class="col-md-12 machine_data" ng-class="getColorClass(machine.data.SO2status)">
 													<h4 class="h">SO2</h4>
@@ -191,7 +191,7 @@
 										</div>
 									</div>
 
-									<div class="row mach-margin">
+									<div class="row mach-margin cursor">
 										<div class="col-md-5 col-xs-12 mach-height">
 											<img alt="" class="center_img" ng-src="{{machine.data.imageUrl}}">
 										</div>
@@ -214,7 +214,7 @@
 								<li ng-repeat="area2 in aqiAreaData2" ng-class="{'active':$index==tabIndexArea2}"><a data-toggle="tab" href="#" data-target="#aqi_area_{{$index}}"
 									ng-click="selectTab($index,'area2')">{{area2.assetName}}</a></li>
 							</ul>
-							<div id="aqi-area-tab-content2" class="tab-content tab-base-content-inner highcharts-button">
+							<div id="aqi-area-tab-content2" class="tab-content tab-base-content-inner highcharts-button cursor">
 								<div ng-repeat="area2 in aqiAreaData2" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea2}" class="tab-pane fade in">
 
 									<div class="row">

@@ -367,14 +367,6 @@ px-app-nav.navbar--collapsed .login {
 	color: #828181;
 }
 
-.hygn_data_tab:hover {
-	background-color: #FF9000;
-}
-
-.hygn_data_tab:hover p .data_text {
-	color: #fff;
-}
-
 .hygn_icons_1 {
 	background-image: url(../images/icon_industrial_hygiene.png);
 	border-radius: 50px;
@@ -1345,5 +1337,9 @@ margin-top: 0px;
     right: 10px;
     background: #d90000;
     
+}
+
+.cursor{
+	cursor: default;
 }
 /* end */

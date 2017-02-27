@@ -68,14 +68,14 @@ define([ 'jquery',
 			 * 'Graph'},
 			 */
 			{
-				icon : 'fa fa-cloud',
+				icon : 'fa-cloud',
 				state : 'airquality',
 				label : 'Air quality Monitoring',
 				subitems : [
 				/* {state: 'blanksubpage', label: 'Blank Sub Page'} */
 				]
 			}, {
-				icon : 'fa fa-industry',
+				icon : 'fa-industry',
 				state : 'industrial-hygiene',
 				label : 'Hygiene Monitoring',
 				subitems : [
@@ -83,28 +83,28 @@ define([ 'jquery',
 				]
 			} ,
 			{    
-				   icon: 'fa fa-tint fa-lg', 
+				   icon: 'fa-tint fa-lg', 
 				   state: 'water-discharge', 
 			       label: 'Water Consumption',
 			       subitems: [
 			     ]
 			},
 			{    
-				   icon: 'fa fa-plug', 
+				   icon: 'fa-plug', 
 				   state: 'Energy-Management', 
 			       label: 'Energy Management', 
 			       subitems: [
 			    ]
 			},
 			{    
-				   icon: 'fa fa-recycle', 
+				   icon: 'fa-recycle', 
 				   state: 'Waste-Management', 
 			       label: 'Waste Management', 
 			       subitems: [
 			    ]
 			},
 			{    
-				   icon: 'fa fa-recycle', 
+				   icon: 'fa-signal', 
 				   state: 'Sensor-Data', 
 			       label: 'Real Time Sensor', 
 			       subitems: [
