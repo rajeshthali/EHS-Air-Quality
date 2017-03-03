@@ -63,27 +63,22 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				var startDynamicUpdateArea = function() {
 					
 					intervalPromiseArea = $interval(function() {
-						 console.log('intervalPromiseArea');
 						loadAqiArea($scope.floor);
 					}, 20000);
 				};
 				var startDynamicUpdateArea2 = function() {
 					
 					intervalPromiseArea = $interval(function() {
-						console.log('intervalPromiseArea');
 						loadAqiArea($scope.floor);
 					}, 20000);
 				};
 
 				$scope.aqiTabChange = function(key) {
-					console.log(key);
 					switch (key) {
 					case 'aqi':
-						console.log("000000");
 						$scope.selectTab($scope.tabIndexMachine, 'machine');
 						break;
 					case 'aqi-comparison':
-						console.log("in case..");
 						$scope.selectTab($scope.tabIndexAreaComparison, 'comparison');
 						break;
 
@@ -103,7 +98,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 
 		
 				var loadData = function() {
-					console.log("loaddata")
 					AuthService.getTocken(function(token) {
 						loadAqiMachine($scope.floor);
 						loadAqiArea($scope.floor);
@@ -132,7 +126,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						DashBoardService.getAvgMachineValues(floor, interval, function(res) {
 							if (res.length > 0) {
 								$scope.aqiMachineData = res[0].assets;
-								// console.log($scope.tabIndexMachine);
 								$scope.selectTab($scope.tabIndexMachine, 'machine');
 							}
 						});
@@ -140,7 +133,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 
 				};
 				var getMahineComponets = function(data) {
-					// console.log(data);
 					var components = {};
 					for (var i = 0; i < data.length; i++) {
 						components[data[i].name] = 0.0;
@@ -183,7 +175,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 									if ($scope.aqiAreaComparison) {
 										$scope.aqiAreaComparisonLastWeek = res[0].assets;
 										
-										console.log( $scope.aqiAreaComparison[$scope.tabIndexAreaComparison].data.maxAqi.aqiValue);
 										loadGaugeChart('#aqi_area_comparison_chart_' + $scope.tabIndexAreaComparison, $scope.aqiAreaComparison[$scope.tabIndexAreaComparison].data.maxAqi.aqiValue);
 										
 										loadGaugeChart('#aqi_area_comparison_chart_last_week_' + $scope.tabIndexAreaComparison, $scope.aqiAreaComparisonLastWeek[$scope.tabIndexAreaComparison].data.maxAqi.aqiValue);
@@ -208,7 +199,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 									if (!lastTimeStamp) {
 										lastTimeStamp = areaCharts[$scope.tabIndexArea].series[0].data[l - 1]['category'];
 									}
-									 console.log(timestamps);
 									if (lastTimeStamp !== timestamps) {
 										areaCharts[$scope.tabIndexArea].series[0].addPoint([ timestamps, y ], true, true);
 									} else {
@@ -278,9 +268,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				$scope.selectTab = function(index, type) {
 					if (type === 'comparison') {
 						$scope.tabIndexAreaComparison = index;
-						console.log($scope.tabIndexAreaComparison);
 						if ($scope.aqiAreaComparison) {
-							console.log("called! "+$scope.aqiAreaComparison[index].data.maxAqi.aqiValue);
 							loadGaugeChart('#aqi_area_comparison_chart_' + index, $scope.aqiAreaComparison[index].data.maxAqi.aqiValue);
 						}
 						if ($scope.aqiAreaComparisonLastWeek) {
@@ -321,7 +309,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					}
 					else if (type === 'machine') {
 						$scope.tabIndexMachine = index;
-						console.log("1111111");
 						switch ($scope.aqiMachineData[index].assetName) {
 						case 'Soltech-Machine':
 							$scope.aqiMachineData[index].data.imageUrl = 'images/soltech_machine (1).png';
@@ -357,9 +344,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				var graphColor = '#00acec';
 
 				var loadGaugeChart = function(id, value) {
-					console.log("id=="+id);
-					console.log("inside loadgaugechart !!!!!");
-					console.log(value);
 					loadChart(id, 0, 500, value);
 				};
 				
@@ -458,7 +442,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				}
 
 				var loadChart = function(selector, min, max, val) {
-					console.log("inside load chart....");
 					var per = (val / max);
 					var chart = c3.generate({
 						bindto : selector,

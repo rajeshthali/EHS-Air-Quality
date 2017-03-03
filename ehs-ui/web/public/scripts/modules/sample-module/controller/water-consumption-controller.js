@@ -81,13 +81,13 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                 intervalPromiseMachine = $interval(function() {                     
                 	loadPollutants($scope.floor);
                     loadWaterAreaKld($scope.floor);
-                    loadWaterkld($scope.floor);
+                   loadWaterkld($scope.floor);
                    loadWaterAllComponents($scope.floor);
 
                 }, 20000);
             };
 
-            var startDynamicUpdateArea = function() {
+          var startDynamicUpdateArea = function() {
                 intervalPromiseArea = $interval(function() {
                 	 loadPollutants($scope.floor);
                      loadWaterAreaKld($scope.floor);
@@ -118,7 +118,7 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                     loadWaterAreaAllComponents($scope.floor);
                     $scope.selectTab($scope.tabIndex, 'industrial');
                     $scope.selectTab($scope.tabIndex, 'domestic');
-
+                    startDynamiUpdate();
                 });
             };
             loadData();
@@ -191,6 +191,7 @@ define(['angular', './controllers-module'], function(angular, controllers) {
 
                             if (!dynamicUpdateMachineStarted) {
                                 startDynamicUpdateMachine();
+                            	/*startDynamicUpdate();*/
                                 dynamicUpdateMachineStarted = true;
                             }
                         }
@@ -242,6 +243,7 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                             $("#water-area-tab-content").fadeIn();
                             if (!dynamicUpdateAreaStarted) {
                                 startDynamicUpdateArea();
+                            	/*startDynamicUpdate();*/
                                 dynamicUpdateAreaStarted = true;
                             }
                         }

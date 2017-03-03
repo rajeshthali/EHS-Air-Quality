@@ -218,7 +218,7 @@
 								<div ng-repeat="area2 in aqiAreaData2" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea2}" class="tab-pane fade in">
 
 									<div class="row">
-										<div class="col-md-12">
+										<div class="col-md-12 cursor">
 											
 											<div class="col-md-6 machine_values">
 												<div class="col-md-12 machine_data" ng-class="getColorClass(area2.data.O3status)">
@@ -276,7 +276,7 @@
 									</div>
 									
 
-									<div class="row mach-margin">
+									<div class="row mach-margin cursor">
 										<div class="col-md-5 col-xs-12 mach-height">
 											<img alt="" class="center_img" ng-src="{{area.data.imageUrl}}">
 										</div>

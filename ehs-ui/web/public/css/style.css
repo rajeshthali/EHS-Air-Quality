@@ -354,7 +354,7 @@ px-app-nav.navbar--collapsed .login {
 .box_text_hygn {
 	/* text-align: left; */
 	padding-left: 30px;
-	font-size: 15px;
+	font-size: 20px;
 	color: #828181;
 	border: 1px;
 	height: 20px;
@@ -429,7 +429,7 @@ px-app-nav.navbar--collapsed .login {
 }
 
 .top {
-	padding-top: 15px;
+	padding-top: 23px;
 }
 
 .mach_val {

@@ -2,7 +2,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 	'use strict';
 	controllers.controller('AQIDetailsPageController', [ '$state', '$timeout', '$interval', '$scope', '$rootScope', '$http', '$log', 'PredixAssetService', 'PredixViewService', 'AuthService', 'HygieneService', 'DashBoardService', '$stateParams',
 			function($state, $timeout, $interval, $scope, $rootScope, $http, $log, PredixAssetService, PredixViewService, AuthService, HygieneService, DashBoardService, $stateParams) {
-				// console.log($stateParams);
 
 				var areaCharts = [];
 				var machineCharts = [];
@@ -34,7 +33,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				
 			   //Rohit
 				$scope.floor =  $stateParams.floor;
-				console.log("undefined floor"+$stateParams.floor);
                 if($stateParams.floor == null){
 				   $scope.floor = 0;
 				}

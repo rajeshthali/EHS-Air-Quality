@@ -83,7 +83,7 @@ define([ 'jquery',
 				]
 			} ,
 			{    
-				   icon: 'fa-tint fa-lg', 
+				   icon: 'fa-tint', 
 				   state: 'water-discharge', 
 			       label: 'Water Consumption',
 			       subitems: [

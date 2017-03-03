@@ -101,7 +101,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 
 				$scope.animateFloor = function(i, iconClass) {
 					var item = null;
-					// console.log(i+' > '+iconClass);
 					if (iconClass) {
 						item = $('#floor_' + i + '> .icon.' + iconClass);
 					} else {
@@ -138,7 +137,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				};
 
 				$scope.selectFoor = function(floor) {
-					// console.log('Current Floor : ' + floor);
 					var element = $('#floor_' + floor);
 					for (var i = 0; i < maxFloor; i++) {
 						if (floorArray[i].attr('id') === element.attr('id')) {
@@ -185,7 +183,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				$scope.selectFoor($rootScope.floor);
 
 				var addTag = function(floorIndex, tag, top, left, data, iconClass) {
-					// console.log(data);
 					var avgHygiene = null;
 					var avgAqi = null;
 					var type = '';
@@ -249,7 +246,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				};
 				$scope.gotoDetails = function(floor, type, assetName) {
 					document.querySelector('px-app-nav').markSelected('/airquality'); 
-					// console.log(floor + ' ' + type + ' ' + assetName);
 					if (type == 'machine' || type === 'area') {
 						$state.go('aqi-details', {
 							'floor' : floor,
@@ -280,8 +276,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				};
 
 				var hygieneAvg = function(data) {
-					// console.log(data);
-					// console.log(data.length);
 					var resObject = {
 						humidity : 0.0,
 						noise : 0.0,

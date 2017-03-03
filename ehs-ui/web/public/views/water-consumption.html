@@ -14,13 +14,13 @@
                   <li class="active"><a data-toggle="tab" href="" data-target="#industrial" ng-click="waterTabChange('industrial')">Industrial Use</a></li>
                   <li><a data-toggle="tab" href="" data-target="#domestic" ng-click="waterTabChange('domestic')">Domestic Use</a></li>
                </ul>
-               <div class="tab-base-inner-water">
-                  <div id="aqi-area" class="tab-pane fade in active details-tab-base-content">
+               <div class="tab-base-inner-water cursor">
+                  <div id="aqi-area" class="tab-pane fade in active details-tab-base-content cursor">
                      <img alt="" class="loading_image" ng-show="waterLoading" src="images/25.gif">
-                     <div id="water-area-tab-content" class="tab-content details-tab-base-content-inner-water highcharts-button">
+                     <div id="water-area-tab-content" class="tab-content details-tab-base-content-inner-water highcharts-button cursor">
                         <div ng-repeat="area in waterAssetTabList" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea}" class="tab-pane fade in">
                            <div  id="area_chart_water_{{$index}}" class="graph_class"></div>
-                           <div class="col-md-12">
+                           <div class="col-md-12 cursor">
                               <div class="col-md-7">
                                  <h4 class="pull-left">Current Use:</h4>
                                  <h2 class="pull-left curr-limit">{{kld1}}</h2>
@@ -45,11 +45,11 @@
                   <li class="active"><a data-toggle="tab" href="" data-target="#p-s-e">Domestic Effluent Treatment</a></li>
                </ul>
                <div class="tab-base-inner-water">
-                  <div id="aqi-machine" class="tab-pane fade in active tab-base-content">
-                     <div id="domestic-effluent-tab-content" class="tab-content details-tab-base-content-inner highcharts-button">
+                  <div id="aqi-machine" class="tab-pane fade in active tab-base-content cursor">
+                     <div id="domestic-effluent-tab-content" class="tab-content details-tab-base-content-inner highcharts-button cursor">
                         <div ng-repeat="machine in waterMachineData" id="aqi_machine_{{$index}}" ng-class="{'active':$index==tabIndexMachine}" class="tab-pane fade in">
                            <div class="row">
-                              <div class="col-md-12" ng-init="gotoDetailsView()">
+                              <div class="col-md-12 cursor" ng-init="gotoDetailsView()">
                                  <div class="col-md-6 machine_values" >
                                     <div class="col-md-12 machine_data" ng-class="{'machine_down_green': pH <= maxValuepH, 'machine_up_orange':pH > maxValuepH}">
                                        <!--  <div class="col-md-12 machine_data machine_down_green"> -->
@@ -130,7 +130,7 @@
                   <ul class="nav nav-tabs" id="waterData">
                      <li ng-repeat="waterTab in waterTabList" ng-class="{'active':$index==tabIndex}"><a data-toggle="tab" href="#" data-target="#water_{{$index}}" ng-click="selectTab1($index)">{{waterTab}}</a></li>
                   </ul>
-                  <div id="container" ng-show="!waterLoading" class="tab-content details-tab-base-content-inner water-graph" ng-model="showMe">
+                  <div id="container" ng-show="!waterLoading" class="tab-content details-tab-base-content-inner water-graph cursor" ng-model="showMe">
                      <div ng-repeat="water in waterTabList" id="water_{{$index}}" ng-class="{'active':$index==tabIndex}" class="tab-pane fade in">
                         <div id="container_{{$index}}" class="water_details_graph_class water_details_graph_class_machine data-graph"></div>
                      </div>

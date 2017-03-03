@@ -26,7 +26,8 @@ module.exports = {
                     'bower_components/c3/*',
                     'bower_components/d3/*',
                     'bower_components/es6-promise/*',
-                    'bower_components/**'
+                    'bower_components/**',
+                    'bower_components/px-login/*'
                 ],
                 dest: 'dist/www/'
             }
