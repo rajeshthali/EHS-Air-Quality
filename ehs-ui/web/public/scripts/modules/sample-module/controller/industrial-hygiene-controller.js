@@ -3,11 +3,8 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 	controllers.controller('industrialHygiene', [ '$scope', '$http', '$state','NewhygnService', 'DashBoardService', 'AuthService', '$rootScope','$interval', '$stateParams', function($scope, $http, $state,NewhygnService, DashBoardService, AuthService, $rootScope,$interval,$stateParams) {
 		$scope.loading = true;
 		var avgHygiene = null;
-		var floorArray = [];
+		var chart1;
 		$scope.floordata = [];
-		var maxFloor = 3;
-		var maxOpacity = .99;
-		var interval = 25 * 1000;
 		$scope.hygieneLoading = true;
 				
 		$scope.floors = [ {
@@ -22,15 +19,12 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		} ];
 		
 		
-		//Rohit
-		var hygieneCharts = [];
+		
 		$scope.hygieneData = null;
 		$scope.tabIndex = 0;
 		var promise = 0;
 		$scope.hygieneLoading = false;
-		var hygieneInterval = null;
 		var interval = 1000 * 60 * 2;
-		var intervalDynamic = 1000 * 30;
 		
 		$scope.floor =  $stateParams.floor;
         if($stateParams.floor == null){
@@ -39,12 +33,11 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		else{
 		 $scope.floor =  $stateParams.floor;
 		}
-		//Rohit
+		
 		$scope.changeFloor = function(floor) {
-			if (!$scope.aqiMachineLoading && !$scope.aqiMachineLoading && !$scope.hygieneLoading) {
+			if (!$scope.aqiMachineLoading && !$scope.hygieneLoading) {
 				$scope.loading = true;
 				$scope.floor = floor;
-				hygieneCharts = [];
 				$rootScope.floor = floor;
 				$scope.floor = floor;
 				$scope.tabIndex = 0;
@@ -57,7 +50,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		};
 		
 		
-		//Rohit
+		
 		$scope.$on('$destroy', function() {
 			$scope.stop();
 		});
@@ -65,29 +58,17 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		$scope.stop = function() {
 			$interval.cancel(promise);
 		};
-		 var loadData = function(floor) {
-			 $scope.floordata = [];
-			 $scope.hygnareaName = null;
-				$scope.hygieneLoading = true;
-				AuthService.getTocken(function(token) {
-					
-					loadHygiene($rootScope.floor);
-					loadhygndata($rootScope.floor);
-					startDynamiUpdate();
-					
-				});
-			};
-			loadData();
-			//Rohit
-			var startDynamiUpdate = function() {
-				/*var interval = 1000 * 60 * 2;*/
-				/*var intervalDynamic = 1000 * 30;*/
+		
+		var startDynamiUpdate = function() {
 
-				promise = $interval(function() {
-					//loadhygndata($rootScope.floor);
-					loadHygiene($rootScope.floor);
-				}, 20000);
-			};
+			promise = $interval(function() {
+				loadHygiene($rootScope.floor);
+			}, 20000);
+		};
+		
+		
+		
+			
 			
 			
 			var loadhygndata = function(floor) {
@@ -131,8 +112,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			//Krishna
 			var loadHygiene = function(floor) {
 				
-				/*var interval = 1000 * 60 * 2;*/
-				/*var intervalDynamic = 1000 * 30;*/
 				DashBoardService.getHygieneValues(floor, interval, function(res) {
 						
                            if(res.length == 0){
@@ -157,10 +136,23 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
                         	$scope.hygieneLoading = false;
        						$scope.selectTab($scope.tabIndex);
                            }
-					  // startDynamiUpdate();
 					});
 			};
 			
+			 var loadData = function(floor) {
+				 $scope.floordata = [];
+				 $scope.hygnareaName = null;
+					$scope.hygieneLoading = true;
+					AuthService.getTocken(function(token) {
+						
+						loadHygiene($rootScope.floor);
+						loadhygndata($rootScope.floor);
+						startDynamiUpdate();
+						
+					});
+				};
+				loadData();
+				
 			$scope.selectTab = function(index) {
 				$scope.tabIndex = index;
 				$('.hygiene_details_graph_class').hide();
@@ -314,19 +306,17 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			{
 			  $(".charticon1").addClass("active_chart");
 			  $(".charticon").removeClass("active_chart");
-			  var column = document.getElementById('areaspline');
 			  $scope.options.chart.renderTo = 'containerH_'+ tabIndex;
 			  $scope.options.chart.type = 'areaspline';
-			  var chart1 = new Highcharts.Chart($scope.options);
+			  chart1 = new Highcharts.Chart($scope.options);
 			 };
 			
 		   $scope.chartfunc2 = function(options , index){
 			  $(".charticon").addClass("active_chart");
 			  $(".charticon1").removeClass("active_chart");
-			  var bar = document.getElementById('column');
 			  $scope.options.chart.renderTo = 'containerH_'+ index;
 			  $scope.options.chart.type = 'column';
-		      var chart1 = new Highcharts.Chart($scope.options);
+		      chart1 = new Highcharts.Chart($scope.options);
 	          };
 				
 				$scope.$on('$destroy', function() {

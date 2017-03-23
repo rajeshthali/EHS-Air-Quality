@@ -5,8 +5,6 @@ define(['angular', './controllers-module'], function (angular, controllers) {
     // Controller definition
     controllers.controller('GraphCtrl', ['$scope','$http', '$log', 'PredixAssetService', 'PredixViewService', function ($scope,$http,$log, PredixAssetService, PredixViewService) {
     
-    	
-    		console.log("i am in graph control");
     		$scope.data_chart = [
     		                     {'x': 1397102460000, 'y': 11.4403},
     		                     {'x': 1397139660000, 'y': 13.1913},

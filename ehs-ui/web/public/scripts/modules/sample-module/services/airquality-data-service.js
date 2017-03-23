@@ -16,7 +16,6 @@ define(['angular', './services-module'], function(angular, module) {
 	            	
 	                //nukeService.data.nukes = data;
 	                //console.log("im in success" + JSON.stringify(nukeService.data.nukes));
-	            	 console.log("im in success" + JSON.stringify(data));
 	            	 mydata(data);
 	            	//return data;
 	               
@@ -25,7 +24,6 @@ define(['angular', './services-module'], function(angular, module) {
 	       
 	    };
 	    var mydata = function(data){
-	   	 console.log("im in mydara" + JSON.stringify(data));
 	   	return data;
 	   };
 

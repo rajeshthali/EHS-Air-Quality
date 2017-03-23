@@ -5,7 +5,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 
 				var areaCharts = [];
 				var machineCharts = [];
-
+				var chart;
 				var initVariables = function() {
 					areaCharts = [];
 					machineCharts = [];
@@ -40,7 +40,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				 $scope.floor =  $stateParams.floor;
 				}
                 
-                
                 $scope.changeFloor = function(floor) {
 					if (!$scope.aqiAreaLoading && !$scope.aqiMachineLoading) {
 						$scope.floor = floor;
@@ -51,7 +50,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				};
 
 				var interval = 2 * 60 * 1000;
-				var refreshInterval = 20 * 1000;
 				var intervalPromiseMachine = null;
 				var intervalPromiseArea = null;
                 var startDynamicUpdateMachine = function() {
@@ -75,13 +73,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					$interval.cancel(intervalPromiseArea);
 				};
 
-				var loadData = function() {
-					AuthService.getTocken(function(token) {
-						loadAqiMachine($scope.floor);
-						loadAqiArea($scope.floor);
-					});
-				};
-				loadData();
+				
 
 				var loadAqiArea = function(floor) {
 					if (!$scope.aqiAreaData) {
@@ -122,7 +114,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 											}
 											if (lastTimeStamp !== timestamps) {
 												areaCharts[$scope.tabIndexArea].series[i].addPoint([ timestamps, series[i].data[last] ], false, true);
-											} else {
 											}
 										}
 
@@ -136,8 +127,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 											}
 											if (lastTimeStamp !== timestamps) {
 												areaCharts[$scope.tabIndexArea].series[i].addPoint([ timestamps, series[i].data[last] ], true, true);
-											} else {
-												console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
 											}
 										}
 									}
@@ -179,8 +168,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 											}
 											if (lastTimeStamp !== timestamps) {
 												machineCharts[$scope.tabIndexMachine].series[i].addPoint([ timestamps, series[i].data[last] ], false, true);
-											} else {
-												console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
 											}
 										}
 
@@ -193,8 +180,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 											}
 											if (lastTimeStamp !== timestamps) {
 												machineCharts[$scope.tabIndexMachine].series[i].addPoint([ timestamps, series[i].data[last] ], true, true);
-											} else {
-												console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
 											}
 										}
 
@@ -206,19 +191,16 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					}
 
 				};
-				var getMahineComponets = function(data) {
-					var components = {};
-					for (var i = 0; i < data.length; i++) {
-						components[data[i].name] = 0.0;
-						for (var j = 0; j < data[i].values.length; j++) {
-							if (components[data[i].name] < data[i].values[j]) {
-								components[data[i].name] = data[i].values[j];
-							}
-						}
-					}
-					return components;
+				
+				var loadData = function() {
+					AuthService.getTocken(function(token) {
+						loadAqiMachine($scope.floor);
+						loadAqiArea($scope.floor);
+					});
 				};
-
+				loadData();
+				
+				
 				var findLastValue = function(timestamps) {
 					var big = 0;
 					var index = 0;
@@ -250,12 +232,11 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					}
 
 				};
-				var graphColor = '#00acec';
 
 				var loadValuesToGraph = function(id, dataX, dataY, index, type) {
 
 					$(id).each(function() {
-						var chart = new Highcharts.Chart({
+						chart = new Highcharts.Chart({
 							type : 'spline',
 							animation : Highcharts.svg,
 							marginRight : 10,
@@ -335,7 +316,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					switch (prominentParameter) {
 					case 'PM10':
 						if (max >= 0 && max <= 50) {
-							var status = 'Good';
+							 status = 'Good';
 						} else if (max >= 51 && max <= 100) {
 							status = 'Satisfactory';
 

@@ -5,6 +5,7 @@ define(['angular', './controllers-module'], function(angular, controllers) {
     	//Test
             var isLoading = false;
             var promise = 0;
+            var chart;
             var initVariables = function() {
                 $scope.waterTabList = ['pH Value', 'Suspended Solids', 'BOD', 'COD', 'Oil & Grease'];
                 $scope.waterAssetTabList = ['Industrial Use', 'Domestic Use']
@@ -47,19 +48,6 @@ define(['angular', './controllers-module'], function(angular, controllers) {
             }];
 
             var interval = 3 * 50 * 1000;
-
-           // $scope.floor = 0;
-           /* $scope.changeFloor = function(floor) {
-            	if (!$scope.waterLoading)
-                    $scope.floor = floor;
-                    $scope.tabIndex = 0;
-                    $scope.water1Loading = false;
-                    $scope.waterData = null;
-                    $scope.stop();
-                    initVariables();
-                    loadData();
-            		
-            };*/
             
             $scope.showMe = false;
             $scope.gotoDetailsView = function() {
@@ -77,60 +65,16 @@ define(['angular', './controllers-module'], function(angular, controllers) {
 
             var dynamicUpdateMachineStarted = false;
             var dynamicUpdateAreaStarted = false;
-            var startDynamicUpdateMachine = function() {
-                intervalPromiseMachine = $interval(function() {                     
-                	loadPollutants($scope.floor);
-                    loadWaterAreaKld($scope.floor);
-                   loadWaterkld($scope.floor);
-                   loadWaterAllComponents($scope.floor);
+           
 
-                }, 20000);
-            };
-
-          var startDynamicUpdateArea = function() {
-                intervalPromiseArea = $interval(function() {
-                	 loadPollutants($scope.floor);
-                     loadWaterAreaKld($scope.floor);
-                     loadWaterkld($scope.floor);
-                    loadWaterAllComponents($scope.floor);
-                }, 20000);
-            };
-
-            var startDynamiUpdate = function() {
-                console.log('running startDynamiUpdate..');
-                promise = $interval(function() {
-                	loadPollutants($scope.floor);
-                    loadWaterAreaKld($scope.floor);
-                    loadWaterkld($scope.floor);
-                    loadWaterAllComponents($scope.floor);
-                    loadWaterAreaAllComponents($scope.floor);
-
-                }, 20000);
-            };
-
-            var loadData = function() {
-                AuthService.getTocken(function(token) {
-                    loadPollutants($scope.floor);
-                    loadWaterAreaKld($scope.floor);
-                    loadWaterkld($scope.floor);
-
-                    loadWaterAllComponents($scope.floor);
-                    loadWaterAreaAllComponents($scope.floor);
-                    $scope.selectTab($scope.tabIndex, 'industrial');
-                    $scope.selectTab($scope.tabIndex, 'domestic');
-                    startDynamiUpdate();
-                });
-            };
-            loadData();
+            
 
 
             $scope.selectTab1 = function(index) {
                 $scope.tabIndex = index;
                 $('.water_details_graph_class').hide();
-                console.log("select tab index is: " + $scope.tabIndex)
                 setTimeout(function() {
                     $('.water_details_graph_class').fadeIn();
-                   // if($scope.tabIndex)
                     loadGraphArea2($scope.waterDataList, $scope.tabIndex);
                 }, 300);
             };
@@ -138,10 +82,8 @@ define(['angular', './controllers-module'], function(angular, controllers) {
             $scope.selectTab2 = function(index) {
                 $scope.tabIndex = index;
                 $('.water_details_graph_class').hide();
-                console.log("select tab index is: " + $scope.tabIndex)
                 setTimeout(function() {
                     $('.water_details_graph_class').fadeIn();
-                   // if($scope.tabIndex)
                     loadGraphArea3($scope.waterDataList, $scope.tabIndex);
                 }, 300);
             };
@@ -150,7 +92,6 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                 WaterConsumptionService.getWaterValues(floor, interval, function(res) {
                 	$scope.waterLoading = false;
                     $scope.waterDataList = angular.copy(res);
-                    console.log("select tab index is: " + $scope.tabIndex)
                     setTimeout(function() {
                         loadGraphArea1($scope.waterDataList, $scope.tabIndex);
                         $scope.waterLoading = false;
@@ -163,7 +104,6 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                 WaterConsumptionService.getWaterValues(floor, interval, function(res) {
                 	$scope.waterLoading = false;
                     $scope.waterDataList = angular.copy(res);
-                    console.log("select tab index is: " + $scope.tabIndex)
                     setTimeout(function() {
                     	if($scope.tabIndex == 0)
                     		{
@@ -191,7 +131,6 @@ define(['angular', './controllers-module'], function(angular, controllers) {
 
                             if (!dynamicUpdateMachineStarted) {
                                 startDynamicUpdateMachine();
-                            	/*startDynamicUpdate();*/
                                 dynamicUpdateMachineStarted = true;
                             }
                         }
@@ -218,20 +157,7 @@ define(['angular', './controllers-module'], function(angular, controllers) {
             };
 
 
-            $scope.waterTabChange = function(key) {
-                console.log(key);
-                switch (key) {
-                    case 'industrial':
-                        $scope.selectTab(0, 'industrial');
-                        break;
-                    case 'domestic':
-                        $scope.selectTab(1, 'domestic');
-                        break;
-
-                    default:
-                        break;
-                }
-            };
+            
             var loadWaterAreaKld = function(floor) {
                 if (!$scope.waterAreaData) {
                     $scope.waterLoading = true;
@@ -243,7 +169,6 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                             $("#water-area-tab-content").fadeIn();
                             if (!dynamicUpdateAreaStarted) {
                                 startDynamicUpdateArea();
-                            	/*startDynamicUpdate();*/
                                 dynamicUpdateAreaStarted = true;
                             }
                         }
@@ -288,7 +213,65 @@ define(['angular', './controllers-module'], function(angular, controllers) {
 
             };
 
+            var startDynamicUpdateMachine = function() {
+                intervalPromiseMachine = $interval(function() {                     
+                	loadPollutants($scope.floor);
+                    loadWaterAreaKld($scope.floor);
+                   loadWaterkld($scope.floor);
+                   loadWaterAllComponents($scope.floor);
 
+                }, 20000);
+            };
+
+          var startDynamicUpdateArea = function() {
+                intervalPromiseArea = $interval(function() {
+                	 loadPollutants($scope.floor);
+                     loadWaterAreaKld($scope.floor);
+                     loadWaterkld($scope.floor);
+                    loadWaterAllComponents($scope.floor);
+                }, 20000);
+            };
+
+            var startDynamiUpdate = function() {
+                promise = $interval(function() {
+                	loadPollutants($scope.floor);
+                    loadWaterAreaKld($scope.floor);
+                    loadWaterkld($scope.floor);
+                    loadWaterAllComponents($scope.floor);
+                    loadWaterAreaAllComponents($scope.floor);
+
+                }, 20000);
+            };
+            
+            var loadData = function() {
+                AuthService.getTocken(function(token) {
+                    loadPollutants($scope.floor);
+                    loadWaterAreaKld($scope.floor);
+                    loadWaterkld($scope.floor);
+
+                    loadWaterAllComponents($scope.floor);
+                    loadWaterAreaAllComponents($scope.floor);
+                    $scope.selectTab($scope.tabIndex, 'industrial');
+                    $scope.selectTab($scope.tabIndex, 'domestic');
+                    startDynamiUpdate();
+                });
+            };
+            loadData();
+
+            $scope.waterTabChange = function(key) {
+                switch (key) {
+                    case 'industrial':
+                        $scope.selectTab(0, 'industrial');
+                        break;
+                    case 'domestic':
+                        $scope.selectTab(1, 'domestic');
+                        break;
+
+                    default:
+                        break;
+                }
+            };
+            
             var loadGraphArea1 = function(waterDataList, index) {
                 for (var i = 0; i < waterDataList.length; i++) {
 
@@ -298,10 +281,10 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                     var dataYaxis = [];
                     for (var j = 0; j < waterDataValues.length; j++) {
                         if ($scope.waterAssetTabList[index] == 'Industrial Use') {
-                            var waterDataValues = waterDataList[0].assets[1].data;
+                             waterDataValues = waterDataList[0].assets[1].data;
                             dataYaxis.push(waterDataValues[j].kld);
                         } else if ($scope.waterAssetTabList[index] == 'Domestic Use') {
-                            var waterDataValues = waterDataList[0].assets[0].data;
+                             waterDataValues = waterDataList[0].assets[0].data;
                             dataYaxis.push(waterDataValues[j].kld);
                         }
 
@@ -420,7 +403,7 @@ define(['angular', './controllers-module'], function(angular, controllers) {
             	   } else if(type=='domestic'){
             		   loadValuesToWaterGraphBar('container1_' + index, convertTimeStamps($scope.time), $scope.dataY, $scope.waterTabList[index]);  
             	   }
-            	   };
+            	   }
             };
 
             $scope.chartfunc1 = function(type) {
@@ -431,14 +414,13 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                     loadValuesToWaterGraphArea('container_' + index, convertTimeStamps($scope.time), $scope.dataY, $scope.waterTabList[index]);
                 	 else if(type=='domestic')
                 		  loadValuesToWaterGraphArea('container1_' + index, convertTimeStamps($scope.time), $scope.dataY, $scope.waterTabList[index]);
-                };
+                }
             };
 
             $scope.selectTab = function(index, type) {
                 if (type === 'industrial') {
                     $scope.tabIndex = index;
                     $('#domestic').hide();
-                    console.log("select tab index is: " + $scope.tabIndex)
 
                     $scope.pH = ($scope.waterMachineData[index].data[index].pHValue);
                     $scope.suspendedSolids = ($scope.waterMachineData[index].data[index].suspendedSolids);
@@ -452,13 +434,10 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                         loadGraphArea1($scope.waterDataList, $scope.tabIndex);
                         $scope.waterLoading = false;
                         loadGraphArea2($scope.waterDataList, $scope.tabIndex);
-                        //$scope.selectTab1(index);
                     }, 300);
                 } else if (type === 'domestic') {
                     $scope.tabIndex = index;
-                   // $('#domestic').hide();
                     $('#industrial').hide();
-                    console.log("select tab index is: " + $scope.tabIndex)
 
                     $scope.pH = ($scope.waterMachineData[index].data[index].pHValue);
                     $scope.suspendedSolids = ($scope.waterMachineData[index].data[index].suspendedSolids);
@@ -467,14 +446,12 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                     $scope.oilGrease = ($scope.waterMachineData[index].data[index].oilGrease);
                     $scope.kld1 = ($scope.waterMachineData[index].data[index].kld);
                     setTimeout(function() {
-                    	// $('#industrial').fadeIn();
 
                         $('#domestic').fadeIn();
 
                         loadGraphArea1($scope.waterDataList, $scope.tabIndex);
                         $scope.waterLoading = false;
                         loadGraphArea3($scope.waterDataList, $scope.tabIndex);
-                        //$scope.selectTab1(index);
                     }, 300);
                 }
             };
@@ -529,15 +506,9 @@ define(['angular', './controllers-module'], function(angular, controllers) {
 
             var loadValuesToWaterGraphBar = function(id, dataX, dataY, waterName) {
                 var waterNameForUI = waterName;
-                console.log(id + ' >> ');
-                console.log(dataX + ' >dataX> ');
-                console.log(dataY + ' >dataY> ');
-                console.log(waterNameForUI + ' >waterNameForUI> ');
-
-
                 var yAxisType = getYAxisType(waterNameForUI);
                 $('#' + id).each(function() {
-                    var chart = new Highcharts.Chart({
+                    chart = new Highcharts.Chart({
                         animation: Highcharts.svg,
                         marginRight: 10,
                         chart: {
@@ -606,7 +577,7 @@ define(['angular', './controllers-module'], function(angular, controllers) {
                 var waterNameForUI = waterName;
                 var yAxisType = getYAxisType(waterNameForUI);
                 $('#' + id).each(function() {
-                    var chart = new Highcharts.Chart({
+                     chart = new Highcharts.Chart({
                         animation: Highcharts.svg,
                         marginRight: 10,
                         chart: {
@@ -671,11 +642,8 @@ define(['angular', './controllers-module'], function(angular, controllers) {
            
 
             var loadValuesToGraphAreaKld = function(id, dataX, dataY, index) {
-                console.log(id + ' >> ');
-                console.log(dataX + ' >dataX> ');
-                console.log(dataY + ' >dataY> ');
                 $(id).each(function() {
-                    var chart = new Highcharts.Chart({
+                    chart = new Highcharts.Chart({
                         type: 'spline',
                         animation: Highcharts.svg,
                         marginRight: 10,

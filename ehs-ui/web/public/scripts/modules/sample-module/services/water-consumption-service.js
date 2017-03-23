@@ -97,30 +97,6 @@ define([ 'angular', './services-module' ], function(angular, sampleModule) {
 						cb(response);
 				});
 			},
-			prettyMs : function(timestamp) {
-				var dates = [];
-				for (var i = 0; i < timestamp.length; i++) {
-					var date = new Date(timestamp[i]);
-					var h = 0;
-					var m = 0;
-					var s = 0;
-					if (date.getHours() < 10)
-						h = '0' + date.getHours();
-					else
-						h = date.getHours();
-					if (date.getMinutes() < 10)
-						m = '0' + date.getMinutes();
-					else
-						m = date.getMinutes();
-					if (date.getSeconds() < 10)
-						s = '0' + date.getSeconds();
-					else
-						s = date.getSeconds();
-
-					var dateString = h + ':' + m + ':' + s;
-					dates.push(dateString);
-				}
-				return dates;
-			}	};
+	};
 	} ]);
 });

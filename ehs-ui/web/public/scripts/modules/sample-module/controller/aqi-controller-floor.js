@@ -4,7 +4,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 	controllers.controller('AqiController', [ '$scope', '$http', '$state', '$log', 'PredixAssetService', 'PredixViewService', 'CalculationOneService', 'CalculationService', '$interval', 'AqiService', '$rootScope', 'AuthService', 'HygieneService', 'DashBoardService',
 			function($scope, $http, $state, $log, PredixAssetService, PredixViewService, CalculationOneService, CalculationService, $interval, AqiService, $rootScope, AuthService, HygieneService, DashBoardService) {
 				var areaCharts = [];
-				var areaGaugeCharts = [];
 				var isLoading = false;
 				var initVariables = function() {
 					$scope.maxValue = 50;
@@ -23,7 +22,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					$scope.tabIndexMachineComparison = 0;
 					$scope.aqiAreaComparisonLastWeek = null;
 					areaCharts = [];
-					areaGaugeCharts = [];
 				};
 				initVariables();
 				$scope.floors = [ {
@@ -38,74 +36,20 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				} ];
 
 				var interval = 50 * 1000;
-				var refreshInterval = 20 * 1000;
 				var intervalPromiseMachine = null;
 				var intervalPromiseArea = null;
 
 				$scope.floor = 0;
 				$scope.changeFloor = function(floor) {
-					if (!$scope.aqiMachineLoading && !$scope.aqiMachineLoading) {
+					if (!$scope.aqiMachineLoading) {
 						$scope.floor = floor;
 						$scope.stop();
 						initVariables();
 						loadData();
 					}
 				};
-				var dynamicUpdateMachineStarted = false;
-				var dynamicUpdateAreaStarted = false;
-				var dynamicUpdateAreaStarted2 = false;
-				var startDynamicUpdateMachine = function() {
-					intervalPromiseMachine = $interval(function() {
-						loadAqiMachine($scope.floor);
-					}, 20000);
-				};
-
-				var startDynamicUpdateArea = function() {
-					
-					intervalPromiseArea = $interval(function() {
-						loadAqiArea($scope.floor);
-					}, 20000);
-				};
-				var startDynamicUpdateArea2 = function() {
-					
-					intervalPromiseArea = $interval(function() {
-						loadAqiArea($scope.floor);
-					}, 20000);
-				};
-
-				$scope.aqiTabChange = function(key) {
-					switch (key) {
-					case 'aqi':
-						$scope.selectTab($scope.tabIndexMachine, 'machine');
-						break;
-					case 'aqi-comparison':
-						$scope.selectTab($scope.tabIndexAreaComparison, 'comparison');
-						break;
-
-					default:
-						break;
-					}
-				};
-
-				$scope.$on('$destroy', function() {
-					$scope.stop();
-				});
-
-				$scope.stop = function() {
-					$interval.cancel(intervalPromiseMachine);
-					$interval.cancel(intervalPromiseArea);
-				};
-
-		
-				var loadData = function() {
-					AuthService.getTocken(function(token) {
-						loadAqiMachine($scope.floor);
-						loadAqiArea($scope.floor);
-						loadAqiArea2($scope.floor);
-					});
-				};
-				loadData();
-				var loadAqiMachine = function(floor) {
+				
+var loadAqiMachine = function(floor) {
 					
 					if (!$scope.aqiMachineData) {
 						$scope.aqiMachineLoading = true;
@@ -201,9 +145,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 									}
 									if (lastTimeStamp !== timestamps) {
 										areaCharts[$scope.tabIndexArea].series[0].addPoint([ timestamps, y ], true, true);
-									} else {
-										console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
-									}
+									} 
 								}
 
 							}
@@ -239,6 +181,63 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 
 				};
 				
+				
+				var dynamicUpdateMachineStarted = false;
+				var dynamicUpdateAreaStarted = false;
+				var dynamicUpdateAreaStarted2 = false;
+				var startDynamicUpdateMachine = function() {
+					intervalPromiseMachine = $interval(function() {
+						loadAqiMachine($scope.floor);
+					}, 20000);
+				};
+
+				var startDynamicUpdateArea = function() {
+					
+					intervalPromiseArea = $interval(function() {
+						loadAqiArea($scope.floor);
+					}, 20000);
+				};
+				var startDynamicUpdateArea2 = function() {
+					
+					intervalPromiseArea = $interval(function() {
+						loadAqiArea($scope.floor);
+					}, 20000);
+				};
+
+				$scope.aqiTabChange = function(key) {
+					switch (key) {
+					case 'aqi':
+						$scope.selectTab($scope.tabIndexMachine, 'machine');
+						break;
+					case 'aqi-comparison':
+						$scope.selectTab($scope.tabIndexAreaComparison, 'comparison');
+						break;
+
+					default:
+						break;
+					}
+				};
+
+				$scope.$on('$destroy', function() {
+					$scope.stop();
+				});
+
+				$scope.stop = function() {
+					$interval.cancel(intervalPromiseMachine);
+					$interval.cancel(intervalPromiseArea);
+				};
+
+
+				
+				
+				var loadData = function() {
+					AuthService.getTocken(function(token) {
+						loadAqiMachine($scope.floor);
+						loadAqiArea($scope.floor);
+						loadAqiArea2($scope.floor);
+					});
+				};
+				loadData();
 				var getAreaComponets = function(data) {
 					var components = {};
 					for (var i = 0; i < data.length; i++) {
@@ -499,9 +498,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					
 					if (gasStatus == ("Good")||gasStatus==("Satisfactory"))
                         return "fa-arrow-down";
-                    else if (gasStatus == ("Moderate"))
-                        return "fa-arrow-up";
-                    else if (gasStatus == ("Poor")||gasStatus == ("Very Poor")||gasStatus==("Severe"))
+                    else if (gasStatus == ("Moderate") || gasStatus == ("Poor")||gasStatus == ("Very Poor")||gasStatus==("Severe"))
                         return "fa-arrow-up";
 				};
 				
@@ -529,7 +526,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					switch (prominentParameter) {
 					case 'PM10':
 						if (max >= 0 && max <= 50.99) {
-							var status = 'Good';
+							status = 'Good';
 						} else if (max >= 51 && max <= 100.99) {
 							status = 'Satisfactory';
 
@@ -711,7 +708,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					var status = '';
 					
 					if (max >= 0 && max <= 50) {
-						var status = 'Good';
+						status = 'Good';
 					} else if (max > 50 && max <= 100) {
 						status = 'Satisfactory';
 

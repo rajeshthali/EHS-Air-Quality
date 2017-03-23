@@ -19,8 +19,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				var maxFloor = 3;
 				var maxOpacity = .99;
 				var interval = 25 * 1000;
-				var isMachineCompleated = false;
-				var isAreaCompleated = false;
 				var compliant = 'all';
 				$rootScope.floor = '0';
 				$scope.setCompliant = function(compliantValue) {
@@ -80,9 +78,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				$scope.floor = 0;
 				$scope.isAllFloorVisible = false;
 
-				$(".floor_text").on('click', function(e) {
-					console.log(e.target.id);
-				});
+
 				$(".base_map").on('click', function(e) {
 					switch (e.target.id) {
 					case 'floor_0':
@@ -143,8 +139,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 							floorArray[i].fadeTo(200, maxOpacity);
 						} else {
 							floorArray[i].fadeOut("fast");
-							// floorArray[i].fadeTo("fast",
-							// 0.2);
 						}
 					}
 					$scope.floor = floor;
@@ -255,7 +249,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					}
 					else
 						{
-						//alert(floor);
 						document.querySelector('px-app-nav').markSelected('/industrial-hygiene'); 
 						$state.go('industrial-hygiene', {
 							'floor' : floor,
@@ -292,24 +285,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 
 					return resObject;
 				};
-
-				// addTag(0, 'ar', 40, 30);
-				// addTag(0, 'ag', 40, 20);
-				// addTag(0, 'hg', 30, 41);
-				// addTag(0, 'ar', 20, 50);
-				// addTag(0, 'hr', 21, 60);
-				//
-				// addTag(1, 'ar', 40, 30);
-				// addTag(1, 'ag', 35, 76);
-				// addTag(1, 'hg', 30, 41);
-				// addTag(1, 'ar', 34, 50);
-				// addTag(1, 'hr', 21, 60);
-				//
-				// addTag(2, 'ar', 40, 30);
-				// addTag(2, 'ag', 40, 20);
-				// addTag(2, 'hg', 20, 41);
-				// addTag(2, 'ar', 20, 50);
-				// addTag(2, 'hr', 21, 60);
 
 			} ]);
 

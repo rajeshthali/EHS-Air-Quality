@@ -25,7 +25,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		$scope.selectTab = function(index) {
 			$scope.tabIndex = index;
 			$('.sensor_details_graph_class').hide();
-		    console.log("select tab index is: " +$scope.tabIndex)
 		    realSensorData(7*20000);
 	     };
 		
@@ -51,7 +50,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				$scope.isLoading = false;
 				$scope.sensorDataList= angular.copy(res);
 				$('.sensor_details_graph_class').hide();
-			    console.log("select tab index is: " +$scope.tabIndex)
 			    setTimeout(function() {
 						$('.sensor_details_graph_class').fadeIn();
 				     	loadGraph($scope.sensorDataList);
@@ -60,9 +58,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			};
 			
 			var realSensorDataReload = function(interval) {
-				//$scope.isLoading = true;
 				SensorDataService.loadSensorData($rootScope.token,interval, function(res){
-					///$scope.isLoading = false;
 					$scope.sensorDataList= angular.copy(res);
 					for (var i = 0; i < $scope.sensorDataList.length; i++) {
 						   var sensorName = $scope.sensorDataList[i].name;
@@ -89,7 +85,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 					   for (var index = 0; index < $scope.sensorTabListForService.length;index++) {
 						   if($scope.sensorTabListForService[index] == sensorName) {
 							   var sensorDataValues = sensorDataList[i].sensorDataValues;
-							   //'PM2_5','Temperature'
 							   var dataXaxisTemp =[];
 							   var dataYaxis =[];
 							   for (var j = 0; j < sensorDataValues.length; j++) {
@@ -155,9 +150,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				var returnValue;
 				if("Temperature" === sensorName) {
 					returnValue = "Deg C";
-				}else if("Methanol" === sensorName){
-					returnValue = "PPM";
-				}else if("CO2" === sensorName){
+				}else if("Methanol" === sensorName || "CO2" === sensorName){
 					returnValue = "PPM";
 				}else{
 					returnValue = "Sensor Values";
@@ -170,9 +163,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				 var tresholdLimits = getTresholdLimits(sensorNameForUI);
 				 var yAxisType = getYAxisType(sensorNameForUI);
 				 $('#'+id).each(function() {
-					// console.log('each');
 					var chart = new Highcharts.Chart({
-						//type : 'spline',
 						animation : Highcharts.svg,
 						marginRight : 10,
 						chart : {

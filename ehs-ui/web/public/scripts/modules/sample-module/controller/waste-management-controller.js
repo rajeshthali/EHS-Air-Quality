@@ -3,7 +3,8 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 	controllers.controller('WasteManagementController', [ '$scope', '$http', '$state','NewhygnService', 'DashBoardService', 'WasteManagementService', 'AuthService', '$rootScope','$interval', function($scope, $http, $state,NewhygnService, DashBoardService, WasteManagementService, AuthService, $rootScope,$interval) {
 		$scope.loading = true;
 	    $scope.floordata = [];
-	    var avgWaste = null;
+	    var chart,chart1;
+	    var data = null;
 	    $scope.hygieneLoading = true;
 	    var intervalDynamic = 1000 * 30;
 		if (!$rootScope.floor) {
@@ -24,15 +25,11 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		
 		
 		//Rohit
-		var wasteCharts = [];
 		$scope.wasteData = null;
 		$scope.floor = 0;
 		$scope.tabIndex = 0;
 		var promise = 0;
 		$scope.hygieneLoading = false;
-		var hygieneInterval = null;
-		var interval = 1000 * 60 ;
-		var intervalDynamic = 1000 * 30;
 		
 		//Rohit
 		$scope.$on('$destroy', function() {
@@ -42,34 +39,10 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 		$scope.stop = function() {
 			$interval.cancel(promise);
 		};
-		 var loadData = function(floor) {
-			 $scope.floordata = [];
-			 $scope.hygnareaName = null;
-				$scope.hygieneLoading = true;
-				AuthService.getTocken(function(token) {
-					loadGuage($rootScope.floor);
-					loadWaste($rootScope.floor);
-					loadG($scope.oilValues, $scope.sValues, $scope.dValues);
-					startDynamiUpdate();
-				});
-			};
-			loadData();
-			
-			//Rohit
-			var startDynamiUpdate = function() {
-				var interval = 1000 * 60 * 2;
-				var intervalDynamic = 1000 * 30;
-
-				promise = $interval(function() {
-					loadGuage($rootScope.floor);
-					loadWaste($rootScope.floor);
-					
-					}, 20000);
-			};
-			//Rohit
+		
+		
 			var loadWaste = function(floor) {
 				var interval = 1000 * 60 * 2;
-				var intervalDynamic = 1000 * 30;
 					WasteManagementService.getWasteConsumptionValues(floor, interval, function(res) {
 						
 						   if(res.length == 0){
@@ -105,9 +78,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 						$scope.wasteName = res[0].assets;
 						$scope.asslen = $scope.wasteName.length;
 						}
-				   else{
-					   console.log("no data found");
-				   }
+				   
 				 var resObject = {
 							usedOilValue : 0.0,
 							discardedContainersValue : 0.0,
@@ -126,13 +97,13 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				   $scope.floorLen = $scope.floordata.length;
 				  			
 				   
-				   for(var i = 0; i <  $scope.floorLen; i++ ){
+				   for(var j = 0; j <  $scope.floorLen; j++ ){
 					   
-					   $scope.oilValues = $scope.floordata[i].usedOilValue;
+					   $scope.oilValues = $scope.floordata[j].usedOilValue;
 					   
-					   $scope.sValues = $scope.floordata[i].discardedContainersValue;
+					   $scope.sValues = $scope.floordata[j].discardedContainersValue;
 					   
-					   $scope.dValues = $scope.floordata[i].solderDrossValue;
+					   $scope.dValues = $scope.floordata[j].solderDrossValue;
 				   }
 				   $scope.selectTab($scope.tabIndex,  $scope.oilValues, $scope.sValues, $scope.dValues);
 			});
@@ -172,9 +143,28 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				return resObject.solderDrossValue;
 				
 			};
-		
-		
+			var startDynamiUpdate = function() {
 
+				promise = $interval(function() {
+					loadGuage($rootScope.floor);
+					loadWaste($rootScope.floor);
+					
+					}, 20000);
+			};
+			 var loadData = function(floor) {
+				 $scope.floordata = [];
+				 $scope.hygnareaName = null;
+					$scope.hygieneLoading = true;
+					AuthService.getTocken(function(token) {
+						loadGuage($rootScope.floor);
+						loadWaste($rootScope.floor);
+						loadG($scope.oilValues, $scope.sValues, $scope.dValues);
+						startDynamiUpdate();
+					});
+				};
+				loadData();
+				
+			
 			$scope.selectTab = function(index, oilValues, sValues, dValues) {
 				  
 				   $scope.tabIndex = index;
@@ -204,7 +194,7 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				};
 		     var loadChart = function(selector, min, max, val) {
 					var per = (val / max);
-					var chart = c3.generate({
+					 chart = c3.generate({
 						bindto : selector,
 						data : {
 
@@ -280,7 +270,6 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 				var getSeries = function(tabId, dataArg) {
 				var colors = [ '#8769FF', '#27A9E3', '#28B779', '#ff9000', '#8bd6f6', '#8669ff', '#28b779' ];
 				var series = [];
-				var data = null;
 				if (dataArg) {
 					data = dataArg;
 				} else {
@@ -426,18 +415,16 @@ define([ 'angular', './controllers-module'], function(angular, controllers) {
 			{
 			  $(".charticon1").addClass("active_chart");
 			  $(".charticon").removeClass("active_chart");
-		      var column = document.getElementById('areaspline');
 			  $scope.options.chart.renderTo = 'containerW_'+ tabIndex;
 			  $scope.options.chart.type = 'areaspline';
-			  var chart1 = new Highcharts.Chart($scope.options);
+			  chart1 = new Highcharts.Chart($scope.options);
 			};
 		   $scope.chartfunc2 = function(options , index){
 			  $(".charticon").addClass("active_chart");
 			  $(".charticon1").removeClass("active_chart");
-			  var bar = document.getElementById('column');
 			  $scope.options.chart.renderTo = 'containerW_'+ index;
 			  $scope.options.chart.type = 'column';
-		      var chart1 = new Highcharts.Chart($scope.options);
+		      chart1 = new Highcharts.Chart($scope.options);
 	        };
 				
 				$scope.$on('$destroy', function() {

@@ -13,12 +13,8 @@ define([ 'angular', './services-module'], function(angular, sampleModule) {
 					$rootScope.token = 'Bearer ' + data.access_token;
 					if (cb) {
 						cb($rootScope.token);
-						console.log('Token Received');
-						// console.log($rootScope.token);
 					}
-				}).error(function(data) {
-					console.log(data);
-				});
+				})
 			}
 		};
 	} ]);
