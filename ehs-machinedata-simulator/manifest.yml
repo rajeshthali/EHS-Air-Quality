@@ -1,12 +1,9 @@
 ---
 applications:
-  - name: ehs-machinedata-simulator-soumya11
+  - name: machinedata-simulator-ehs
     buildpack: java_buildpack
-    path: target/ehs-machinedata-simulator-V2.0-4.0.0.jar
+    path: target/ehs-machinedata-simulator-4.0.0.jar
     timeout: 120
 env:
     machineControllerId: 1
-    predix_dataingestion_service_uri: https://ehs-dataingestion-service-soumya11.run.aws-usw02-pr.ice.predix.io
-   
-     
-    
+    predix_dataingestion_service_uri: https://dataingestion-service-ehs.run.azr-usw01-pr.ice.predix.io

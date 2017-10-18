@@ -1,16 +1,16 @@
 ---
 applications:
-  - name: ehs-dataingestion-service-soumya11
+  - name: dataingestion-service-ehs
     buildpack: java_buildpack
-    path: target/ehs-dataingestion-service-V2.0-2.0.0.jar
+    path: target/ehs-dataingestion-service-2.0.0.jar
     services:
-      - Soumya_Timeseries
-      - Soumya_UAA
+      - timeseries-EHS
+      - uaa-EHS
 env:
     SPRING_PROFILES_ACTIVE : cloud,clouddev
     #predix_asset_name: sd_ehs_asset
-    predix_timeseries_name: Soumya_Timeseries
-    predix_oauth_restHost: 2ff4bca0-3515-465f-9ffe-9f7e984e1a0f.predix-uaa.run.aws-usw02-pr.ice.predix.io
-    predix_oauth_clientId: test:test
-    predixWebSocketURI: wss://gateway-predix-data-services.run.aws-usw02-pr.ice.predix.io/v1/stream/messages
+    predix_timeseries_name: timeseries-EHS
+    predix_oauth_restHost: 7ceb1e08-909a-455f-81cb-48861cd5670c.predix-uaa.run.azr-usw01-pr.ice.predix.io
+    predix_oauth_clientId: ehs-client:ehs-client
+    predixWebSocketURI: wss://gateway-predix-data-services.run.azr-usw01-pr.ice.predix.io/v1/stream/messages
     predix_timeseries_ws_retry_attempt: 1
